@@ -146,7 +146,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="md2model.cpp" />
     <ClCompile Include="rt3d.cpp" />
+    <ClCompile Include="rt3dObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gouraud.vert" />
@@ -160,7 +162,10 @@
     <None Include="simple.frag" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="anorms.h" />
+    <ClInclude Include="md2model.h" />
     <ClInclude Include="rt3d.h" />
+    <ClInclude Include="rt3dObjLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
