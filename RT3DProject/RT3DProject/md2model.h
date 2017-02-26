@@ -37,6 +37,7 @@
  *
  * gcc -Wall -ansi -lGL -lGLU -lglut md2.c -o md2
  */
+#pragma once
 #define WIN32
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

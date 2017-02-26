@@ -7,14 +7,27 @@
 #include <stack>
 #include <stdio.h>
 #include "md2model.h"
+#include "Actor.h"
 
 #define DEG_TO_RADIAN 0.017453293
+
+rt3d::lightStruct light0 = {
+	{ 0.3f, 0.3f, 0.3f, 1.0f }, // ambient
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
+};
+glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
+
+
 
 GLuint shaderProgram;
 GLuint meshObjects[1];
 std::stack<glm::mat4> mvStack;
 md2model testModel;
 GLuint md2VertCount = 0;
+Actor testActor;
+ResourceManager content;
 SDL_Window * setupRC(SDL_GLContext &context)
 {
 	SDL_Window * window;
@@ -46,39 +59,41 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 void init(void)
 {
-	glEnable(GL_DEPTH_TEST);
-	shaderProgram = rt3d::initShaders("mvp.vert", "minimal.frag");
+	
+	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
+	rt3d::setLight(shaderProgram, light0);
+	testActor.loadContent(content);
 	meshObjects[0] = testModel.ReadMD2Model("yoshi.md2");
 	md2VertCount = testModel.getVertDataCount();
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void draw(SDL_Window* window)
 {
+	glEnable(GL_CULL_FACE);
 	//Clear the screen
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 800.0f / 600.0f, 1.0f, 500.0f);
-
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 	glm::mat4 modelview(1.0);
 	mvStack.push(modelview);
 
-	testModel.Animate(0.016f);
-	rt3d::updateMesh(meshObjects[0], RT3D_VERTEX, testModel.getAnimVerts(), testModel.getVertDataSize());
+
 	//Draw yoshi
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, -50.0f));
-	glm::mat4 mvp = projection * mvStack.top();
-	rt3d::setUniformMatrix4fv(shaderProgram, "MVP", glm::value_ptr(mvp));
-	rt3d::drawMesh(meshObjects[0], md2VertCount, GL_TRIANGLES);
-	mvStack.pop();
+	testActor.draw(mvStack, projection, shaderProgram);
+	
+
 	mvStack.pop();
 	SDL_GL_SwapWindow(window); // swap buffers
 }
 
 void update()
 {
-
+	testActor.update(0.016f);
 }
 int main(int argc, char* argv[])
 {
