@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "md2model.h"
 #include "Actor.h"
+#include "Box.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -29,6 +30,7 @@ std::stack<glm::mat4> mvStack;
 md2model testModel;
 GLuint md2VertCount = 0;
 Actor testActor;
+Box testBox;
 ResourceManager content;
 SDL_Window * setupRC(SDL_GLContext &context)
 {
@@ -67,6 +69,8 @@ void init(void)
 	testActor.loadContent(content);
 	meshObjects[0] = testModel.ReadMD2Model("yoshi.md2");
 	md2VertCount = testModel.getVertDataCount();
+	testBox = Box(100, 1, 1);
+	testBox.loadContent(content);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -88,7 +92,7 @@ void draw(SDL_Window* window)
 	//Draw yoshi
 	testActor.draw(mvStack, projection, shaderProgram);
 	
-
+	testBox.draw(mvStack, projection, shaderProgram);
 	mvStack.pop();
 	SDL_GL_SwapWindow(window); // swap buffers
 }
@@ -96,6 +100,7 @@ void draw(SDL_Window* window)
 void update()
 {
 	testActor.update(0.1f);
+	testBox.update();
 }
 int main(int argc, char* argv[])
 {
