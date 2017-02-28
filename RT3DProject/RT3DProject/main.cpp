@@ -6,8 +6,32 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
 #include <stdio.h>
-GLuint shaderProgram;
+#include "md2model.h"
+#include "Actor.h"
+#include "Box.h"
 
+#define DEG_TO_RADIAN 0.017453293
+
+rt3d::lightStruct light0 = {
+	{ 0.3f, 0.3f, 0.3f, 1.0f }, // ambient
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
+	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
+};
+glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
+
+glm::vec3 eye(0.0f, 0.0f, 1.0f);
+glm::vec3 at(0.0f, -1.0f, 1.0f);
+glm::vec3 up(0.0f, 0.0f, 1.0f);
+
+GLuint shaderProgram;
+GLuint meshObjects[1];
+std::stack<glm::mat4> mvStack;
+md2model testModel;
+GLuint md2VertCount = 0;
+Actor testActor;
+Box testBox;
+ResourceManager content;
 SDL_Window * setupRC(SDL_GLContext &context)
 {
 	SDL_Window * window;
@@ -39,30 +63,52 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 void init(void)
 {
+	
+	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
+	rt3d::setLight(shaderProgram, light0);
+	testActor.loadContent(content);
+	meshObjects[0] = testModel.ReadMD2Model("yoshi.md2");
+	md2VertCount = testModel.getVertDataCount();
+	testBox = Box(100, 1, 1);
+	testBox.loadContent(content);
 	glEnable(GL_DEPTH_TEST);
-	shaderProgram = rt3d::initShaders("minimal.vert", "minimal.frag");
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void draw(SDL_Window* window)
 {
+	glEnable(GL_CULL_FACE);
 	//Clear the screen
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glm::mat4 projection(1.0);
+	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 800.0f / 600.0f, 1.0f, 500.0f);
+	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
+	glm::mat4 modelview(1.0);
+	mvStack.push(modelview);
+	mvStack.top() = glm::lookAt(eye, at, up);
 
+	//Draw yoshi
+	testActor.draw(mvStack, projection, shaderProgram);
+	
+	testBox.draw(mvStack, projection, shaderProgram);
+	mvStack.pop();
 	SDL_GL_SwapWindow(window); // swap buffers
 }
 
 void update()
 {
-
+	testActor.update(0.1f);
+	testBox.update();
 }
 int main(int argc, char* argv[])
 {
 	SDL_Window * hWindow;
 	SDL_GLContext glContext;
 	hWindow = setupRC(glContext);
-
+	
+	
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
