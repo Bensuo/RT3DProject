@@ -19,7 +19,9 @@ rt3d::lightStruct light0 = {
 };
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 
-
+glm::vec3 eye(0.0f, 0.0f, 1.0f);
+glm::vec3 at(0.0f, -1.0f, 1.0f);
+glm::vec3 up(0.0f, 0.0f, 1.0f);
 
 GLuint shaderProgram;
 GLuint meshObjects[1];
@@ -81,7 +83,7 @@ void draw(SDL_Window* window)
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 	glm::mat4 modelview(1.0);
 	mvStack.push(modelview);
-
+	mvStack.top() = glm::lookAt(eye, at, up);
 
 	//Draw yoshi
 	testActor.draw(mvStack, projection, shaderProgram);
@@ -93,7 +95,7 @@ void draw(SDL_Window* window)
 
 void update()
 {
-	testActor.update(0.016f);
+	testActor.update(0.1f);
 }
 int main(int argc, char* argv[])
 {

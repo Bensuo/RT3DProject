@@ -30,8 +30,9 @@ void Actor::draw(std::stack<glm::mat4> &mvStack, glm::mat4 projection, GLuint sh
 {
 	glCullFace(GL_FRONT);
 	glBindTexture(GL_TEXTURE_2D, *texture.get());
-	mvStack.push(modelView);
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, -50.0f));
+	mvStack.push(mvStack.top());
+	mvStack.top() = mvStack.top() * modelView;
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f,-50.0f, 0.0f));
 	
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
 	rt3d::setMaterial(shaderProgram, material);
