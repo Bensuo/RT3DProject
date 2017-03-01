@@ -43,9 +43,9 @@ namespace rt3d {
 	GLuint createMesh(const GLuint numVerts, const GLfloat* vertices);
 	GLuint createColourMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours);
 
-	void setUniformMatrix4fv(const GLuint program, const char* uniformName, const GLfloat *data);
+	void setUniformMatrix4fv(const GLuint& program, const char* uniformName, const GLfloat *data);
 	void setMatrices(const GLuint program, const GLfloat *proj, const GLfloat *mv, const GLfloat *mvp);
-	void setLight(const GLuint program, const lightStruct light);
+	void setLight(const GLuint& program, const lightStruct light);
 	void setLightPos(const GLuint program, const GLfloat *lightPos);
 	void setMaterial(const GLuint program, const materialStruct material);
 

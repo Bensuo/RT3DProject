@@ -33,6 +33,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <glm/glm.hpp>
+
 #include "md2model.h"
 #include <vector>
 

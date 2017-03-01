@@ -53,7 +53,7 @@ char* loadFile(const char *fname, GLint &fSize) {
 }
 
 // printShaderError
-// Display (hopefully) useful error messages if shader fails to compile or link
+// Display (hopefully) useful error messages if Shader fails to compile or link
 void printShaderError(const GLint shader) {
 	int maxLength = 0;
 	int logLength = 0;
@@ -103,14 +103,14 @@ GLuint initShaders(const char *vertFile, const char *fragFile) {
 	glCompileShader(v);
 	glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		cout << "Vertex shader not compiled." << endl;
+		cout << "Vertex Shader not compiled." << endl;
 		rt3d::printShaderError(v);
 	} 
 
 	glCompileShader(f);
 	glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		cout << "Fragment shader not compiled." << endl;
+		cout << "Fragment Shader not compiled." << endl;
 		rt3d::printShaderError(f);
 	} 
 	
@@ -219,7 +219,7 @@ GLuint createColourMesh(const GLuint numVerts, const GLfloat* vertices, const GL
 	return createMesh(numVerts, vertices, colours, nullptr, nullptr);
 }
 
-void setUniformMatrix4fv(const GLuint program, const char* uniformName, const GLfloat *data) {
+void setUniformMatrix4fv(const GLuint& program, const char* uniformName, const GLfloat *data) {
 	int uniformIndex = glGetUniformLocation(program, uniformName);
 	glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data); 
 }
@@ -245,8 +245,8 @@ void setProjection(const GLuint program, const GLfloat *data) {
 	glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data); 
 }
 
-void setLight(const GLuint program, const lightStruct light) {
-	// pass in light data to shader
+void setLight(const GLuint& program, const lightStruct light) {
+	// pass in light data to Shader
 	int uniformIndex = glGetUniformLocation(program, "light.ambient");
 	glUniform4fv(uniformIndex, 1, light.ambient);
 	uniformIndex = glGetUniformLocation(program, "light.diffuse");
@@ -259,7 +259,7 @@ void setLight(const GLuint program, const lightStruct light) {
 
 
 void setMaterial(const GLuint program, const materialStruct material) {
-	// pass in material data to shader 
+	// pass in material data to Shader 
 	int uniformIndex = glGetUniformLocation(program, "material.ambient");
 	glUniform4fv(uniformIndex, 1, material.ambient);
 	uniformIndex = glGetUniformLocation(program, "material.diffuse");
