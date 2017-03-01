@@ -1,14 +1,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "skybox.h"
+#include "Skybox.h"
 #include "shader.h"
 #include "stb_image.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
 
-namespace rendering
+namespace Rendering
 {
-	bool skybox::loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name) {
+	bool Skybox::loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name) {
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 
@@ -40,7 +40,7 @@ namespace rendering
 		return true;
 	}
 
-	skybox::skybox(const char* front, const char* back, const char* top, const char* bottom, const char* left, const char* right, const char* vertexPath, const char* fragmentPath) : shader(vertexPath, fragmentPath)
+	Skybox::Skybox(const char* front, const char* back, const char* top, const char* bottom, const char* left, const char* right, const char* vertexPath, const char* fragmentPath) : shader(vertexPath, fragmentPath)
 	{
 		GLfloat skyboxVertices[] = {
 			// Positions          
@@ -121,11 +121,11 @@ namespace rendering
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
 
-	skybox::~skybox()
+	Skybox::~Skybox()
 	{
 	}
 
-	void skybox::render(camera& camera) const
+	void Skybox::render(Camera& camera) const
 	{
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(GL_FALSE);

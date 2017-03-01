@@ -3,19 +3,19 @@
 #include "shader.h"
 #include "camera.h"
 
-namespace rendering
+namespace Rendering
 {	
-	class skybox
+	class Skybox
 	{
 		const float SIZE = 1;
 		GLuint vbo;
 		GLuint vao;
 		GLuint texture;
-		shader shader;
+		Shader shader;
 		bool loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name);
 	public:
-		skybox() {}
-		skybox(const char* front,
+		Skybox() {}
+		Skybox(const char* front,
 			const char* back,
 			const char* top,
 			const char* bottom,
@@ -23,7 +23,7 @@ namespace rendering
 			const char* right,
 			const char* vertexPath,
 			const char* fragmentPath);
-		~skybox();
-		void render(camera& camera) const;
+		~Skybox();
+		void render(Camera& camera) const;
 	};
 }

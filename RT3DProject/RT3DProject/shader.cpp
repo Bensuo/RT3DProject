@@ -1,9 +1,9 @@
-#include "shader.h"
+#include "Shader.h"
 #include "md2model.h"
 
-namespace rendering
+namespace Rendering
 {
-	shader::shader(const std::string& vertexPath, const std::string& fragmentPath)
+	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 	{
 		GLuint f, v;
 
@@ -29,35 +29,35 @@ namespace rendering
 		glCompileShader(v);
 		glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
-			std::cout << "Vertex shader not compiled." << std::endl;
+			std::cout << "Vertex Shader not compiled." << std::endl;
 			rt3d::printShaderError(v);
 		}
 
 		glCompileShader(f);
 		glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
-			std::cout << "Fragment shader not compiled." << std::endl;
+			std::cout << "Fragment Shader not compiled." << std::endl;
 			rt3d::printShaderError(f);
 		}
 
-		Program = glCreateProgram();
+		m_program = glCreateProgram();
 
-		glAttachShader(Program, v);
-		glAttachShader(Program, f);
+		glAttachShader(m_program, v);
+		glAttachShader(m_program, f);
 
-		glBindAttribLocation(Program, RT3D_VERTEX, "in_Position");
-		glBindAttribLocation(Program, RT3D_COLOUR, "in_Color");
-		glBindAttribLocation(Program, RT3D_NORMAL, "in_Normal");
-		glBindAttribLocation(Program, RT3D_TEXCOORD, "in_TexCoord");
+		glBindAttribLocation(m_program, RT3D_VERTEX, "in_Position");
+		glBindAttribLocation(m_program, RT3D_COLOUR, "in_Color");
+		glBindAttribLocation(m_program, RT3D_NORMAL, "in_Normal");
+		glBindAttribLocation(m_program, RT3D_TEXCOORD, "in_TexCoord");
 
-		glLinkProgram(Program);
-		glUseProgram(Program);
+		glLinkProgram(m_program);
+		glUseProgram(m_program);
 
 		delete[] vs; // dont forget to free allocated memory
 		delete[] fs; // we allocated this in the loadFile function...
 	}
 
-	char * shader::loadFile(const char * fname, GLint & fSize)
+	char* Shader::loadFile(const char* fname, GLint& fSize) const
 	{
 		int size;
 		char * memblock;
@@ -84,71 +84,71 @@ namespace rendering
 		return memblock;
 	}
 
-	// Uses the current shader
-	void shader::use() const
+	// Uses the current Shader
+	void Shader::use() const
 	{
-		glUseProgram(Program);
+		glUseProgram(m_program);
 	}
 
-	void shader::disable() const
+	void Shader::disable() const
 	{
 		glUseProgram(0);
 	}
 
-	void shader::setUniformMatrix4fv(const char* uniformName, const GLfloat *data) const
+	void Shader::setUniformMatrix4fv(const char* uniformName, const GLfloat *data) const
 	{
-		int uniformIndex = glGetUniformLocation(Program, uniformName);
+		int uniformIndex = glGetUniformLocation(m_program, uniformName);
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
 	}
 
 	// set matrices untested... likely to change - not totally happy with this for now.
-	void shader::setMatrices(const GLfloat *proj, const GLfloat *mv, const GLfloat *mvp) const
+	void Shader::setMatrices(const GLfloat *proj, const GLfloat *mv, const GLfloat *mvp) const
 	{
-		int uniformIndex = glGetUniformLocation(Program, "modelview");
+		int uniformIndex = glGetUniformLocation(m_program, "modelview");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, mv);
-		uniformIndex = glGetUniformLocation(Program, "projection");
+		uniformIndex = glGetUniformLocation(m_program, "projection");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, proj);
-		uniformIndex = glGetUniformLocation(Program, "MVP");
+		uniformIndex = glGetUniformLocation(m_program, "MVP");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, mvp);
-		uniformIndex = glGetUniformLocation(Program, "normalmatrix");
+		uniformIndex = glGetUniformLocation(m_program, "normalmatrix");
 	}
 
-	void shader::setLightPos(const GLfloat *lightPos) const
+	void Shader::setLightPos(const GLfloat *lightPos) const
 	{
-		int uniformIndex = glGetUniformLocation(Program, "lightPosition");
+		int uniformIndex = glGetUniformLocation(m_program, "lightPosition");
 		glUniform4fv(uniformIndex, 1, lightPos);
 	}
 
-	void shader::setProjection(const GLfloat *data) const
+	void Shader::setProjection(const GLfloat *data) const
 	{
-		int uniformIndex = glGetUniformLocation(Program, "projection");
+		int uniformIndex = glGetUniformLocation(m_program, "projection");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
 	}
 
-	void shader::setLight(const rt3d::lightStruct light) const
+	void Shader::setLight(const rt3d::lightStruct& light) const
 	{
-		// pass in light data to shader
-		int uniformIndex = glGetUniformLocation(Program, "light.ambient");
+		// pass in light data to Shader
+		int uniformIndex = glGetUniformLocation(m_program, "light.ambient");
 		glUniform4fv(uniformIndex, 1, light.ambient);
-		uniformIndex = glGetUniformLocation(Program, "light.diffuse");
+		uniformIndex = glGetUniformLocation(m_program, "light.diffuse");
 		glUniform4fv(uniformIndex, 1, light.diffuse);
-		uniformIndex = glGetUniformLocation(Program, "light.specular");
+		uniformIndex = glGetUniformLocation(m_program, "light.specular");
 		glUniform4fv(uniformIndex, 1, light.specular);
-		uniformIndex = glGetUniformLocation(Program, "lightPosition");
+		uniformIndex = glGetUniformLocation(m_program, "lightPosition");
 		glUniform4fv(uniformIndex, 1, light.position);
 	}
 
 
-	void shader::setMaterial(const rt3d::materialStruct material) const
+	void Shader::setMaterial(const rt3d::materialStruct& material) const
 	{
-		// pass in material data to shader 
-		int uniformIndex = glGetUniformLocation(Program, "material.ambient");
+		// pass in material data to Shader 
+		int uniformIndex = glGetUniformLocation(m_program, "material.ambient");
 		glUniform4fv(uniformIndex, 1, material.ambient);
-		uniformIndex = glGetUniformLocation(Program, "material.diffuse");
+		uniformIndex = glGetUniformLocation(m_program, "material.diffuse");
 		glUniform4fv(uniformIndex, 1, material.diffuse);
-		uniformIndex = glGetUniformLocation(Program, "material.specular");
+		uniformIndex = glGetUniformLocation(m_program, "material.specular");
 		glUniform4fv(uniformIndex, 1, material.specular);
-		uniformIndex = glGetUniformLocation(Program, "material.shininess");
+		uniformIndex = glGetUniformLocation(m_program, "material.shininess");
 		glUniform1f(uniformIndex, material.shininess);
 	}
 }

@@ -6,16 +6,17 @@
 #include "md2model.h"
 #include "Actor.h"
 #include "Box.h"
-#include "skybox.h"
+#include "Skybox.h"
 #include "camera.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "clock.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
 rt3d::lightStruct light0 = {
-	{ 0.3f, 0.3f, 0.3f, 1.0f }, // ambient
-	{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
-	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+	{ 0.1f, 0.1f, 0.1f, 1.0f }, // ambient
+	{ 0.5f, 0.5f, 1.0f, 1.0f }, // diffuse
+	{ 0.2f, 0.2f, 0.2f, 1.0f }, // specular
 	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
 };
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
@@ -24,15 +25,18 @@ GLuint meshObjects[1];
 std::stack<glm::mat4> mvStack;
 md2model testModel;
 GLuint md2VertCount = 0;
-Actor testActor;
-Box testBox;
-ResourceManager content;
-rendering::shader shader;
-camera m_camera;
-rendering::skybox* m_skybox;
 
-const int screenHeight = 720;
-const int screenWidth = 1280;
+Utilities::ResourceManager content;
+Utilities::Clock m_clock;
+
+Rendering::Camera m_camera;
+Rendering::Shader shader;
+Rendering::Actor testActor;
+Rendering::Box testBox;
+Rendering::Skybox* m_skybox;
+
+const unsigned SCREEN_HEIGHT = 720;
+const unsigned SCREEN_WIDTH = 1280;
 
 SDL_Window * setupRC(SDL_GLContext &context)
 {
@@ -54,7 +58,7 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 													   // Create 800x600 window
 	window = SDL_CreateWindow("RT3DProject", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (!window) // Check window was created OK
 		rt3d::exitFatalError("Unable to create window");
 
@@ -65,10 +69,10 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 void init(void)
 {
-	m_camera.Position = glm::vec3(0,0,50);
-	shader = rendering::shader("phong-tex.vert", "phong-tex.frag");
+	m_camera.setPosition(glm::vec3(0,0,50));
+	shader = Rendering::Shader("phong-tex.vert", "phong-tex.frag");
 	shader.setLight(light0);
-	m_skybox = new rendering::skybox("res/textures/front.bmp",
+	m_skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
 		"res/textures/top.bmp",
 		"res/textures/bottom.bmp",
@@ -80,7 +84,7 @@ void init(void)
 	testActor.loadContent(content);
 	meshObjects[0] = testModel.ReadMD2Model("yoshi.md2");
 	md2VertCount = testModel.getVertDataCount();
-	testBox = Box(glm::vec3(100,1,100), glm::vec3(0,-20,0));
+	testBox = Rendering::Box(glm::vec3(100,1,100), glm::vec3(0,-23,0));
 	testBox.loadContent(content);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -89,36 +93,48 @@ void init(void)
 
 void draw(SDL_Window* window)
 {
+	//reset draw
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	//render Skybox
 	m_skybox->render(m_camera);
 
-	//Clear the screen
+	//clear the depth to ensure Skybox is always drawn on top
 	glClear(GL_DEPTH_BUFFER_BIT);
+
+	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(m_camera.Zoom, static_cast<float>(screenWidth) / screenHeight, 1.0f, 500.0f);
+	projection = glm::perspective(m_camera.getZoom(), static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+
+	//Use default phong Shader
 	shader.use();
 	shader.setUniformMatrix4fv("projection", value_ptr(projection));
+
 	mvStack.push(m_camera.GetViewMatrix());
-
-	//Draw yoshi
-	testActor.draw(mvStack, projection, shader.getProgram());
-	testBox.draw(mvStack, projection, shader.getProgram());
-
+	{
+		//Draw yoshi
+		testActor.draw(mvStack, shader.getProgram());
+		//Draw floor
+		testBox.draw(mvStack, shader.getProgram());
+		shader.disable();
+	}
 	mvStack.pop();
-	SDL_GL_SwapWindow(window); // swap buffers
+
+	SDL_GL_SwapWindow(window); //Swap buffers
 }
 
 void update()
 {
 	testActor.update(0.1f);
 	testBox.update();
+	m_camera.update(m_clock.currentTimeSeconds());
 }
+
 int main(int argc, char* argv[])
 {
-	SDL_Window * hWindow;
+	SDL_Window* hWindow;
 	SDL_GLContext glContext;
 	hWindow = setupRC(glContext);
 	

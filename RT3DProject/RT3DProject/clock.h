@@ -4,19 +4,16 @@
 
 #include <chrono>
 
-namespace utilities
+namespace Utilities
 {
-	class clock
+	class Clock
 	{
 	private:
-		std::chrono::duration<double> m_Delta;
 		std::chrono::time_point<std::chrono::steady_clock> m_StartTime;
 	public:
-		clock();
+		Clock();
 		double currentTimeSeconds() const;
 		std::chrono::steady_clock::time_point getTime() const;
-		const std::chrono::duration<double>& getDelta() const;
-		void setDelta(const std::chrono::duration<double> delta);
 	};
 }
 #endif

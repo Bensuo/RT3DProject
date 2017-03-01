@@ -147,13 +147,13 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Box.cpp" />
-    <ClCompile Include="clock.cpp" />
+    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="rt3d.cpp" />
-    <ClCompile Include="shader.cpp" />
-    <ClCompile Include="skybox.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gouraud.vert" />
@@ -170,13 +170,13 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="anorms.h" />
     <ClInclude Include="Box.h" />
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="clock.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="rt3d.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="skybox.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

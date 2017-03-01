@@ -1,13 +1,13 @@
-#include "clock.h"
+#include "Clock.h"
 
-namespace utilities
+namespace Utilities
 {
-	clock::clock()
+	Clock::Clock()
 	{
 		m_StartTime = std::chrono::high_resolution_clock::now();
 	}
 
-	double clock::currentTimeSeconds() const
+	double Clock::currentTimeSeconds() const
 	{
 		//find current time in miliseconds, return this data in terms of seconds
 		auto current_time = std::chrono::high_resolution_clock::now();
@@ -15,18 +15,8 @@ namespace utilities
 		return value / 1000.0;
 	}
 
-	std::chrono::steady_clock::time_point clock::getTime() const
+	std::chrono::steady_clock::time_point Clock::getTime() const
 	{
 		return std::chrono::steady_clock::now();
-	}
-
-	const std::chrono::duration<double>& clock::getDelta() const
-	{
-		return m_Delta;
-	}
-
-	void clock::setDelta(std::chrono::duration<double> newDelta)
-	{
-		m_Delta = newDelta;
 	}
 }

@@ -44,23 +44,23 @@
     <ClCompile Include="Actor.cpp">
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
-    <ClCompile Include="skybox.cpp">
-      <Filter>Rendering\Renderables</Filter>
-    </ClCompile>
     <ClCompile Include="md2model.cpp">
       <Filter>Rendering\Model Loading</Filter>
-    </ClCompile>
-    <ClCompile Include="shader.cpp">
-      <Filter>Rendering\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="rt3d.cpp">
       <Filter>Rendering\RT3D Library</Filter>
     </ClCompile>
-    <ClCompile Include="clock.cpp">
-      <Filter>Utilities\Clock</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Utilities\Resource Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Rendering\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Clock.cpp">
+      <Filter>Utilities\Clock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,32 +96,32 @@
     <ClInclude Include="md2model.h">
       <Filter>Rendering\Model Loading</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>Rendering\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
-    <ClInclude Include="skybox.h">
-      <Filter>Rendering\Renderables</Filter>
-    </ClInclude>
     <ClInclude Include="anorms.h">
       <Filter>Rendering\Model Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>Rendering\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="rt3d.h">
       <Filter>Rendering\RT3D Library</Filter>
     </ClInclude>
-    <ClInclude Include="clock.h">
-      <Filter>Utilities\Clock</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Utilities\Resource Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Rendering\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Clock.h">
+      <Filter>Utilities\Clock</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

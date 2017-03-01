@@ -6,23 +6,23 @@
 #include <sstream>
 #include "rt3d.h"
 
-namespace rendering
+namespace Rendering
 {
-	class shader
+	class Shader
 	{
-		GLuint Program;
+		GLuint m_program;
 	public:
-		shader(){}
-		shader(const std::string& vertexPath, const std::string& fragmentPath);
-		char* loadFile(const char *fname, GLint &fSize);
+		Shader(){}
+		Shader(const std::string& vertexPath, const std::string& fragmentPath);
+		char* loadFile(const char *fname, GLint &fSize) const;
 		void use() const;
-		const GLuint& getProgram() const { return this->Program; }
+		const GLuint& getProgram() const { return this->m_program; }
 		void disable() const;
 		void setUniformMatrix4fv(const char* uniformName, const GLfloat* data) const;
 		void setMatrices(const GLfloat* proj, const GLfloat* mv, const GLfloat* mvp) const;
 		void setLightPos(const GLfloat* lightPos) const;
 		void setProjection(const GLfloat* data) const;
-		void setLight(const rt3d::lightStruct light) const;
-		void setMaterial(const rt3d::materialStruct material) const;
+		void setLight(const rt3d::lightStruct& light) const;
+		void setMaterial(const rt3d::materialStruct& material) const;
 	};
 }
