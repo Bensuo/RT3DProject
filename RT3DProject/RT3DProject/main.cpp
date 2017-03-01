@@ -1,14 +1,14 @@
 #include <SDL.h>
 #undef main
 #include "rt3d.h"
-#include <glm\glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <stack>
 #include <stdio.h>
 #include "md2model.h"
 #include "Actor.h"
 #include "Box.h"
+#include "skybox.h"
+#include "camera.h"
+#include <glm/gtc/type_ptr.hpp>
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -20,11 +20,6 @@ rt3d::lightStruct light0 = {
 };
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 
-glm::vec3 eye(0.0f, 0.0f, 1.0f);
-glm::vec3 at(0.0f, -1.0f, 1.0f);
-glm::vec3 up(0.0f, 0.0f, 1.0f);
-
-GLuint shaderProgram;
 GLuint meshObjects[1];
 std::stack<glm::mat4> mvStack;
 md2model testModel;
@@ -32,6 +27,13 @@ GLuint md2VertCount = 0;
 Actor testActor;
 Box testBox;
 ResourceManager content;
+rendering::shader shader;
+camera m_camera;
+rendering::skybox* m_skybox;
+
+const int screenHeight = 720;
+const int screenWidth = 1280;
+
 SDL_Window * setupRC(SDL_GLContext &context)
 {
 	SDL_Window * window;
@@ -52,7 +54,7 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 													   // Create 800x600 window
 	window = SDL_CreateWindow("RT3DProject", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (!window) // Check window was created OK
 		rt3d::exitFatalError("Unable to create window");
 
@@ -63,13 +65,22 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 void init(void)
 {
-	
-	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
-	rt3d::setLight(shaderProgram, light0);
+	m_camera.Position = glm::vec3(0,0,50);
+	shader = rendering::shader("phong-tex.vert", "phong-tex.frag");
+	shader.setLight(light0);
+	m_skybox = new rendering::skybox("res/textures/front.bmp",
+		"res/textures/back.bmp",
+		"res/textures/top.bmp",
+		"res/textures/bottom.bmp",
+		"res/textures/left.bmp",
+		"res/textures/right.bmp",
+		"res/shaders/skyboxVertex.vs",
+		"res/shaders/skyboxFragment.fs");
+
 	testActor.loadContent(content);
 	meshObjects[0] = testModel.ReadMD2Model("yoshi.md2");
 	md2VertCount = testModel.getVertDataCount();
-	testBox = Box(100, 1, 1);
+	testBox = Box(glm::vec3(100,1,100), glm::vec3(0,-20,0));
 	testBox.loadContent(content);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -78,21 +89,24 @@ void init(void)
 
 void draw(SDL_Window* window)
 {
-	glEnable(GL_CULL_FACE);
-	//Clear the screen
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_CULL_FACE);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	m_skybox->render(m_camera);
+
+	//Clear the screen
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(float(60.0f*DEG_TO_RADIAN), 800.0f / 600.0f, 1.0f, 500.0f);
-	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
-	glm::mat4 modelview(1.0);
-	mvStack.push(modelview);
-	mvStack.top() = glm::lookAt(eye, at, up);
+	projection = glm::perspective(m_camera.Zoom, static_cast<float>(screenWidth) / screenHeight, 1.0f, 500.0f);
+	shader.use();
+	shader.setUniformMatrix4fv("projection", value_ptr(projection));
+	mvStack.push(m_camera.GetViewMatrix());
 
 	//Draw yoshi
-	testActor.draw(mvStack, projection, shaderProgram);
-	
-	testBox.draw(mvStack, projection, shaderProgram);
+	testActor.draw(mvStack, projection, shader.getProgram());
+	testBox.draw(mvStack, projection, shader.getProgram());
+
 	mvStack.pop();
 	SDL_GL_SwapWindow(window); // swap buffers
 }
@@ -107,7 +121,6 @@ int main(int argc, char* argv[])
 	SDL_Window * hWindow;
 	SDL_GLContext glContext;
 	hWindow = setupRC(glContext);
-	
 	
 	// Required on Windows *only* init GLEW to access OpenGL beyond 1.1
 	glewExperimental = GL_TRUE;

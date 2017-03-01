@@ -1,8 +1,6 @@
 #pragma once
 #include "rt3d.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <stack>
 #include <memory>
 #include "ResourceManager.h"
@@ -10,10 +8,10 @@ class Box
 {
 public:
 	Box() {};
-	Box(int w, int h, int d);
+	Box(const glm::vec3& bounds, const glm::vec3& position);
 	void loadContent(ResourceManager &content);
 	virtual ~Box();
-	void draw(std::stack<glm::mat4> &mvStack, glm::mat4 projection, GLuint shaderProgram);
+	void draw(std::stack<glm::mat4> &mvStack, glm::mat4 projection, GLuint shaderProgram) const;
 	void update();
 private:
 	GLfloat cubeVerts[24];

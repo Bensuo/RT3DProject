@@ -219,7 +219,7 @@ GLuint createColourMesh(const GLuint numVerts, const GLfloat* vertices, const GL
 	return createMesh(numVerts, vertices, colours, nullptr, nullptr);
 }
 
-void setUniformMatrix4fv(const GLuint program, const char* uniformName, const GLfloat *data) {
+void setUniformMatrix4fv(const GLuint& program, const char* uniformName, const GLfloat *data) {
 	int uniformIndex = glGetUniformLocation(program, uniformName);
 	glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data); 
 }
@@ -245,7 +245,7 @@ void setProjection(const GLuint program, const GLfloat *data) {
 	glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data); 
 }
 
-void setLight(const GLuint program, const lightStruct light) {
+void setLight(const GLuint& program, const lightStruct light) {
 	// pass in light data to shader
 	int uniformIndex = glGetUniformLocation(program, "light.ambient");
 	glUniform4fv(uniformIndex, 1, light.ambient);
