@@ -40,8 +40,8 @@ namespace Rendering
 		void update(float currentTime)
 		{
 			auto radius = 120.0f;
-			position.x = sin(currentTime / 24.0) * radius;
-			position.z = cos(currentTime / 24.0) * radius;
+			position.x = sin(currentTime / 16.0) * radius;
+			position.z = cos(currentTime / 16.0) * radius;
 			view = glm::lookAt(glm::vec3(position.x, 0.0, position.z), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 		}
 	};

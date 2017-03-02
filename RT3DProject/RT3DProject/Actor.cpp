@@ -15,8 +15,8 @@ namespace Rendering
 
 	void Actor::loadContent(Utilities::ResourceManager &content)
 	{
-		mesh = model.ReadMD2Model("yoshi.md2");
-		texture = content.loadTexture("yoshi.bmp");
+		mesh = model.ReadMD2Model("test.md2");
+		texture = content.loadTexture("test.bmp");
 		vertexCount = model.getVertDataCount();
 	}
 

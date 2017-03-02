@@ -14,9 +14,9 @@
 #define DEG_TO_RADIAN 0.017453293
 
 rt3d::lightStruct light0 = {
-	{ 0.1f, 0.1f, 0.1f, 1.0f }, // ambient
-	{ 0.5f, 0.5f, 1.0f, 1.0f }, // diffuse
-	{ 0.2f, 0.2f, 0.2f, 1.0f }, // specular
+	{ 0.3f, 0.3f, 0.5f, 1.0f }, // ambient
+	{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse
+	{ 0.15f, 0.34f, 1.0f, 1.0f }, // specular
 	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
 };
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
@@ -82,7 +82,7 @@ void init(void)
 		"res/shaders/skyboxFragment.fs");
 
 	testActor.loadContent(content);
-	meshObjects[0] = testModel.ReadMD2Model("yoshi.md2");
+	meshObjects[0] = testModel.ReadMD2Model("test.md2");
 	md2VertCount = testModel.getVertDataCount();
 	testBox = Rendering::Box(glm::vec3(100,1,100), glm::vec3(0,-23,0));
 	testBox.loadContent(content);
@@ -109,6 +109,7 @@ void draw(SDL_Window* window)
 	projection = glm::perspective(m_camera.getZoom(), static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 
 	//Use default phong Shader
+	shader.setLight(light0);
 	shader.use();
 	shader.setUniformMatrix4fv("projection", value_ptr(projection));
 
