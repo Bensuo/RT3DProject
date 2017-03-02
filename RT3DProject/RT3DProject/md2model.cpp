@@ -45,16 +45,16 @@ md2vec3 anorms_table[162] = {
 
 // Table of animation begin/end frames
 static int animFrameList[40] = {
-	0, 39, // stand
-	40, 45, // run
-	46, 53, // attack
-	54, 57, //pain1
-	58, 61, //pain2
-	62, 65, //pain3
-	66, 71, //jump
-	72, 83, //flip
-	84, 94, //salute
-	95, 111, //taunt
+	0, 39,    //stand
+	40, 45,   //run
+	46, 53,   //attack
+	54, 57,   //pain1
+	58, 61,   //pain2
+	62, 65,   //pain3
+	66, 71,   //jump
+	72, 83,   //flip
+	84, 94,   //salute
+	95, 111,  //taunt
 	112, 122, //wave
 	123, 134, //point
 	135, 153, //crstnd
@@ -64,7 +64,7 @@ static int animFrameList[40] = {
 	173, 177, //crdeath
 	178, 183, //death1
 	184, 189, //death2
-	190, 196 //death3
+	190, 196  //death3
 };
 
 md2model::md2model()
@@ -313,7 +313,7 @@ void md2model::FreeModel ()
 * and next frame = current frame + 1
 */
 
-void md2model::Animate (int animation, float dt)
+void md2model::Animate (int animation, const float& dt)
 {
 	int start = animFrameList[animation * 2];
 	int end =  animFrameList[animation * 2 + 1];

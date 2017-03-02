@@ -41,7 +41,7 @@ namespace Rendering
 
 	void Box::loadContent(Utilities::ResourceManager& content)
 	{
-		texture = content.loadTexture("test.bmp");
+		texture = content.loadTexture("res/md2/rampage.bmp");
 	}
 
 	void Box::draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram) const

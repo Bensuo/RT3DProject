@@ -14,9 +14,10 @@ namespace Rendering
 	public:
 		Actor();
 		virtual ~Actor();
-		virtual void loadContent(Utilities::ResourceManager &content);
-		virtual void update(const float& dt);
-		virtual void draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram);
+		void loadContent(Utilities::ResourceManager &content, const std::string& path);
+		void update(const float& dt);
+		void draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram);
+		void setPosition(const glm::vec3& position);
 	private:
 		GLuint vertexCount;
 		md2model model;

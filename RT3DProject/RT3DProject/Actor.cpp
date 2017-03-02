@@ -6,17 +6,19 @@ namespace Rendering
 {
 	Actor::Actor()
 	{
-		position = glm::vec3(0.0, 0.0, 20.0);
+		position = glm::vec3(0.0, 0.0, 0.0);
 	}
 
 	Actor::~Actor()
 	{
 	}
 
-	void Actor::loadContent(Utilities::ResourceManager &content)
+	void Actor::loadContent(Utilities::ResourceManager &content, const std::string& path)
 	{
-		mesh = model.ReadMD2Model("test.md2");
-		texture = content.loadTexture("test.bmp");
+		auto meshPath = path + ".md2";
+		auto texturePath = path + ".bmp";
+		mesh = model.ReadMD2Model(meshPath.c_str());
+		texture = content.loadTexture(texturePath.c_str());
 		vertexCount = model.getVertDataCount();
 	}
 
@@ -35,7 +37,7 @@ namespace Rendering
 		float rotation = -90.0f * DEG_TO_RADIAN;
 
 		mvStack.push(glm::rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
-		mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position.x, position.z, position.y));
+		mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-position.x, -position.z, position.y));
 
 		rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
 		rt3d::setMaterial(shaderProgram, material);
@@ -44,5 +46,10 @@ namespace Rendering
 		mvStack.pop();
 
 		glCullFace(GL_BACK);
+	}
+
+	void Actor::setPosition(const glm::vec3 & position)
+	{
+		this->position = position;
 	}
 }

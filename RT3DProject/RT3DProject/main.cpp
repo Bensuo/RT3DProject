@@ -21,7 +21,6 @@ rt3d::lightStruct light0 = {
 };
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 
-GLuint meshObjects[1];
 std::stack<glm::mat4> mvStack;
 md2model testModel;
 GLuint md2VertCount = 0;
@@ -32,6 +31,7 @@ Utilities::Clock m_clock;
 Rendering::Camera m_camera;
 Rendering::Shader shader;
 Rendering::Actor testActor;
+Rendering::Actor gunActor;
 Rendering::Box testBox;
 Rendering::Skybox* m_skybox;
 
@@ -81,8 +81,8 @@ void init(void)
 		"res/shaders/skyboxVertex.vs",
 		"res/shaders/skyboxFragment.fs");
 
-	testActor.loadContent(content);
-	meshObjects[0] = testModel.ReadMD2Model("test.md2");
+	testActor.loadContent(content, "res/md2/rampage");
+	gunActor.loadContent(content, "res/md2/weapon");
 	md2VertCount = testModel.getVertDataCount();
 	testBox = Rendering::Box(glm::vec3(100,1,100), glm::vec3(0,-23,0));
 	testBox.loadContent(content);
@@ -109,13 +109,13 @@ void draw(SDL_Window* window)
 	projection = glm::perspective(m_camera.getZoom(), static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 
 	//Use default phong Shader
-	shader.setLight(light0);
 	shader.use();
 	shader.setUniformMatrix4fv("projection", value_ptr(projection));
 
 	mvStack.push(m_camera.GetViewMatrix());
 	{
-		//Draw yoshi
+		//Draw baddie
+		gunActor.draw(mvStack, shader.getProgram());
 		testActor.draw(mvStack, shader.getProgram());
 		//Draw floor
 		testBox.draw(mvStack, shader.getProgram());
@@ -128,6 +128,7 @@ void draw(SDL_Window* window)
 
 void update()
 {
+	gunActor.update(0.1f);
 	testActor.update(0.1f);
 	testBox.update();
 	m_camera.update(m_clock.currentTimeSeconds());
