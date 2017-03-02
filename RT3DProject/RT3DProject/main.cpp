@@ -7,7 +7,7 @@
 #include "Actor.h"
 #include "Box.h"
 #include "Skybox.h"
-#include "camera.h"
+#include "Camera.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "clock.h"
 
@@ -22,16 +22,16 @@ rt3d::lightStruct light0 = {
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 
 std::stack<glm::mat4> mvStack;
-md2model testModel;
-GLuint md2VertCount = 0;
 
 Utilities::ResourceManager content;
 Utilities::Clock m_clock;
 
-Rendering::Camera m_camera;
+Camera m_camera;
 Rendering::Shader shader;
-Rendering::Actor testActor;
-Rendering::Actor gunActor;
+Rendering::Actor playerCharacter;
+Rendering::Actor playerWeapon;
+Rendering::Actor viewportWeapon;
+
 Rendering::Box testBox;
 Rendering::Skybox* m_skybox;
 
@@ -69,7 +69,7 @@ SDL_Window * setupRC(SDL_GLContext &context)
 
 void init(void)
 {
-	m_camera.setPosition(glm::vec3(0,0,50));
+	m_camera.Position = glm::vec3(0,0,200);
 	shader = Rendering::Shader("phong-tex.vert", "phong-tex.frag");
 	shader.setLight(light0);
 	m_skybox = new Rendering::Skybox("res/textures/front.bmp",
@@ -81,9 +81,10 @@ void init(void)
 		"res/shaders/skyboxVertex.vs",
 		"res/shaders/skyboxFragment.fs");
 
-	testActor.loadContent(content, "res/md2/rampage");
-	gunActor.loadContent(content, "res/md2/weapon");
-	md2VertCount = testModel.getVertDataCount();
+	playerCharacter.loadContent(content, "res/md2/rampage");
+	playerWeapon.loadContent(content, "res/md2/weapon");
+	viewportWeapon.loadContent(content, "res/md2/v_machn");
+
 	testBox = Rendering::Box(glm::vec3(100,1,100), glm::vec3(0,-23,0));
 	testBox.loadContent(content);
 	glEnable(GL_DEPTH_TEST);
@@ -106,17 +107,25 @@ void draw(SDL_Window* window)
 
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(m_camera.getZoom(), static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(m_camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 
 	//Use default phong Shader
 	shader.use();
 	shader.setUniformMatrix4fv("projection", value_ptr(projection));
 
+	mvStack.push(inverse(m_camera.GetViewMatrix()));
+		float rotation = 90.0f * DEG_TO_RADIAN;
+		mvStack.top() = translate(mvStack.top(), -m_camera.Position);
+		mvStack.top() = translate(mvStack.top(), glm::vec3(0,0,-10));
+		mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+		viewportWeapon.draw(mvStack, shader.getProgram());
+	mvStack.pop();
+
 	mvStack.push(m_camera.GetViewMatrix());
 	{
 		//Draw baddie
-		gunActor.draw(mvStack, shader.getProgram());
-		testActor.draw(mvStack, shader.getProgram());
+		playerWeapon.draw(mvStack, shader.getProgram());
+		playerCharacter.draw(mvStack, shader.getProgram());
 		//Draw floor
 		testBox.draw(mvStack, shader.getProgram());
 		shader.disable();
@@ -128,10 +137,11 @@ void draw(SDL_Window* window)
 
 void update()
 {
-	gunActor.update(0.1f);
-	testActor.update(0.1f);
+	playerWeapon.update(0.1f);
+	playerCharacter.update(0.1f);
+	viewportWeapon.update(0.1f);
 	testBox.update();
-	m_camera.update(m_clock.currentTimeSeconds());
+	m_camera.Update(1 / 60.0f);
 }
 
 int main(int argc, char* argv[])

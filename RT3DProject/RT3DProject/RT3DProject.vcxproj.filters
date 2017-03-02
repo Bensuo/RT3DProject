@@ -35,6 +35,12 @@
     <Filter Include="Core Engine">
       <UniqueIdentifier>{6640ad8d-c4d7-4b28-a3a6-d7d721de4451}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Model Loading\New md2">
+      <UniqueIdentifier>{ce45fe3e-e65f-4b04-b597-442a08fe17af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Model Loading\Old MD2 lib">
+      <UniqueIdentifier>{3e9e6218-636c-40bb-a0a6-9ce122ccfa1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -43,9 +49,6 @@
     </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Rendering\Renderables</Filter>
-    </ClCompile>
-    <ClCompile Include="md2model.cpp">
-      <Filter>Rendering\Model Loading</Filter>
     </ClCompile>
     <ClCompile Include="rt3d.cpp">
       <Filter>Rendering\RT3D Library</Filter>
@@ -61,6 +64,15 @@
     </ClCompile>
     <ClCompile Include="Clock.cpp">
       <Filter>Utilities\Clock</Filter>
+    </ClCompile>
+    <ClCompile Include="md2model.cpp">
+      <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModel.cpp">
+      <Filter>Rendering\Model Loading\New md2</Filter>
+    </ClCompile>
+    <ClCompile Include="MD2.cpp">
+      <Filter>Rendering\Model Loading\New md2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +105,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="md2model.h">
-      <Filter>Rendering\Model Loading</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
@@ -122,6 +131,15 @@
     </ClInclude>
     <ClInclude Include="Clock.h">
       <Filter>Utilities\Clock</Filter>
+    </ClInclude>
+    <ClInclude Include="md2model.h">
+      <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
+    </ClInclude>
+    <ClInclude Include="MD2.h">
+      <Filter>Rendering\Model Loading\New md2</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerModel.h">
+      <Filter>Rendering\Model Loading\New md2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

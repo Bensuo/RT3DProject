@@ -1,9 +1,9 @@
 #pragma once
-#include "md2model.h"
 #include "ResourceManager.h"
 #include <glm/glm.hpp>
 #include "rt3d.h"
 #include <stack>
+#include "PlayerModel.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -16,11 +16,11 @@ namespace Rendering
 		virtual ~Actor();
 		void loadContent(Utilities::ResourceManager &content, const std::string& path);
 		void update(const float& dt);
-		void draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram);
+		void draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram) const;
 		void setPosition(const glm::vec3& position);
 	private:
 		GLuint vertexCount;
-		md2model model;
+		PlayerModel model;
 		GLuint mesh;
 		std::shared_ptr<GLuint> texture;
 		glm::vec3 position;

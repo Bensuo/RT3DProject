@@ -149,7 +149,9 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MD2.cpp" />
     <ClCompile Include="md2model.cpp" />
+    <ClCompile Include="PlayerModel.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -172,7 +174,9 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="MD2.h" />
     <ClInclude Include="md2model.h" />
+    <ClInclude Include="PlayerModel.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="Shader.h" />
