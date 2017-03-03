@@ -1,34 +1,27 @@
-#include "Actor.h"
+#include "Model.h"
 #include <glm/gtc/matrix_transform.inl>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Rendering
 {
-	Actor::Actor()
-	{
-		position = glm::vec3(0.0, 0.0, 0.0);
-	}
+	Model::~Model() {}
 
-	Actor::~Actor()
-	{
-	}
-
-	void Actor::loadContent(Utilities::ResourceManager &content, const std::string& path)
+	void Model::loadContent(Utilities::ResourceManager &content, const std::string& path)
 	{
 		auto meshPath = path + ".md2";
 		auto texturePath = path + ".bmp";
-		mesh = model.ReadMD2Model(meshPath.c_str());
+		mesh = m_MD2.ReadMD2Model(meshPath.c_str());
 		texture = content.loadTexture(texturePath.c_str());
-		vertexCount = model.getVertDataCount();
+		vertexCount = m_MD2.getVertDataCount();
 	}
 
-	void Actor::update(const float& dt)
+	void Model::update(const float& dt)
 	{
-		model.Animate(dt);
-		rt3d::updateMesh(mesh, RT3D_VERTEX, model.getAnimVerts(), model.getVertDataSize());
+		m_MD2.Animate(dt);
+		rt3d::updateMesh(mesh, RT3D_VERTEX, m_MD2.getAnimVerts(), m_MD2.getVertDataSize());
 	}
 
-	void Actor::draw(std::stack<glm::mat4> &mvStack, const GLuint& shaderProgram) const
+	void Model::draw(std::stack<glm::mat4> &mvStack, const GLuint& shaderProgram) const
 	{
 		glCullFace(GL_FRONT);
 		glBindTexture(GL_TEXTURE_2D, *texture.get());
@@ -48,8 +41,13 @@ namespace Rendering
 		glCullFace(GL_BACK);
 	}
 
-	void Actor::setPosition(const glm::vec3 & position)
+	void Model::setPosition(const glm::vec3 & position)
 	{
 		this->position = position;
+	}
+
+	void Model::setAnimation(const int& state)
+	{
+		m_MD2.setCurrentAnim(state);
 	}
 }

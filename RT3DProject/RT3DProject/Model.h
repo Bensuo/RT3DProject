@@ -3,24 +3,25 @@
 #include <glm/glm.hpp>
 #include "rt3d.h"
 #include <stack>
-#include "PlayerModel.h"
+#include "MD2.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
 namespace Rendering
 {
-	class Actor
+	class Model
 	{
 	public:
-		Actor();
-		virtual ~Actor();
+		virtual ~Model();
 		void loadContent(Utilities::ResourceManager &content, const std::string& path);
 		void update(const float& dt);
 		void draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram) const;
 		void setPosition(const glm::vec3& position);
-	private:
+		void setAnimation(const int& state);
+		virtual void SetUpAnimationData() = 0;
+	protected:
 		GLuint vertexCount;
-		PlayerModel model;
+		MD2 m_MD2;
 		GLuint mesh;
 		std::shared_ptr<GLuint> texture;
 		glm::vec3 position;

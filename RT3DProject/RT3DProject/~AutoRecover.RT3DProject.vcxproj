@@ -145,9 +145,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Clock.cpp" />
+    <ClCompile Include="GunViewModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MD2.cpp" />
     <ClCompile Include="md2model.cpp" />
@@ -156,7 +157,6 @@
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="ViewportWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gouraud.vert" />
@@ -170,11 +170,12 @@
     <None Include="simple.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="anorms.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="GunViewModel.h" />
     <ClInclude Include="MD2.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="PlayerModel.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
-    <ClInclude Include="ViewportWeapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

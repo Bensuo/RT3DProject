@@ -1,17 +1,29 @@
-#include "rt3d.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <glm/glm.hpp>
-
 #include <vector>
+#include "rt3d.h"
 #include "MD2.h"
 
-/* Table of precalculated normals */
-md2vec3 anorms_table[162] = {
-#include "anorms.h"
-};
+MD2::MD2(const std::string& filename)
+{
+	ReadMD2Model(filename);
+	currentAnim = 0;
+	currentFrame = 0;
+	nextFrame = 1;
+	interp = 0.0f;
+}
+
+MD2::~MD2()
+{
+	FreeModel();
+	int i;
+	for (i = 0; i<mdl.header.num_frames; ++i) {
+		delete[] vertData[i];
+	}
+	delete[] animVerts;
+}
 
 GLuint MD2::ReadMD2Model(const std::string& filename)
 {
@@ -48,7 +60,7 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 		malloc(sizeof(struct md2_frame_t) * mdl.header.num_frames);
 	mdl.glcmds = (int *)malloc(sizeof(int) * mdl.header.num_glcmds);
 
-	/* Read model data */
+	/* Read m_MD2 data */
 	fseek(fp, mdl.header.offset_skins, SEEK_SET);
 	fread(mdl.skins, sizeof(struct md2_skin_t),
 		mdl.header.num_skins, fp);
@@ -120,7 +132,10 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 			pvert = &pframe->verts[mdl.triangles[i].vertex[j]];
 
 			// Get normals 
-			//norm = anorms_table[pvert->normalIndex][0];
+			/* Table of precalculated normals */
+			md2vec3 anorms_table[162] = {
+			#include "anorms.h"
+			};
 			norms.push_back(anorms_table[pvert->normalIndex][0]);
 			norms.push_back(anorms_table[pvert->normalIndex][1]);
 			norms.push_back(anorms_table[pvert->normalIndex][2]);
@@ -221,10 +236,9 @@ void MD2::Animate(const int& animation, const float& dt)
 		nextFrame = start + 1;
 	}
 	interp += dt;
+
 	if (interp >= 1.0f)
 	{
-
-		// Move to next frame 
 		interp = 0.0f;
 		currentFrame = nextFrame;
 		nextFrame++;
@@ -232,6 +246,7 @@ void MD2::Animate(const int& animation, const float& dt)
 		if (nextFrame >= end + 1)
 			nextFrame = start;
 	}
+
 	if (interp == 0.0f)
 		memcpy(animVerts, vertData[currentFrame], vertDataSize * sizeof(float));
 	else {

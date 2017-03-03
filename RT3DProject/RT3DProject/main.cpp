@@ -4,12 +4,14 @@
 #include <stack>
 #include <stdio.h>
 #include "md2model.h"
-#include "Actor.h"
+#include "Model.h"
 #include "Box.h"
 #include "Skybox.h"
 #include "Camera.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "clock.h"
+#include "PlayerModel.h"
+#include "ViewportWeapon.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -28,9 +30,9 @@ Utilities::Clock m_clock;
 
 Camera m_camera;
 Rendering::Shader shader;
-Rendering::Actor playerCharacter;
-Rendering::Actor playerWeapon;
-Rendering::Actor viewportWeapon;
+Rendering::PlayerModel playerCharacter;
+Rendering::PlayerModel playerWeapon;
+Rendering::ViewportWeapon viewportWeapon;
 
 Rendering::Box testBox;
 Rendering::Skybox* m_skybox;
@@ -82,8 +84,11 @@ void init(void)
 		"res/shaders/skyboxFragment.fs");
 
 	playerCharacter.loadContent(content, "res/md2/rampage");
+	playerCharacter.setAnimation(1);
 	playerWeapon.loadContent(content, "res/md2/weapon");
+	playerWeapon.setAnimation(1);
 	viewportWeapon.loadContent(content, "res/md2/v_machn");
+	viewportWeapon.setAnimation(2);
 
 	testBox = Rendering::Box(glm::vec3(100,1,100), glm::vec3(0,-23,0));
 	testBox.loadContent(content);
@@ -116,7 +121,7 @@ void draw(SDL_Window* window)
 	mvStack.push(inverse(m_camera.GetViewMatrix()));
 		float rotation = 90.0f * DEG_TO_RADIAN;
 		mvStack.top() = translate(mvStack.top(), -m_camera.Position);
-		mvStack.top() = translate(mvStack.top(), glm::vec3(0,0,-10));
+		mvStack.top() = translate(mvStack.top(), glm::vec3(0,2,-2));
 		mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 		viewportWeapon.draw(mvStack, shader.getProgram());
 	mvStack.pop();

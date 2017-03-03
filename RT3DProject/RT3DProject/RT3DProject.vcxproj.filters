@@ -35,19 +35,16 @@
     <Filter Include="Core Engine">
       <UniqueIdentifier>{6640ad8d-c4d7-4b28-a3a6-d7d721de4451}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\Model Loading\New md2">
-      <UniqueIdentifier>{ce45fe3e-e65f-4b04-b597-442a08fe17af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering\Model Loading\Old MD2 lib">
       <UniqueIdentifier>{3e9e6218-636c-40bb-a0a6-9ce122ccfa1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Model Loading\M2D">
+      <UniqueIdentifier>{ce45fe3e-e65f-4b04-b597-442a08fe17af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Box.cpp">
-      <Filter>Rendering\Renderables</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor.cpp">
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
     <ClCompile Include="rt3d.cpp">
@@ -68,11 +65,17 @@
     <ClCompile Include="md2model.cpp">
       <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerModel.cpp">
-      <Filter>Rendering\Model Loading\New md2</Filter>
-    </ClCompile>
     <ClCompile Include="MD2.cpp">
-      <Filter>Rendering\Model Loading\New md2</Filter>
+      <Filter>Rendering\Model Loading\M2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModel.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewportWeapon.cpp">
+      <Filter>Rendering\Renderables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,14 +108,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h">
-      <Filter>Rendering\Renderables</Filter>
-    </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Rendering\Renderables</Filter>
-    </ClInclude>
-    <ClInclude Include="anorms.h">
-      <Filter>Rendering\Model Loading</Filter>
     </ClInclude>
     <ClInclude Include="rt3d.h">
       <Filter>Rendering\RT3D Library</Filter>
@@ -136,10 +133,19 @@
       <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
     </ClInclude>
     <ClInclude Include="MD2.h">
-      <Filter>Rendering\Model Loading\New md2</Filter>
+      <Filter>Rendering\Model Loading\M2D</Filter>
+    </ClInclude>
+    <ClInclude Include="anorms.h">
+      <Filter>Rendering\Model Loading\M2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Rendering\Renderables</Filter>
     </ClInclude>
     <ClInclude Include="PlayerModel.h">
-      <Filter>Rendering\Model Loading\New md2</Filter>
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewportWeapon.h">
+      <Filter>Rendering\Renderables</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

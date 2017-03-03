@@ -83,15 +83,16 @@ struct md2_model_t
 
 class MD2
 {
-	virtual void SetUpAnimationData() = 0;
-	virtual void SetUpAnimationData(const std::vector<int>& frameList) = 0;
 public:
-	virtual ~MD2() {}
+	explicit MD2(const std::string& filename);
+	MD2() {}
+	virtual ~MD2();
 	GLuint ReadMD2Model(const std::string& filename);
 	void FreeModel();
 	void Animate(const int& animation, const float& dt);
-	void Animate(const float& dt) { Animate(1, dt); }
+	void Animate(const float& dt) { Animate(currentAnim, dt); }
 	void setCurrentAnim(const int& n) { currentAnim = n; }
+	void SetUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
 protected:
 	md2_model_t mdl;
 	int currentAnim;

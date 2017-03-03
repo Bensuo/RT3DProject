@@ -1,5 +1,5 @@
 ///* md2model.cpp - based on original:
-//* md2.c -- md2 model loader
+//* md2.c -- md2 m_MD2 loader
 //* last modification: November 2010 by Daniel Livingstone
 //*
 //* Copyright (c) 2005-2007 David HENRY
@@ -95,9 +95,9 @@
 //}
 //
 ///**
-//* Load an MD2 model from file.
+//* Load an MD2 m_MD2 from file.
 //*
-//* Note: MD2 format stores model's data in little-endian ordering.  On
+//* Note: MD2 format stores m_MD2's data in little-endian ordering.  On
 //* big-endian machines, you'll have to perform proper conversions.
 //*/
 //GLuint md2model::ReadMD2Model (const char *filename)
@@ -135,7 +135,7 @@
 //		malloc (sizeof (struct md2_frame_t) * mdl.header.num_frames);
 //	mdl.glcmds = (int *)malloc (sizeof (int) * mdl.header.num_glcmds);
 //
-//	/* Read model data */
+//	/* Read m_MD2 data */
 //	fseek (fp, mdl.header.offset_skins, SEEK_SET);
 //	fread (mdl.skins, sizeof (struct md2_skin_t),
 //		mdl.header.num_skins, fp);
@@ -259,7 +259,7 @@
 //
 //
 ///**
-//* Free resources allocated for the model.
+//* Free resources allocated for the m_MD2.
 //*/
 //void md2model::FreeModel ()
 //{

@@ -1,5 +1,5 @@
 ///* md2model.h - based on original:
-// * md2.c -- md2 model loader
+// * md2.c -- md2 m_MD2 loader
 //
 // * Modified: March 2013 by Daniel Livingstone
 // * to remove use of GLTools, replacing with calls to GLM and rt3d library
@@ -140,7 +140,7 @@
 //  int index;
 //};
 //
-///* MD2 model structure */
+///* MD2 m_MD2 structure */
 //struct md2_model_t
 //{
 //  struct md2_header_t header;
@@ -154,7 +154,7 @@
 //  GLuint tex_id;
 //};
 //
-///*** An MD2 model ***/
+///*** An MD2 m_MD2 ***/
 ////struct md2_model_t md2file;
 //
 //// md2model class
