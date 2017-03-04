@@ -15,6 +15,14 @@ MD2::MD2(const std::string& filename)
 	interp = 0.0f;
 }
 
+MD2::MD2()
+{
+	currentAnim = 0;
+	currentFrame = 0;
+	nextFrame = 1;
+	interp = 0.0f;
+}
+
 MD2::~MD2()
 {
 	FreeModel();

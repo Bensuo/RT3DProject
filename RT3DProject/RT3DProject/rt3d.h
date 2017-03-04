@@ -2,10 +2,6 @@
 #define RT3D
 
 #include <GL/glew.h>
-#include <SDL.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 
 #define RT3D_VERTEX		0
 #define RT3D_COLOUR		1

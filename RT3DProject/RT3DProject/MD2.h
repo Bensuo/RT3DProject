@@ -1,5 +1,4 @@
 #pragma once
-#define WIN32
 #include "rt3d.h"
 #include <vector>
 
@@ -85,7 +84,7 @@ class MD2
 {
 public:
 	explicit MD2(const std::string& filename);
-	MD2() {}
+	MD2();
 	virtual ~MD2();
 	GLuint ReadMD2Model(const std::string& filename);
 	void FreeModel();
@@ -95,7 +94,7 @@ public:
 	void SetUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
 protected:
 	md2_model_t mdl;
-	int currentAnim;
+	int currentAnim = 0;
 	int currentFrame;
 	int nextFrame;
 	float interp;

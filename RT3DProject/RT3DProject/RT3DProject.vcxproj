@@ -94,7 +94,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CoreEngine.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Clock.cpp" />
@@ -170,6 +171,7 @@
     <None Include="simple.frag" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoreEngine.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="anorms.h" />
     <ClInclude Include="Box.h" />

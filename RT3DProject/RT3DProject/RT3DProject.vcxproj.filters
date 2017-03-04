@@ -77,6 +77,9 @@
     <ClCompile Include="ViewportWeapon.cpp">
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
+    <ClCompile Include="CoreEngine.cpp">
+      <Filter>Core Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="ViewportWeapon.h">
       <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreEngine.h">
+      <Filter>Core Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
