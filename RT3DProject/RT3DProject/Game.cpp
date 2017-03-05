@@ -1,6 +1,6 @@
-#include "CoreEngine.h"
+#include "Game.h"
 
-SDL_Window* CoreEngine::setupRC(SDL_GLContext& context)
+SDL_Window* Game::setupRC(SDL_GLContext& context)
 {
 	SDL_Window* window;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize video
@@ -29,7 +29,7 @@ SDL_Window* CoreEngine::setupRC(SDL_GLContext& context)
 	return window;
 }
 
-void CoreEngine::init()
+void Game::init()
 {
 	m_camera.Position = glm::vec3(0, 0, 200);
 	shader = Rendering::Shader("phong-tex.vert", "phong-tex.frag");
@@ -57,7 +57,7 @@ void CoreEngine::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void CoreEngine::draw(SDL_Window* window)
+void Game::draw(SDL_Window* window)
 {
 	//reset draw
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -100,7 +100,7 @@ void CoreEngine::draw(SDL_Window* window)
 	SDL_GL_SwapWindow(window); //Swap buffers
 }
 
-void CoreEngine::update()
+void Game::update()
 {
 	playerWeapon.update(0.1f);
 	playerCharacter.update(0.1f);
@@ -109,7 +109,7 @@ void CoreEngine::update()
 	m_camera.Update(1 / 60.0f);
 }
 
-CoreEngine::CoreEngine()
+Game::Game()
 {
 	lightPos = glm::vec4(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 

@@ -145,7 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CoreEngine.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Clock.cpp" />
@@ -171,7 +171,7 @@
     <None Include="simple.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoreEngine.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="anorms.h" />
     <ClInclude Include="Box.h" />

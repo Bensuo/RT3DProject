@@ -13,7 +13,7 @@
 
 #define DEG_TO_RADIAN 0.017453293
 
-class CoreEngine
+class Game
 {
 	rt3d::lightStruct light0 = {
 		{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
@@ -45,6 +45,6 @@ public:
 	void init(void);
 	void draw(SDL_Window* window);
 	void update();
-	CoreEngine();
+	Game();
 };
 

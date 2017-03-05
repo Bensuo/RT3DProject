@@ -77,7 +77,7 @@
     <ClCompile Include="ViewportWeapon.cpp">
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
-    <ClCompile Include="CoreEngine.cpp">
+    <ClCompile Include="Game.cpp">
       <Filter>Core Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -150,7 +150,7 @@
     <ClInclude Include="ViewportWeapon.h">
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
-    <ClInclude Include="CoreEngine.h">
+    <ClInclude Include="Game.h">
       <Filter>Core Engine</Filter>
     </ClInclude>
   </ItemGroup>
