@@ -153,6 +153,7 @@
     <ClCompile Include="MD2.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="PlayerModel.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="MD2.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="PlayerModel.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="Shader.h" />

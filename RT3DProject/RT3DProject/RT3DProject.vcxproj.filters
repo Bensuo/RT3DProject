@@ -80,6 +80,9 @@
     <ClCompile Include="Game.cpp">
       <Filter>Core Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -152,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Core Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
