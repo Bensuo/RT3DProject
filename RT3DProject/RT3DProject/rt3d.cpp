@@ -1,5 +1,9 @@
 #include "rt3d.h"
 #include <map>
+#include <SDL.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
