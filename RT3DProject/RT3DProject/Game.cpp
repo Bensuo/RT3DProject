@@ -23,10 +23,7 @@ void Game::init()
 	testPlayer2 = new Player();
 	testPlayer2->loadContent(content);
 	testPlayer2->setPosition(glm::vec3(100, 0, 0));
-	renderList.emplace_back(&testPlayer->getPlayerModel());
-	renderList.emplace_back(&testPlayer->getWeapon());
 	
-	renderList.emplace_back(&testBox);
 }
 
 void Game::draw()
@@ -35,9 +32,14 @@ void Game::draw()
 	renderer.drawSkybox(m_skybox);
 	renderer.setShader("Phong");
 	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
+	renderList.emplace_back(&testPlayer->getPlayerModel());
+	renderer.render(renderList);
+	renderer.setShader("Phong2");
+	renderList.clear();
+	renderList.emplace_back(&testBox);
 	renderer.render(renderList);
 	renderer.end();
-
+	renderList.clear();
 }
 
 void Game::update()

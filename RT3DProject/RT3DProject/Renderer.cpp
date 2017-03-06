@@ -60,6 +60,8 @@ void Renderer::init()
 	//Set up shaders
 	shaders.insert(std::make_pair("Phong", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
 	shaders["Phong"].setLight(light0);
+	shaders.insert(std::make_pair("Phong2", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
+	shaders["Phong2"].setLight(light1);
 
 }
 
