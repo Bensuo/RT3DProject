@@ -4,18 +4,26 @@
 #include <stack>
 #include <memory>
 #include "ResourceManager.h"
-
+#include "IRenderable.h"
 namespace Rendering
 {
-	class Box
+	class Box : public IRenderable
 	{
 	public:
 		Box() {};
 		Box(const glm::vec3& bounds, const glm::vec3& position);
 		void loadContent(Utilities::ResourceManager& content);
 		virtual ~Box();
-		void draw(std::stack<glm::mat4>& mvStack, const GLuint& shaderProgram) const;
+
 		void update();
+
+		// Inherited via IRenderable
+		virtual GLuint & getMesh() override;
+		virtual GLuint & getTexture() override;
+		virtual GLuint & getCount() override;
+		virtual rt3d::materialStruct & getMaterial() override;
+		virtual Transform & getTransform() override;
+		virtual bool isIndexed() override;
 	private:
 		GLfloat cubeVerts[24];
 		GLfloat cubeColours[24];
@@ -32,7 +40,9 @@ namespace Rendering
 			{ 0.8f, 0.8f, 0.8f, 1.0f }, // specular
 			1.0f  // shininess
 		};
-		glm::vec3 position;
+		Transform transform{ glm::vec3(0), glm::vec3(0) };
+
+
 	};
 }
 

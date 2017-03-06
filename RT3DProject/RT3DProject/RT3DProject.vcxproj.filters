@@ -80,6 +80,10 @@
     <ClCompile Include="Game.cpp">
       <Filter>Core Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -153,5 +157,13 @@
     <ClInclude Include="Game.h">
       <Filter>Core Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="IRenderable.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h" />
   </ItemGroup>
 </Project>

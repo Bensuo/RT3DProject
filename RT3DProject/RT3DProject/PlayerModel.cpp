@@ -4,13 +4,13 @@ namespace Rendering {
 
 	PlayerModel::PlayerModel()
 	{
-		this->position = glm::vec3();
+
 		PlayerModel::SetUpAnimationData();
 	}
 
 	PlayerModel::PlayerModel(const glm::vec3& position)
 	{
-		this->position = position;
+		this->transform.position = position;
 		PlayerModel::SetUpAnimationData();
 	}
 
