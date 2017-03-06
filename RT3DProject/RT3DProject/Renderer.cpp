@@ -79,12 +79,13 @@ void Renderer::quit()
 	SDL_Quit();
 }
 
-void Renderer::begin(Camera camera)
+void Renderer::begin(Camera& camera)
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
+	this->camera = &camera;
 }
 
 void Renderer::end()
@@ -121,7 +122,7 @@ void Renderer::draw(IRenderable* renderable)
 	glCullFace(GL_BACK);
 }
 
-void Renderer::drawSkybox(Rendering::Skybox* skybox, Camera& camera)
+void Renderer::drawSkybox(Rendering::Skybox* skybox)
 {
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
@@ -129,7 +130,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox, Camera& camera)
 	skybox->shader.use();
 
 	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 1000.0f);
-	glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+	glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
@@ -146,16 +147,16 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox, Camera& camera)
 	skybox->shader.disable();
 }
 
-void Renderer::render(std::vector<IRenderable*>& models, Camera camera)
+void Renderer::render(std::vector<IRenderable*>& models)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(camera->Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-	mvStack.push(camera.GetViewMatrix());
+	mvStack.push(camera->GetViewMatrix());
 
 	for (auto const& m : models)
 	{
@@ -167,18 +168,18 @@ void Renderer::render(std::vector<IRenderable*>& models, Camera camera)
 
 }
 
-void Renderer::renderFirstPerson(IRenderable * renderable, Camera & camera)
+void Renderer::renderFirstPerson(IRenderable * renderable)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(camera->Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-	mvStack.push(inverse(camera.GetViewMatrix()));
+	mvStack.push(inverse(camera->GetViewMatrix()));
 	float rotation = 90.0f * DEG_TO_RADIAN;
-	mvStack.top() = translate(mvStack.top(), -camera.Position);
+	mvStack.top() = translate(mvStack.top(), -camera->Position);
 	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
 	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	draw(renderable);

@@ -19,12 +19,12 @@ public:
 	Renderer();
 	virtual ~Renderer();
 	void quit();
-	void begin(Camera camera);
+	void begin(Camera& camera);
 	void end();
 	void draw(IRenderable* renderable);
-	void drawSkybox(Rendering::Skybox* skybox, Camera& camera);
-	void render(std::vector<IRenderable*>& models, Camera camera);
-	void renderFirstPerson(IRenderable* renderable, Camera& camera);
+	void drawSkybox(Rendering::Skybox* skybox);
+	void render(std::vector<IRenderable*>& models);
+	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);
 private:
 	std::stack<glm::mat4> mvStack;
@@ -45,7 +45,7 @@ private:
 		{ 0.15f, 0.34f, 1.0f, 1.0f }, // specular
 		{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
 	};
-
+	Camera* camera;
 	glm::vec4 lightPos; //light position
 
 };
