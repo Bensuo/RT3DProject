@@ -13,6 +13,9 @@
 #include "ViewportWeapon.h"
 #include <map>
 #include "IRenderable.h"
+
+//The Renderer handles window creation and management as well as drawing to the screen using
+//OpenGL
 class Renderer
 {
 public:
@@ -27,18 +30,18 @@ public:
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);
 private:
+	void init();
 	std::stack<glm::mat4> mvStack;
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
 	SDL_Window* setupRC(SDL_GLContext& context);
-	void init();
-
 	SDL_Window* hWindow;
 	SDL_GLContext glContext;
 
-	//TODO: Replace with maps?
 	std::map<std::string, Rendering::Shader> shaders;
 	Rendering::Shader* currentShader;
+
+	//TODO: Replace with maps?
 	rt3d::lightStruct light0 = {
 		{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
 		{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse

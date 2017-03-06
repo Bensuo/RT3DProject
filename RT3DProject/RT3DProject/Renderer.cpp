@@ -65,6 +65,7 @@ void Renderer::init()
 
 }
 
+//Set the shader to be used for rendering
 void Renderer::setShader(std::string name)
 {
 	if (shaders.find(name) != shaders.end())
@@ -81,6 +82,7 @@ void Renderer::quit()
 	SDL_Quit();
 }
 
+//Clears buffers to begin rendering
 void Renderer::begin(Camera& camera)
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -90,12 +92,13 @@ void Renderer::begin(Camera& camera)
 	this->camera = &camera;
 }
 
+//Ends rendering and pushes the result to the screen
 void Renderer::end()
 {
-
 	SDL_GL_SwapWindow(hWindow); //Swap buffers
 }
 
+//Draws an object implementing the IRenderable interface
 void Renderer::draw(IRenderable* renderable)
 {
 	glCullFace(GL_FRONT);
@@ -104,9 +107,7 @@ void Renderer::draw(IRenderable* renderable)
 	mvStack.push(mvStack.top());
 	float rotation = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
 	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
-
 	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
-
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 	currentShader->setMaterial(renderable->getMaterial());
 	if (renderable->isIndexed())
@@ -117,12 +118,12 @@ void Renderer::draw(IRenderable* renderable)
 	{
 		rt3d::drawMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	}
-	
 	mvStack.pop();
 	mvStack.pop();
 
 	glCullFace(GL_BACK);
 }
+
 
 void Renderer::drawSkybox(Rendering::Skybox* skybox)
 {
@@ -130,7 +131,6 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox)
 	glDepthMask(GL_FALSE);
 
 	skybox->shader.use();
-
 	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 1000.0f);
 	glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -149,27 +149,27 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox)
 	skybox->shader.disable();
 }
 
+//Renders all objects in the provided list based on the camera provided in begin() and the currently
+//active shader
 void Renderer::render(std::vector<IRenderable*>& models)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
+
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(camera->Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(camera->GetViewMatrix());
-
 	for (auto const& m : models)
 	{
 		draw(m);
 	}
-
-
 	mvStack.pop();
-
 }
 
+//Renders "first person" renderables such as viewport weapon models
 void Renderer::renderFirstPerson(IRenderable * renderable)
 {
 	glEnable(GL_DEPTH_TEST);

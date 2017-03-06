@@ -2,6 +2,7 @@
 #include <GL\glew.h>
 #include "rt3d.h"
 #include "Transform.h"
+//An interface for rendering 3D objects using OpenGL and the RT3D libraries
 class IRenderable
 {
 public:
