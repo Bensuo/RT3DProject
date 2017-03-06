@@ -13,7 +13,7 @@ Renderer::Renderer()
 		exit(1);
 	}
 	std::cout << glGetString(GL_VERSION) << std::endl;
-
+		lightPos = glm::vec4(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 	init();
 }
 
@@ -56,8 +56,20 @@ void Renderer::init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	shader = Rendering::Shader("phong-tex.vert", "phong-tex.frag");
-	shader.setLight(light0);
+
+	//Set up shaders
+	shaders.insert(std::make_pair("Phong", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
+	shaders["Phong"].setLight(light0);
+
+}
+
+void Renderer::setShader(std::string name)
+{
+	if (shaders.find(name) != shaders.end())
+	{
+		currentShader = &shaders[name];
+		currentShader->use();
+	}
 }
 
 void Renderer::quit()
@@ -72,17 +84,89 @@ void Renderer::begin(Camera camera)
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	//create projection from Camera data
-	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
-
-	//Use default phong Shader
-	shader.use();
-	shader.setUniformMatrix4fv("projection", value_ptr(projection));
+	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::end()
 {
+
 	SDL_GL_SwapWindow(hWindow); //Swap buffers
+}
+
+void Renderer::draw(Rendering::Model* model)
+{
+	glCullFace(GL_FRONT);
+	glBindTexture(GL_TEXTURE_2D, *model->getTexture().get());
+
+	mvStack.push(mvStack.top());
+	float rotation = -90.0f * DEG_TO_RADIAN;
+	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
+
+	mvStack.top() = translate(mvStack.top(), model->position);
+
+	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
+	currentShader->setMaterial(model->material);
+	rt3d::drawMesh(model->mesh, model->vertexCount, GL_TRIANGLES);
+	mvStack.pop();
+	mvStack.pop();
+
+	glCullFace(GL_BACK);
+}
+
+void Renderer::drawSkybox(Rendering::Skybox* skybox, Camera& camera)
+{
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+
+	skybox->shader.use();
+
+	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 1000.0f);
+	glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+	glBindVertexArray(skybox->vao);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->texture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+
+	//clear the depth to ensure Skybox is always drawn on bottom
+	glClear(GL_DEPTH_BUFFER_BIT);
+	skybox->shader.disable();
+}
+
+void Renderer::render(std::vector<Rendering::Model*>& fpModels, std::vector<Rendering::Model*>& models, Camera camera)
+{
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	//create projection from Camera data
+	glm::mat4 projection(1.0);
+	projection = glm::perspective(camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	currentShader->use();
+	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
+
+	mvStack.push(inverse(camera.GetViewMatrix()));
+	float rotation = 90.0f * DEG_TO_RADIAN;
+	mvStack.top() = translate(mvStack.top(), -camera.Position);
+	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
+	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+	for (auto const& m : fpModels)
+	{
+		draw(m);
+	}
+	mvStack.pop();
+
+	mvStack.push(camera.GetViewMatrix());
+
+	for (auto const& m : models)
+	{
+		draw(m);
+	}
+
+
+	mvStack.pop();
+
 }

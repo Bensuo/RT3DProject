@@ -9,9 +9,8 @@ namespace Rendering
 	{
 		const float SIZE = 1;
 		GLuint vbo;
-		GLuint vao;
-		GLuint texture;
-		Shader shader;
+
+		
 		bool loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name);
 	public:
 		Skybox() {}
@@ -25,5 +24,8 @@ namespace Rendering
 			const char* fragmentPath);
 		~Skybox();
 		void render(Camera& camera) const;
+		GLuint vao;
+		GLuint texture;
+		Shader shader;
 	};
 }

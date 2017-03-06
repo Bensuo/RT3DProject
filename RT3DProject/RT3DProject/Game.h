@@ -10,6 +10,7 @@
 #include "clock.h"
 #include "PlayerModel.h"
 #include "ViewportWeapon.h"
+#include "Renderer.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -40,10 +41,13 @@ class Game
 
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
+	
+	Renderer renderer;
+	std::vector<Rendering::Model*> renderList;
+	std::vector<Rendering::Model*> fpRenderList;
 public:
-	SDL_Window* setupRC(SDL_GLContext& context);
 	void init(void);
-	void draw(SDL_Window* window);
+	void draw();
 	void update();
 	Game();
 };

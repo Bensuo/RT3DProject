@@ -8,8 +8,10 @@
 #include "camera.h"
 #include "rt3d.h"
 #include "shader.h"
-
-
+#include "Model.h"
+#include "skybox.h"
+#include "ViewportWeapon.h"
+#include <map>
 class Renderer
 {
 public:
@@ -18,6 +20,11 @@ public:
 	void quit();
 	void begin(Camera camera);
 	void end();
+	void draw(Rendering::Model* model);
+	void drawSkybox(Rendering::Skybox* skybox, Camera& camera);
+	void render(std::vector<Rendering::Model*>& fpModels, std::vector<Rendering::Model*>& models, Camera camera);
+
+	void setShader(std::string name);
 private:
 	std::stack<glm::mat4> mvStack;
 	const unsigned SCREEN_HEIGHT = 720;
@@ -29,6 +36,8 @@ private:
 	SDL_GLContext glContext;
 
 	//TODO: Replace with maps?
+	std::map<std::string, Rendering::Shader> shaders;
+	Rendering::Shader* currentShader;
 	rt3d::lightStruct light0 = {
 		{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
 		{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse
@@ -37,6 +46,6 @@ private:
 	};
 
 	glm::vec4 lightPos; //light position
-	Rendering::Shader shader;
+
 };
 
