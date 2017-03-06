@@ -12,6 +12,7 @@
 #include "skybox.h"
 #include "ViewportWeapon.h"
 #include <map>
+#include "IRenderable.h"
 class Renderer
 {
 public:
@@ -20,10 +21,10 @@ public:
 	void quit();
 	void begin(Camera camera);
 	void end();
-	void draw(Rendering::Model* model);
+	void draw(IRenderable* renderable);
 	void drawSkybox(Rendering::Skybox* skybox, Camera& camera);
-	void render(std::vector<Rendering::Model*>& fpModels, std::vector<Rendering::Model*>& models, Camera camera);
-
+	void render(std::vector<IRenderable*>& models, Camera camera);
+	void renderFirstPerson(IRenderable* renderable, Camera& camera);
 	void setShader(std::string name);
 private:
 	std::stack<glm::mat4> mvStack;

@@ -25,9 +25,15 @@ void Game::init()
 	testBox = Rendering::Box(glm::vec3(100, 1, 100), glm::vec3(0, -23, 0));
 	testBox.loadContent(content);
 
-	renderList.push_back(&playerCharacter);
-	renderList.push_back(&playerWeapon);
-	fpRenderList.push_back(&viewportWeapon);
+	testPlayer = new Player();
+	testPlayer->loadContent(content);
+	testPlayer2 = new Player();
+	testPlayer2->loadContent(content);
+	testPlayer2->setPosition(glm::vec3(100, 0, 0));
+	renderList.emplace_back(&testPlayer->getPlayerModel());
+	renderList.emplace_back(&testPlayer->getWeapon());
+	
+	renderList.emplace_back(&testBox);
 }
 
 void Game::draw()
@@ -35,7 +41,8 @@ void Game::draw()
 	renderer.begin(m_camera);
 	renderer.drawSkybox(m_skybox, m_camera);
 	renderer.setShader("Phong");
-	renderer.render(fpRenderList, renderList, m_camera);
+	renderer.renderFirstPerson(&testPlayer->getVPWeapon(), m_camera);
+	renderer.render(renderList, m_camera);
 	renderer.end();
 
 }
@@ -46,6 +53,8 @@ void Game::update()
 	playerCharacter.update(0.1f);
 	viewportWeapon.update(0.1f);
 	testBox.update();
+	testPlayer->update(0.1f);
+	testPlayer2->update(0.1f);
 	m_camera.Update(1 / 60.0f);
 }
 

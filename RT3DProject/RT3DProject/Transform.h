@@ -1,12 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
-class Transform
+struct Transform
 {
-public:
-	Transform();
-	virtual ~Transform();
 	glm::vec3 position;
-	float rotation;
+	glm::vec3 rotation;
 
 };
 

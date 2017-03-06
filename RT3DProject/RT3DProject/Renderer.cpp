@@ -93,20 +93,28 @@ void Renderer::end()
 	SDL_GL_SwapWindow(hWindow); //Swap buffers
 }
 
-void Renderer::draw(Rendering::Model* model)
+void Renderer::draw(IRenderable* renderable)
 {
 	glCullFace(GL_FRONT);
-	glBindTexture(GL_TEXTURE_2D, *model->getTexture().get());
+	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 
 	mvStack.push(mvStack.top());
-	float rotation = -90.0f * DEG_TO_RADIAN;
+	float rotation = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
 	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
 
-	mvStack.top() = translate(mvStack.top(), model->position);
+	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
 
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
-	currentShader->setMaterial(model->material);
-	rt3d::drawMesh(model->mesh, model->vertexCount, GL_TRIANGLES);
+	currentShader->setMaterial(renderable->getMaterial());
+	if (renderable->isIndexed())
+	{
+		rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
+	}
+	else
+	{
+		rt3d::drawMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
+	}
+	
 	mvStack.pop();
 	mvStack.pop();
 
@@ -138,7 +146,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox, Camera& camera)
 	skybox->shader.disable();
 }
 
-void Renderer::render(std::vector<Rendering::Model*>& fpModels, std::vector<Rendering::Model*>& models, Camera camera)
+void Renderer::render(std::vector<IRenderable*>& models, Camera camera)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -147,18 +155,6 @@ void Renderer::render(std::vector<Rendering::Model*>& fpModels, std::vector<Rend
 	projection = glm::perspective(camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-
-	mvStack.push(inverse(camera.GetViewMatrix()));
-	float rotation = 90.0f * DEG_TO_RADIAN;
-	mvStack.top() = translate(mvStack.top(), -camera.Position);
-	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
-	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
-	for (auto const& m : fpModels)
-	{
-		draw(m);
-	}
-	mvStack.pop();
-
 	mvStack.push(camera.GetViewMatrix());
 
 	for (auto const& m : models)
@@ -169,4 +165,22 @@ void Renderer::render(std::vector<Rendering::Model*>& fpModels, std::vector<Rend
 
 	mvStack.pop();
 
+}
+
+void Renderer::renderFirstPerson(IRenderable * renderable, Camera & camera)
+{
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	//create projection from Camera data
+	glm::mat4 projection(1.0);
+	projection = glm::perspective(camera.Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	currentShader->use();
+	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
+	mvStack.push(inverse(camera.GetViewMatrix()));
+	float rotation = 90.0f * DEG_TO_RADIAN;
+	mvStack.top() = translate(mvStack.top(), -camera.Position);
+	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
+	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+	draw(renderable);
+	mvStack.pop();
 }

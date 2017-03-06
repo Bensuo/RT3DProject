@@ -5,14 +5,14 @@ namespace Rendering {
 	ViewportWeapon::ViewportWeapon()
 	{
 		weaponType = ASSAULT_RIFLE;
-		this->position = glm::vec3();
+
 		ViewportWeapon::SetUpAnimationData();
 	}
 
 	ViewportWeapon::ViewportWeapon(const WeaponType& type, const glm::vec3& position)
 	{
 		weaponType = type;
-		this->position = position;
+		this->transform.position = position;
 		ViewportWeapon::SetUpAnimationData();
 	}
 
@@ -38,5 +38,10 @@ namespace Rendering {
 
 	ViewportWeapon::~ViewportWeapon()
 	{
+	}
+	void ViewportWeapon::setTransform(const Transform & transform)
+	{
+		this->transform.position = transform.position;
+		this->transform.rotation = transform.rotation;
 	}
 }

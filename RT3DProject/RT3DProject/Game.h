@@ -11,6 +11,7 @@
 #include "PlayerModel.h"
 #include "ViewportWeapon.h"
 #include "Renderer.h"
+#include "Player.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -39,12 +40,14 @@ class Game
 	Rendering::Box testBox;
 	Rendering::Skybox* m_skybox;
 
+	Player* testPlayer, *testPlayer2;
+
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
 	
 	Renderer renderer;
-	std::vector<Rendering::Model*> renderList;
-	std::vector<Rendering::Model*> fpRenderList;
+	std::vector<IRenderable*> renderList;
+	std::vector<IRenderable*> fpRenderList;
 public:
 	void init(void);
 	void draw();
