@@ -24,6 +24,7 @@ namespace Rendering
 		virtual rt3d::materialStruct & getMaterial() override;
 		virtual Transform & getTransform() override;
 		virtual bool isIndexed() override;
+		void setMaterial(rt3d::materialStruct mat) { material = mat; };
 	private:
 		GLfloat cubeVerts[24];
 		GLfloat cubeColours[24];

@@ -165,5 +165,6 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="AABB.h" />
   </ItemGroup>
 </Project>

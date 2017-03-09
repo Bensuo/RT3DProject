@@ -173,6 +173,7 @@
     <None Include="simple.frag" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Model.h" />
