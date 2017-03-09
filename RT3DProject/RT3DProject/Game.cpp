@@ -31,61 +31,33 @@ void Game::draw()
 	renderer.begin(m_camera);
 	renderer.drawSkybox(m_skybox);
 	renderer.setShader("Phong");
-	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
 	renderList.emplace_back(&testPlayer->getPlayerModel());
 	renderList.emplace_back(&testPlayer->getWeapon());
-	renderer.render(renderList);
-	renderer.setShader("Phong2");
-	renderList.clear();
 	renderList.emplace_back(&testBox);
 	renderer.render(renderList);
+	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
 	renderer.end();
 	renderList.clear();
 }
 
 void Game::update()
 {
+	m_input.Update(m_camera);
 	testBox.update();
 	testPlayer->update(0.1f);
 	testPlayer2->update(0.1f);
 	m_camera.Update(1 / 60.0f);
-
-	auto currentKeyStates = SDL_GetKeyboardState(nullptr);
-	if (currentKeyStates[SDL_SCANCODE_W])
-	{
-		m_camera.Position.z -= 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_A])
-	{
-		m_camera.Position.x -= 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_D])
-	{
-		m_camera.Position.x += 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_S])
-	{
-		m_camera.Position.z += 1.0f;
-	}
 }
 
 Game::Game()
 {
-
-
 	init();
-	bool running = true; // set running to true
-	SDL_Event sdlEvent; // variable to detect SDL events
-	while (running)
-	{ // the event loop
-		while (SDL_PollEvent(&sdlEvent))
-		{
-			if (sdlEvent.type == SDL_QUIT)
-				running = false;
-		}
-		update();
-		draw(); // call the draw function
-	}
+	auto running = true;
 
+	while (running)
+	{
+		update();
+		draw();
+	}
 	renderer.quit();
 }

@@ -12,6 +12,7 @@
 #include "ViewportWeapon.h"
 #include "Renderer.h"
 #include "Player.h"
+#include "Input.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -21,6 +22,7 @@ class Game
 	Utilities::Clock m_clock;
 	Renderer renderer;
 	Camera m_camera;
+	Input m_input;
 	Rendering::Box testBox;
 	Rendering::Skybox* m_skybox;
 
