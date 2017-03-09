@@ -13,7 +13,6 @@ void Input::Update(Camera& camera)
 		switch (event.type)
 		{
 		case SDL_MOUSEMOTION:
-			SDL_SetRelativeMouseMode(SDL_TRUE);
 			camera.ProcessMouseMovement(event.motion.xrel, -event.motion.yrel);
 			break;
 		case SDL_QUIT:

@@ -4,6 +4,8 @@
 
 void Game::init()
 {
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	m_camera.Position = glm::vec3(0, 15.5f, 100);
 
 	m_skybox = new Rendering::Skybox("res/textures/front.bmp",
