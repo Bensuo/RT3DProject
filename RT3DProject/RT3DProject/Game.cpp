@@ -40,6 +40,11 @@ void Game::draw()
 	renderList.clear();
 }
 
+bool Game::Quit() const
+{
+	return m_input.Quit();
+}
+
 void Game::update()
 {
 	m_input.Update(m_camera);
@@ -56,6 +61,7 @@ Game::Game()
 
 	while (running)
 	{
+		running = !Quit();
 		update();
 		draw();
 	}

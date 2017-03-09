@@ -37,6 +37,7 @@ class Game
 public:
 	void init(void);
 	void draw();
+	bool Quit() const;
 	void update();
 	Game();
 };

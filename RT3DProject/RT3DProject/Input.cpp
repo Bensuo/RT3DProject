@@ -17,6 +17,7 @@ void Input::Update(Camera& camera)
 			camera.ProcessMouseMovement(event.motion.xrel, -event.motion.yrel);
 			break;
 		case SDL_QUIT:
+			quit = true;
 			break;
 		default: 
 			break;
@@ -41,7 +42,17 @@ void Input::Update(Camera& camera)
 		camera.ProcessKeyboard(RIGHT);
 	}
 
+	if (currentKeyState[SDL_SCANCODE_ESCAPE])
+	{
+		quit = true;
+	}
+
 	previousKeyState = currentKeyState;
+}
+
+bool Input::Quit() const
+{
+	return quit;
 }
 
 
