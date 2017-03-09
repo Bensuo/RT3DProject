@@ -4,7 +4,7 @@
 
 void Game::init()
 {
-	m_camera.Position = glm::vec3(0, 0, 200);
+	m_camera.Position = glm::vec3(0, 15.5f, 100);
 
 	m_skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
@@ -15,7 +15,7 @@ void Game::init()
 		"res/shaders/skyboxVertex.vs",
 		"res/shaders/skyboxFragment.fs");
 
-	testBox = Rendering::Box(glm::vec3(100, 1, 100), glm::vec3(0, -23, 0));
+	testBox = Rendering::Box(glm::vec3(1000, 1, 1000), glm::vec3(0, -23, 0));
 	testBox.loadContent(content);
 
 	testPlayer = new Player();
@@ -33,6 +33,7 @@ void Game::draw()
 	renderer.setShader("Phong");
 	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
 	renderList.emplace_back(&testPlayer->getPlayerModel());
+	renderList.emplace_back(&testPlayer->getWeapon());
 	renderer.render(renderList);
 	renderer.setShader("Phong2");
 	renderList.clear();
@@ -48,6 +49,24 @@ void Game::update()
 	testPlayer->update(0.1f);
 	testPlayer2->update(0.1f);
 	m_camera.Update(1 / 60.0f);
+
+	auto currentKeyStates = SDL_GetKeyboardState(nullptr);
+	if (currentKeyStates[SDL_SCANCODE_W])
+	{
+		m_camera.Position.z -= 1.0f;
+	}
+	else if (currentKeyStates[SDL_SCANCODE_A])
+	{
+		m_camera.Position.x -= 1.0f;
+	}
+	else if (currentKeyStates[SDL_SCANCODE_D])
+	{
+		m_camera.Position.x += 1.0f;
+	}
+	else if (currentKeyStates[SDL_SCANCODE_S])
+	{
+		m_camera.Position.z += 1.0f;
+	}
 }
 
 Game::Game()
