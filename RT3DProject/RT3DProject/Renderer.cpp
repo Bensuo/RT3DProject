@@ -158,7 +158,7 @@ void Renderer::render(std::vector<IRenderable*>& models)
 
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(camera->GetViewMatrix());
@@ -176,14 +176,14 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->Zoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-	mvStack.push(inverse(camera->GetViewMatrix()));
+	mvStack.push(glm::mat4(1));
 	float rotation = 90.0f * DEG_TO_RADIAN;
-	mvStack.top() = translate(mvStack.top(), -camera->Position);
 	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
 	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+	glClear(GL_DEPTH_BUFFER_BIT);
 	draw(renderable);
 	mvStack.pop();
 }
