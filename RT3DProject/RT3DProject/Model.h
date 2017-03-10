@@ -14,7 +14,7 @@ namespace Rendering
 	{
 	public:
 		virtual ~Model();
-		void loadContent(Utilities::ResourceManager &content, const std::string& path);
+		void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
 		void update(const float& dt);
 		void setAnimation(const int& state);
 

@@ -3,17 +3,51 @@
 #include "PlayerModel.h"
 #include "ResourceManager.h"
 #include "ViewportWeapon.h"
+
 class Player
 {
 public:
+	enum PlayerState
+	{
+		STAND,
+		RUN,
+		ATTACK,
+		PAIN1,
+		PAIN2,
+		PAIN3,
+		JUMP,
+		FLIP,
+		SALUTE,
+		TAUNT,
+		WAVE,
+		POINT,
+		CRSTND,
+		CRWALK,
+		CRATTAK,
+		CRPAIN,
+		CRDEATH,
+		DEATH1,
+		DEATH2,
+		DEATH3
+	} playerState;
+	enum WeaponState
+	{
+		ACTIVE,
+		POW,
+		IDLE1,
+		IDLE2,
+		PUTAWAY
+	} weaponState;
+
 	Player();
 	virtual ~Player();
-	void loadContent(Utilities::ResourceManager content);
+	void loadContent(Utilities::ResourceManager content, const std::string& skin);
 	void update(float dt);
 	Rendering::PlayerModel& getPlayerModel() { return model; };
 	Rendering::PlayerModel& getWeapon() { return weapon; };
 	Rendering::ViewportWeapon& getVPWeapon() { return vpWeapon; };
 	void setPosition(glm::vec3 pos) { transform.position = pos; };
+	void setState(PlayerState state);
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;

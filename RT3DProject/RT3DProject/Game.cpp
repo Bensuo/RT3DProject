@@ -4,7 +4,7 @@ void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	camera.Position = glm::vec3(0, 15.5f, 100);
+	camera.Position = glm::vec3(0, 18.0f, 100);
 
 	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
@@ -19,7 +19,18 @@ void Game::init()
 	testBox.loadContent(content);
 
 	testPlayer = new Player();
-	testPlayer->loadContent(content);
+	testPlayer->loadContent(content, "rampage");
+	testPlayer->setState(Player::STAND);
+
+	//testPlayer2 = new Player();
+	//testPlayer2->loadContent(content, "claymore");
+	//testPlayer2->setPosition(glm::vec3(10, 0, 30));
+	//testPlayer2->setState(Player::WAVE);
+
+	//testPlayer3 = new Player();
+	//testPlayer3->loadContent(content, "grunt");
+	//testPlayer3->setPosition(glm::vec3(30, 0, 10));
+	//testPlayer3->setState(Player::POINT);
 
 	timer.Initialize();	//always init last for accurate game loop startup
 }
@@ -31,6 +42,10 @@ void Game::draw()
 	renderer.setShader("Phong");
 	renderList.emplace_back(&testPlayer->getPlayerModel());
 	renderList.emplace_back(&testPlayer->getWeapon());
+	//renderList.emplace_back(&testPlayer2->getPlayerModel());
+	//renderList.emplace_back(&testPlayer2->getWeapon());
+	//renderList.emplace_back(&testPlayer3->getPlayerModel());
+	//renderList.emplace_back(&testPlayer3->getWeapon());
 	renderList.emplace_back(&testBox);
 	renderer.render(renderList);
 	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
@@ -50,6 +65,8 @@ void Game::update()
 	input.Update(camera);
 	testBox.update();
 	testPlayer->update(timer.GetDeltaTime());
+	//testPlayer2->update(timer.GetDeltaTime());
+	//testPlayer3->update(timer.GetDeltaTime());
 	camera.Update(timer.GetDeltaTime());
 }
 

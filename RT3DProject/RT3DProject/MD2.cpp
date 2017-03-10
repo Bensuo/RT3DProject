@@ -148,13 +148,6 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 			norms.push_back(anorms_table[pvert->normalIndex][1]);
 			norms.push_back(anorms_table[pvert->normalIndex][2]);
 
-			// Vertices 
-			// Doing these scaling operations *every* refresh is *very* wasteful
-			// Should do all the scaling calculations once only, when loading the file
-			//verts.push_back( pframe->scale[0] * pvert->v[0] + pframe->translate[0] );
-			//verts.push_back( pframe->scale[1] * pvert->v[1] + pframe->translate[1] );
-			//verts.push_back( pframe->scale[2] * pvert->v[2] + pframe->translate[2] );
-
 		}
 	}
 	// now repeat for each frame...
