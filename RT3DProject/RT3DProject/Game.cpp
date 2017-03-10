@@ -70,8 +70,8 @@ Game::Game()
 		//render processed frame
 		if (timer.FrameComplete())
 		{
-			draw();
 			timer.IncrementFrames();
+			draw();
 		}
 		else
 		{

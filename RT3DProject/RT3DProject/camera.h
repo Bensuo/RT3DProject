@@ -3,25 +3,17 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-enum Camera_Movement {
-	FORWARD,
-	BACKWARD,
-	LEFT,
-	RIGHT,
-	NONE
-};
-
 class Camera
 {
 	const GLfloat YAW = -90.0f;
 	const GLfloat PITCH = 0.0f;
-	const GLfloat MAX_SPEED = 50.0f;
 	const GLfloat SPEED = 100.0f;
 	const GLfloat SENSITIVTY = 0.05f;
 	const GLfloat ZOOM = 45.0f;
 	const GLfloat MAX_FOV = 45.1f;
 	const GLfloat MIN_FOV = 45.0f;
 
+	glm::vec3 MovementNormal;
 	glm::vec3 Front;
 	glm::vec3 Up;
 	glm::vec3 Right;
@@ -30,7 +22,6 @@ class Camera
 	GLfloat Yaw;
 	GLfloat Pitch;
 
-	Camera_Movement currentDirection;
 public:
 	glm::vec3 Position;
 	float currentZoom = ZOOM;
@@ -49,27 +40,46 @@ public:
 		return lookAt(this->Position, this->Position + this->Front, this->Up);
 	}
 
-	void ProcessKeyboard(Camera_Movement direction)
+	void MoveForward()
 	{
-		currentDirection = direction;
+		MovementNormal += this->Front;
+	}
+
+	void MoveBackward()
+	{
+		MovementNormal -= this->Front;
+	}
+
+	void MoveLeft()
+	{
+		MovementNormal -= this->Right;
+	}
+
+	void MoveRight()
+	{
+		MovementNormal += this->Right;
+	}
+
+	const glm::vec3& Normalise(glm::vec3& vector) const
+	{
+		if (vector != glm::vec3(0))
+		{
+			return vector = normalize(vector);
+		}
+		return vector;
 	}
 
 	void Update(float deltaTime)
 	{
+		Normalise(MovementNormal);
+
 		auto y = Position.y;
 
 		auto velocity = this->SPEED * deltaTime;
-		if (currentDirection == FORWARD)
-			this->Position += this->Front * velocity;
-		if (currentDirection == BACKWARD)
-			this->Position -= this->Front * velocity;
-		if (currentDirection == LEFT)
-			this->Position -= this->Right * velocity;
-		if (currentDirection == RIGHT)
-			this->Position += this->Right * velocity;
+		this->Position += this->MovementNormal * velocity;
 
 		Position.y = y;
-		currentDirection = NONE;
+		MovementNormal = glm::vec3();
 	}
 
 	void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true)
@@ -108,9 +118,9 @@ private:
 		front.x = cos(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
 		front.y = sin(glm::radians(this->Pitch));
 		front.z = sin(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-		this->Front = glm::normalize(front);
+		this->Front = normalize(front);
 
-		this->Right = glm::normalize(glm::cross(this->Front, this->WorldUp)); 
-		this->Up = glm::normalize(glm::cross(this->Right, this->Front));
+		this->Right = normalize(cross(this->Front, this->WorldUp)); 
+		this->Up = normalize(cross(this->Right, this->Front));
 	}
 };

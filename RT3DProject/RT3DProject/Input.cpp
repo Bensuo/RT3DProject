@@ -26,19 +26,19 @@ void Input::Update(Camera& camera)
 	currentKeyState = SDL_GetKeyboardState(nullptr);
 	if (currentKeyState[SDL_SCANCODE_W] && previousKeyState[SDL_SCANCODE_W])
 	{
-		camera.ProcessKeyboard(FORWARD);
+		camera.MoveForward();
 	}
-	else if (currentKeyState[SDL_SCANCODE_S] && previousKeyState[SDL_SCANCODE_S])
+	if (currentKeyState[SDL_SCANCODE_S] && previousKeyState[SDL_SCANCODE_S])
 	{
-		camera.ProcessKeyboard(BACKWARD);
+		camera.MoveBackward();
 	}
-	else if (currentKeyState[SDL_SCANCODE_A] && previousKeyState[SDL_SCANCODE_A])
+	if (currentKeyState[SDL_SCANCODE_A] && previousKeyState[SDL_SCANCODE_A])
 	{
-		camera.ProcessKeyboard(LEFT);
+		camera.MoveLeft();
 	}
-	else if (currentKeyState[SDL_SCANCODE_D] && previousKeyState[SDL_SCANCODE_D])
+	if (currentKeyState[SDL_SCANCODE_D] && previousKeyState[SDL_SCANCODE_D])
 	{
-		camera.ProcessKeyboard(RIGHT);
+		camera.MoveRight();
 	}
 
 	if (currentKeyState[SDL_SCANCODE_ESCAPE])
