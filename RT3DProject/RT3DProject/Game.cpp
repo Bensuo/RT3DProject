@@ -47,52 +47,48 @@ bool TestAABBAABB(const AABB& A, const AABB& B)
 	return true;
 }
 
+
+void testAxis(glm::vec3 axis, float minA, float maxA, float minB, float maxB, glm::vec3& mtvAxis, float& mtvDistance)
+{
+	float axisLengthSquared = glm::dot(axis, axis);
+	//Calculates overlap ranges and find out if the overlap is on the left or right
+	float d0 = (maxB - minA);
+	float d1 = (maxA - minB);
+	float overlap = (d0 < d1) ? d0 : -d1;
+
+	glm::vec3 sep = axis * (overlap / axisLengthSquared);
+
+	float sepLengthSquared = glm::dot(sep, sep);
+	if (sepLengthSquared < mtvDistance)
+	{
+		mtvDistance = sepLengthSquared;
+		mtvAxis = sep;
+	}
+}
+
 glm::vec3 getMTV(const AABB& A, const AABB& B)
 {
-	float xp, yp, zp;
-	glm::vec3 mtv(0);
-	//X axis
-	xp = abs((A.c.x + A.r.x) - (B.c.x - B.r.x));
-	//Y axis
-	yp = abs((A.c.y + A.r.y) - (B.c.y - B.r.y));
-	//Z axis
-	zp = abs((A.c.z + A.r.z) - (B.c.z - B.r.z));
-	if (xp < yp && xp < zp)
-	{
-		if (A.c.x < B.c.x)
-		{
-			mtv += glm::vec3(-xp, 0, 0);
-		}
-		else
-		{
-			mtv += glm::vec3(xp, 0, 0);
-		}
-	}
-	else if (yp < zp && yp < xp)
-	{
-		if (A.c.y < B.c.y)
-		{
-			mtv += glm::vec3(0, -yp, 0);
-		}
-		else
-		{
-			mtv += glm::vec3(0, yp, 0);
-		}
-	}
-	else if (zp < yp && zp < xp)
-	{
-		if (A.c.z < B.c.z)
-		{
-			mtv += glm::vec3(0, 0, -zp);
-		}
-		else
-		{
-			mtv += glm::vec3(0, 0, zp);
-		}
-	}
+	glm::vec3 mtv = glm::vec3(0);
+	float mtvDistance = std::numeric_limits<float>::max();
+	glm::vec3 minA(A.c - A.r);
+	glm::vec3 maxA(A.c + A.r);
+	glm::vec3 minB(B.c - B.r);
+	glm::vec3 maxB(B.c + B.r);
 
+	//Test the X, Y and Z axis to find the MTV
+	testAxis(glm::vec3(1, 0, 0), minA.x, maxA.x, minB.x, maxB.x, mtv, mtvDistance);
+	testAxis(glm::vec3(0, 1, 0), minA.y, maxA.y, minB.y, maxB.y, mtv, mtvDistance);
+	testAxis(glm::vec3(0, 0, 1), minA.z, maxA.z, minB.z, maxB.z, mtv, mtvDistance);
+	if (mtvDistance > 0)
+	{
+		mtv = glm::normalize(mtv);
+		mtvDistance = (float)sqrt(mtvDistance) * 1.001f;
+		mtv *= mtvDistance;
+	}
+	
 	return mtv;
 }
+
 
 
 void Game::draw()
@@ -135,14 +131,29 @@ void Game::update()
 	}
 	else if (currentKeyStates[SDL_SCANCODE_LEFT])
 	{
-		aabb2.c.x -= 1.0f;
-		testBox2.getTransform().position = aabb2.c;
+		aabb1.c.x -= 5.0f;
+		testBox1.getTransform().position = aabb1.c;
+	}
+	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+	{
+		aabb1.c.x += 5.0f;
+		testBox1.getTransform().position = aabb1.c;
+	}
+	else if (currentKeyStates[SDL_SCANCODE_UP])
+	{
+		aabb1.c.z -= 5.0f;
+		testBox1.getTransform().position = aabb1.c;
+	}
+	else if (currentKeyStates[SDL_SCANCODE_DOWN])
+	{
+		aabb1.c.z += 5.0f;
+		testBox1.getTransform().position = aabb1.c;
 	}
 	bool result = TestAABBAABB(aabb1, aabb2);
 	if (result == true)
 	{
-		aabb2.c += getMTV(aabb1, aabb2);
-		testBox2.getTransform().position = aabb2.c;
+		aabb1.c += getMTV(aabb1, aabb2);
+		testBox1.getTransform().position = aabb1.c;
 	}
 }
 
