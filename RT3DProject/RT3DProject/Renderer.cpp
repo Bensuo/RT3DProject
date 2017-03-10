@@ -6,7 +6,7 @@ Renderer::Renderer()
 {
 	hWindow = setupRC(glContext);
 	glewExperimental = GL_TRUE;
-	GLenum err = glewInit();
+	auto err = glewInit();
 	if (GLEW_OK != err)
 	{ // glewInit failed, something is seriously wrong
 		std::cout << "glewInit failed, aborting." << std::endl;
@@ -22,7 +22,7 @@ Renderer::~Renderer()
 {
 }
 
-SDL_Window* Renderer::setupRC(SDL_GLContext& context)
+SDL_Window* Renderer::setupRC(SDL_GLContext& context) const
 {
 	SDL_Window* window;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize video
@@ -75,7 +75,7 @@ void Renderer::setShader(std::string name)
 	}
 }
 
-void Renderer::quit()
+void Renderer::quit() const
 {
 	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(hWindow);
@@ -93,7 +93,7 @@ void Renderer::begin(Camera& camera)
 }
 
 //Ends rendering and pushes the result to the screen
-void Renderer::end()
+void Renderer::end() const
 {
 	SDL_GL_SwapWindow(hWindow); //Swap buffers
 }
@@ -105,8 +105,10 @@ void Renderer::draw(IRenderable* renderable)
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 
 	mvStack.push(mvStack.top());
+
 	float rotation = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
 	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
+
 	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 	currentShader->setMaterial(renderable->getMaterial());
@@ -125,7 +127,7 @@ void Renderer::draw(IRenderable* renderable)
 }
 
 
-void Renderer::drawSkybox(Rendering::Skybox* skybox)
+void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 {
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);

@@ -13,7 +13,6 @@ namespace Rendering
 		
 		bool loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name);
 	public:
-		Skybox() {}
 		Skybox(const char* front,
 			const char* back,
 			const char* top,

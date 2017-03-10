@@ -17,13 +17,9 @@ namespace Rendering
 
 	void Model::update(const float& dt)
 	{
-		m_MD2.Animate(dt);
+		m_MD2.Animate(dt * ANIMATION_SPEED);
 		rt3d::updateMesh(mesh, RT3D_VERTEX, m_MD2.getAnimVerts(), m_MD2.getVertDataSize());
 	}
-
-
-
-
 
 	void Model::setAnimation(const int& state)
 	{
@@ -33,7 +29,7 @@ namespace Rendering
 	{
 		this->transform.position = transform.position;
 		this->transform.rotation = transform.rotation;
-		this->transform.rotation.x -= 90.0f; //Apply md2 model offset
+		this->transform.rotation.x -= 90.0f;
 	}
 	GLuint& Model::getMesh()
 	{

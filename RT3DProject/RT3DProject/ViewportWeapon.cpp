@@ -31,6 +31,12 @@ namespace Rendering {
 			   46, 49, //put away
 			};
 			break;
+		case BFG: 
+			break;
+		case ROCKET_LAUNCHER: 
+			break;
+		default: 
+			break;
 		}
 
 		m_MD2.SetUpAnimationData(animFrameList);

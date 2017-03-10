@@ -21,11 +21,11 @@ class Renderer
 public:
 	Renderer();
 	virtual ~Renderer();
-	void quit();
+	void quit() const;
 	void begin(Camera& camera);
-	void end();
+	void end() const;
 	void draw(IRenderable* renderable);
-	void drawSkybox(Rendering::Skybox* skybox);
+	void drawSkybox(Rendering::Skybox* skybox) const;
 	void render(std::vector<IRenderable*>& models);
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);
@@ -34,7 +34,7 @@ private:
 	std::stack<glm::mat4> mvStack;
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
-	SDL_Window* setupRC(SDL_GLContext& context);
+	SDL_Window* setupRC(SDL_GLContext& context) const;
 	SDL_Window* hWindow;
 	SDL_GLContext glContext;
 
