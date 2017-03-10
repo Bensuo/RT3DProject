@@ -1,14 +1,12 @@
 #include "Game.h"
 
-
-
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	m_camera.Position = glm::vec3(0, 15.5f, 100);
+	camera.Position = glm::vec3(0, 15.5f, 100);
 
-	m_skybox = new Rendering::Skybox("res/textures/front.bmp",
+	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
 		"res/textures/top.bmp",
 		"res/textures/bottom.bmp",
@@ -22,16 +20,14 @@ void Game::init()
 
 	testPlayer = new Player();
 	testPlayer->loadContent(content);
-	testPlayer2 = new Player();
-	testPlayer2->loadContent(content);
-	testPlayer2->setPosition(glm::vec3(100, 0, 0));
-	
+
+	timer.Initialize();	//always init last for accurate game loop startup
 }
 
 void Game::draw()
 {
-	renderer.begin(m_camera);
-	renderer.drawSkybox(m_skybox);
+	renderer.begin(camera);
+	renderer.drawSkybox(skybox);
 	renderer.setShader("Phong");
 	renderList.emplace_back(&testPlayer->getPlayerModel());
 	renderList.emplace_back(&testPlayer->getWeapon());
@@ -40,32 +36,47 @@ void Game::draw()
 	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
 	renderer.end();
 	renderList.clear();
+	auto test = 0;
 }
 
 bool Game::Quit() const
 {
-	return m_input.Quit();
+	return input.Quit();
 }
 
 void Game::update()
 {
-	m_input.Update(m_camera);
+	running = !Quit();
+	input.Update(camera);
 	testBox.update();
-	testPlayer->update(0.1f);
-	testPlayer2->update(0.1f);
-	m_camera.Update(1 / 60.0f);
+	testPlayer->update(timer.GetDeltaTime());
+	camera.Update(timer.GetDeltaTime());
 }
 
 Game::Game()
 {
 	init();
-	auto running = true;
-
 	while (running)
 	{
-		running = !Quit();
-		update();
-		draw();
+		timer.Reset();
+
+		//process individual frame's worth of updates
+		while (timer.ProcessFrame())
+		{
+			timer.Update();
+			update();
+		}
+
+		//render processed frame
+		if (timer.FrameComplete())
+		{
+			draw();
+			timer.IncrementFrames();
+		}
+		else
+		{
+			timer.Sleep();
+		}
 	}
 	renderer.quit();
 }
