@@ -162,6 +162,7 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Input.h">
       <Filter>Game</Filter>
     </ClInclude>

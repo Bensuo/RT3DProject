@@ -26,6 +26,8 @@ void Player::update(float dt)
 	weapon.update(dt);
 	weapon.setTransform(transform);
 	vpWeapon.update(dt);
+
+	collider.c = transform.position;
 }
 
 void Player::setState(PlayerState state)

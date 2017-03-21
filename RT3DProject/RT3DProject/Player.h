@@ -3,6 +3,7 @@
 #include "PlayerModel.h"
 #include "ResourceManager.h"
 #include "ViewportWeapon.h"
+#include "AABB.h"
 
 class Player
 {
@@ -47,11 +48,16 @@ public:
 	Rendering::PlayerModel& getWeapon() { return weapon; };
 	Rendering::ViewportWeapon& getVPWeapon() { return vpWeapon; };
 	void setPosition(glm::vec3 pos) { transform.position = pos; };
+<<<<<<< HEAD
+	const AABB& getAABB() { return collider; };
+=======
 	void setState(PlayerState state);
+>>>>>>> master
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
 	Rendering::ViewportWeapon vpWeapon;
 	Transform transform{ glm::vec3(0), glm::vec3(0) };
+	AABB collider{ glm::vec3(0), glm::vec3(50, 50, 50) };
 };
 

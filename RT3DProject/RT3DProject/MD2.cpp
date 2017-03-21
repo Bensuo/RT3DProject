@@ -251,7 +251,11 @@ void MD2::Animate(const int& animation, const float& dt)
 	if (interp == 0.0f)
 		memcpy(animVerts, vertData[currentFrame], vertDataSize * sizeof(float));
 	else {
-		for (auto i = 0; i<vertDataSize; i++)
-			animVerts[i] = vertData[currentFrame][i] + interp*(vertData[nextFrame][i] - vertData[currentFrame][i]);
+		GLfloat current;
+		for (auto i = 0; i < vertDataSize; i++)
+		{
+			current = vertData[currentFrame][i];
+			animVerts[i] = current + interp*(vertData[nextFrame][i] - current);
+		}
 	}
 }
