@@ -35,11 +35,14 @@ class Game
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
 
-	//Some AABB testing stuff
-	AABB aabb1{ glm::vec3(0, 0, -20), glm::vec3(25, 50, 25) };
 	Rendering::Box testBox1;
-	AABB aabb2{ glm::vec3(100, 0, -20), glm::vec3(25, 50, 25) };
 	Rendering::Box testBox2;
+	rt3d::materialStruct material = {
+		{ 0.4f, 0.4f, 1.0f, 0.2f }, // ambient
+		{ 0.8f, 0.8f, 1.0f, 0.2f }, // diffuse
+		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
+		0.2f  // shininess
+	};
 public:
 	void init(void);
 	void draw();

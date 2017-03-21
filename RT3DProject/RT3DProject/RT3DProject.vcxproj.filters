@@ -169,5 +169,8 @@
     <ClInclude Include="Timer.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Collisions.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

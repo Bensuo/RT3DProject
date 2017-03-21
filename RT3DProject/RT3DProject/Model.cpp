@@ -29,8 +29,8 @@ namespace Rendering
 	void Model::setTransform(const Transform & transform)
 	{
 		this->transform.position.x = transform.position.x;
-		this->transform.position.y = transform.position.z;
-		this->transform.position.z = transform.position.y;
+		this->transform.position.y = transform.position.y;
+		this->transform.position.z = transform.position.z;
 
 		this->transform.rotation = transform.rotation;
 		this->transform.rotation.x -= 90.0f;
