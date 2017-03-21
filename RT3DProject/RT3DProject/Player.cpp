@@ -1,24 +1,22 @@
 #include "Player.h"
+#include <iostream>
 
-
-
-Player::Player()
+Player::Player(): playerState(), weaponState()
 {
-	model.setAnimation(1);
-	weapon.setAnimation(1);
-	vpWeapon.setAnimation(2);
+	model.setAnimation(playerState);
+	weapon.setAnimation(playerState);
+	vpWeapon.setAnimation(IDLE1);
 }
-
 
 Player::~Player()
 {
 }
 
-void Player::loadContent(Utilities::ResourceManager content)
+void Player::loadContent(Utilities::ResourceManager content, const std::string& skin)
 {
-	model.loadContent(content, "res/md2/rampage");
-	weapon.loadContent(content, "res/md2/weapon");
-	vpWeapon.loadContent(content, "res/md2/v_machn");
+	model.loadContent(content, "res/md2/player", "res/md2/" + skin);
+	weapon.loadContent(content, "res/md2/weapon", "res/md2/weapon");
+	vpWeapon.loadContent(content, "res/md2/v_machn", "res/md2/v_machn");
 }
 
 void Player::update(float dt)
@@ -30,6 +28,12 @@ void Player::update(float dt)
 	vpWeapon.update(dt);
 
 	collider.c = transform.position;
+}
+
+void Player::setState(PlayerState state)
+{
+	model.setAnimation(state);
+	weapon.setAnimation(state);
 }
 
 

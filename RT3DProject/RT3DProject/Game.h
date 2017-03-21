@@ -1,35 +1,36 @@
 #pragma once
 
-#include <SDL.h>
-#include <stack>
 #include "md2model.h"
 #include "Box.h"
 #include "Skybox.h"
 #include "Camera.h"
-#include <glm/gtc/type_ptr.hpp>
-#include "clock.h"
-#include "PlayerModel.h"
-#include "ViewportWeapon.h"
 #include "Renderer.h"
 #include "Player.h"
 #include "AABB.h"
+#include "Input.h"
+#include "Timer.h"
+
 
 #define DEG_TO_RADIAN 0.017453293
 
 class Game
 {
 	Utilities::ResourceManager content;
-	Utilities::Clock m_clock;
 	Renderer renderer;
-	Camera m_camera;
+	Camera camera;
+	Input input;
+	Timer timer;
 	Rendering::Box testBox;
-	Rendering::Skybox* m_skybox;
+	Rendering::Skybox* skybox;
 
-	Player* testPlayer, *testPlayer2;
+	Player* testPlayer;	
+	Player* testPlayer2;
+	Player* testPlayer3;
 
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
 	
+	bool running = true;
 
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
@@ -42,6 +43,7 @@ class Game
 public:
 	void init(void);
 	void draw();
+	bool Quit() const;
 	void update();
 	Game();
 };

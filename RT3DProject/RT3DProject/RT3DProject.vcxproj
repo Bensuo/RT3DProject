@@ -146,9 +146,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Box.cpp" />
-    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MD2.cpp" />
     <ClCompile Include="md2model.cpp" />
@@ -159,6 +159,7 @@
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="ViewportWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,12 +176,12 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="anorms.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Clock.h" />
     <ClInclude Include="MD2.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="Player.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="ViewportWeapon.h" />
   </ItemGroup>

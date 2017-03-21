@@ -26,20 +26,17 @@
     <Filter Include="Rendering\RT3D Library">
       <UniqueIdentifier>{ccf5276a-422e-41f2-9bde-fe46f79f9c6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utilities\Clock">
-      <UniqueIdentifier>{a624b6f9-deb7-43c2-a7fc-e98a40136b9a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utilities\Resource Management">
       <UniqueIdentifier>{a6ed9cc7-67b1-4ea7-acfc-a7169c26b5b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core Engine">
-      <UniqueIdentifier>{6640ad8d-c4d7-4b28-a3a6-d7d721de4451}</UniqueIdentifier>
     </Filter>
     <Filter Include="Rendering\Model Loading\Old MD2 lib">
       <UniqueIdentifier>{3e9e6218-636c-40bb-a0a6-9ce122ccfa1f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Rendering\Model Loading\M2D">
       <UniqueIdentifier>{ce45fe3e-e65f-4b04-b597-442a08fe17af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{6640ad8d-c4d7-4b28-a3a6-d7d721de4451}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,9 +56,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Rendering\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Clock.cpp">
-      <Filter>Utilities\Clock</Filter>
-    </ClCompile>
     <ClCompile Include="md2model.cpp">
       <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
     </ClCompile>
@@ -78,12 +72,18 @@
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Core Engine</Filter>
+      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Input.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -133,9 +133,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Rendering\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Clock.h">
-      <Filter>Utilities\Clock</Filter>
-    </ClInclude>
     <ClInclude Include="md2model.h">
       <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
     </ClInclude>
@@ -155,7 +152,7 @@
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Core Engine</Filter>
+      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Rendering</Filter>
@@ -166,5 +163,11 @@
     </ClInclude>
     <ClInclude Include="Player.h" />
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="Input.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

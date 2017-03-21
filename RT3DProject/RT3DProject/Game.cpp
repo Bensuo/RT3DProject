@@ -1,12 +1,12 @@
 #include "Game.h"
 
-
-
 void Game::init()
 {
-	m_camera.Position = glm::vec3(0, 15.5f, 100);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	m_skybox = new Rendering::Skybox("res/textures/front.bmp",
+	camera.Position = glm::vec3(0, 18.0f, 100);
+
+	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
 		"res/textures/top.bmp",
 		"res/textures/bottom.bmp",
@@ -19,24 +19,10 @@ void Game::init()
 	testBox.loadContent(content);
 
 	testPlayer = new Player();
-	testPlayer->loadContent(content);
-	testPlayer2 = new Player();
-	testPlayer2->loadContent(content);
-	testPlayer2->setPosition(glm::vec3(100, 0, 0));
+	testPlayer->loadContent(content, "rampage");
+	testPlayer->setState(Player::STAND);
+	timer.Initialize();	//always init last for accurate game loop startup
 
-	rt3d::materialStruct material = {
-		{ 0.4f, 0.4f, 1.0f, 0.2f }, // ambient
-		{ 0.8f, 0.8f, 1.0f, 0.2f }, // diffuse
-		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
-		0.2f  // shininess
-	};
-	glm::vec3 size(50, 100, 50);
-	testBox1 = Rendering::Box(size, aabb1.c);
-	testBox1.setMaterial(material);
-	testBox2 = Rendering::Box(size, aabb2.c);
-	testBox2.setMaterial(material);
-	testBox1.loadContent(content);
-	testBox2.loadContent(content);
 }
 
 bool TestAABBAABB(const AABB& A, const AABB& B)
@@ -87,93 +73,64 @@ glm::vec3 getMTV(const AABB& A, const AABB& B)
 	}
 	
 	return mtv;
+
 }
 
 
 
 void Game::draw()
 {
-	renderer.begin(m_camera);
-	renderer.drawSkybox(m_skybox);
+	renderer.begin(camera);
+	renderer.drawSkybox(skybox);
 	renderer.setShader("Phong");
-	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
-	renderList.emplace_back(&testBox1);
-	renderList.emplace_back(&testBox2);
-	//renderList.emplace_back(&testBox);
+	renderList.emplace_back(&testPlayer->getPlayerModel());
+	renderList.emplace_back(&testPlayer->getWeapon());
+	renderList.emplace_back(&testBox);
 	renderer.render(renderList);
+	renderer.renderFirstPerson(&testPlayer->getVPWeapon());
 	renderer.end();
 	renderList.clear();
+	auto test = 0;
+}
+
+bool Game::Quit() const
+{
+	return input.Quit();
 }
 
 void Game::update()
 {
+	running = !Quit();
+	input.Update(camera);
 	testBox.update();
-	testPlayer->update(0.1f);
-	testPlayer2->update(0.1f);
-	m_camera.Update(1 / 60.0f);
-
-	auto currentKeyStates = SDL_GetKeyboardState(nullptr);
-	if (currentKeyStates[SDL_SCANCODE_W])
-	{
-		m_camera.Position.z -= 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_A])
-	{
-		m_camera.Position.x -= 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_D])
-	{
-		m_camera.Position.x += 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_S])
-	{
-		m_camera.Position.z += 1.0f;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_LEFT])
-	{
-		aabb1.c.x -= 5.0f;
-		testBox1.getTransform().position = aabb1.c;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
-	{
-		aabb1.c.x += 5.0f;
-		testBox1.getTransform().position = aabb1.c;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_UP])
-	{
-		aabb1.c.z -= 5.0f;
-		testBox1.getTransform().position = aabb1.c;
-	}
-	else if (currentKeyStates[SDL_SCANCODE_DOWN])
-	{
-		aabb1.c.z += 5.0f;
-		testBox1.getTransform().position = aabb1.c;
-	}
-	bool result = TestAABBAABB(aabb1, aabb2);
-	if (result == true)
-	{
-		aabb1.c += getMTV(aabb1, aabb2);
-		testBox1.getTransform().position = aabb1.c;
-	}
+	testPlayer->update(timer.GetDeltaTime());
+	camera.Update(timer.GetDeltaTime());
 }
 
 Game::Game()
 {
-
-
 	init();
-	bool running = true; // set running to true
-	SDL_Event sdlEvent; // variable to detect SDL events
 	while (running)
-	{ // the event loop
-		while (SDL_PollEvent(&sdlEvent))
-		{
-			if (sdlEvent.type == SDL_QUIT)
-				running = false;
-		}
-		update();
-		draw(); // call the draw function
-	}
+	{
+		timer.Reset();
 
+		//process individual frame's worth of updates
+		while (timer.ProcessFrame())
+		{
+			timer.Update();
+			update();
+		}
+
+		//render processed frame
+		if (timer.FrameComplete())
+		{
+			timer.IncrementFrames();
+			draw();
+		}
+		else
+		{
+			timer.Sleep();
+		}
+	}
 	renderer.quit();
 }

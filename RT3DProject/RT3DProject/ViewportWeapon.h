@@ -4,15 +4,6 @@
 namespace Rendering {
 	class ViewportWeapon : public Model
 	{
-		enum WeaponState
-		{
-			ACTIVE,
-			POW,
-			IDLE1,
-			IDLE2,
-			PUTAWAY
-		} weaponState;
-
 		enum WeaponType
 		{
 			ASSAULT_RIFLE,

@@ -14,7 +14,7 @@ namespace Rendering
 	{
 	public:
 		virtual ~Model();
-		void loadContent(Utilities::ResourceManager &content, const std::string& path);
+		void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
 		void update(const float& dt);
 		void setAnimation(const int& state);
 
@@ -33,7 +33,7 @@ namespace Rendering
 		
 		virtual bool isIndexed() override;
 	protected:
-
+		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;
 		rt3d::materialStruct material = {
 			{ 0.4f, 0.4f, 1.0f, 1.0f }, // ambient
