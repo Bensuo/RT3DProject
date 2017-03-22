@@ -5,7 +5,7 @@ void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	camera.Position = glm::vec3(0, 18.0f, 100);
+	camera.Position = glm::vec3(0, 100.0f, 100);
 
 	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
@@ -17,6 +17,7 @@ void Game::init()
 		"res/shaders/skyboxFragment.fs");
 
 	testBox = Rendering::Box(glm::vec3(1000, 1, 1000), glm::vec3(0, -23, 0));
+	floor = AABB{ glm::vec3(0, -23, 0), glm::vec3(1000, 1, 1000) };
 	testBox.loadContent(content);
 
 	testPlayer = new Player();
@@ -57,6 +58,8 @@ void Game::update()
 {
 	running = !Quit();
 	input.Update(camera);
+	//Simulate some gravity!
+	camera.Position.y -= 50.0f * timer.GetDeltaTime();
 	testBox.update();
 	testPlayer2->setPosition(camera.Position);
 	testPlayer->update(timer.GetDeltaTime());
@@ -69,6 +72,11 @@ void Game::update()
 	if (info.collision)
 	{
 		camera.Position -= info.mtv;
+	}
+	info = Collisions::TestAABBAABB(testPlayer2->getAABB(), floor);
+	if (info.collision)
+	{
+		camera.Position += info.mtv;
 	}
 	testBox1 = Rendering::Box(testPlayer->getAABB().r, testPlayer->getAABB().c);
 	testBox1.setMaterial(material);

@@ -21,6 +21,7 @@ class Game
 	Input input;
 	Timer timer;
 	Rendering::Box testBox;
+	AABB floor;
 	Rendering::Skybox* skybox;
 
 	Player* testPlayer;	
