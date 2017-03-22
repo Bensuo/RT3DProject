@@ -9,7 +9,7 @@
 #include "AABB.h"
 #include "Input.h"
 #include "Timer.h"
-
+#include "Terrain.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -44,6 +44,7 @@ class Game
 		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
 		0.2f  // shininess
 	};
+	Terrain terrain;
 public:
 	void init(void);
 	void draw();

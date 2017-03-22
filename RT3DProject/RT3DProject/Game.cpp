@@ -27,7 +27,7 @@ void Game::init()
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
 	timer.Initialize();	//always init last for accurate game loop startup
-
+	//terrain.loadContent("heightmap.bmp");
 	
 }
 
@@ -40,8 +40,8 @@ void Game::draw()
 	renderList.emplace_back(&testPlayer->getPlayerModel());
 	renderList.emplace_back(&testPlayer->getWeapon());
 	renderList.emplace_back(&testBox);
-	renderList.emplace_back(&testBox1);
-	renderList.emplace_back(&testBox2);
+	//renderList.emplace_back(&testBox1);
+	//renderList.emplace_back(&testBox2);
 	renderer.render(renderList);
 	renderer.renderFirstPerson(&testPlayer2->getVPWeapon());
 	renderer.end();
@@ -78,12 +78,12 @@ void Game::update()
 	{
 		camera.Position += info.mtv;
 	}
-	testBox1 = Rendering::Box(testPlayer->getAABB().r, testPlayer->getAABB().c);
-	testBox1.setMaterial(material);
-	testBox2 = Rendering::Box(testPlayer2->getAABB().r, testPlayer2->getAABB().c);
-	testBox2.setMaterial(material);
-	testBox1.loadContent(content);
-	testBox2.loadContent(content);
+	//testBox1 = Rendering::Box(testPlayer->getAABB().r, testPlayer->getAABB().c);
+	//testBox1.setMaterial(material);
+	//testBox2 = Rendering::Box(testPlayer2->getAABB().r, testPlayer2->getAABB().c);
+	//testBox2.setMaterial(material);
+	//testBox1.loadContent(content);
+	//testBox2.loadContent(content);
 }
 
 Game::Game()
