@@ -84,6 +84,9 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="CameraThirdPerson.cpp">
+      <Filter>Rendering\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -168,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraThirdPerson.h">
+      <Filter>Rendering\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
