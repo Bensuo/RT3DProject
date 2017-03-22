@@ -172,6 +172,10 @@
     <ClInclude Include="Timer.h">
       <Filter>Game</Filter>
     </ClInclude>
+
+    <ClInclude Include="Collisions.h">
+      <Filter>Utilities</Filter>
+     </ClInclude>
     <ClInclude Include="CameraThirdPerson.h">
       <Filter>Rendering\Camera</Filter>
     </ClInclude>

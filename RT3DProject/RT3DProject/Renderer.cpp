@@ -107,9 +107,10 @@ void Renderer::draw(IRenderable* renderable)
 	mvStack.push(mvStack.top());
 
 	float rotation = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
-	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
-
+	
+	
 	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
+	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 	currentShader->setMaterial(renderable->getMaterial());
 	if (renderable->isIndexed())

@@ -47,6 +47,7 @@ public:
 	Rendering::PlayerModel& getPlayerModel() { return model; };
 	Rendering::PlayerModel& getWeapon() { return weapon; };
 	Rendering::ViewportWeapon& getVPWeapon() { return vpWeapon; };
+	glm::vec3 getPosition() { return transform.position; };
 	void setPosition(glm::vec3 pos) { transform.position = pos; };
 	const AABB& getAABB() { return collider; };
 	void setState(PlayerState state);
@@ -56,6 +57,6 @@ private:
 	Rendering::PlayerModel weapon;
 	Rendering::ViewportWeapon vpWeapon;
 	Transform transform{ glm::vec3(0), glm::vec3(0) };
-	AABB collider{ glm::vec3(0), glm::vec3(50, 50, 50) };
+	AABB collider{ glm::vec3(0), glm::vec3(15, 35, 15) };
 };
 
