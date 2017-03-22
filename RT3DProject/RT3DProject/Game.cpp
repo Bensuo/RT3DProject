@@ -27,7 +27,7 @@ void Game::init()
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
 	timer.Initialize();	//always init last for accurate game loop startup
-	//terrain.loadContent("heightmap.bmp");
+	terrain.loadContent("heightmap.bmp");
 	
 }
 
