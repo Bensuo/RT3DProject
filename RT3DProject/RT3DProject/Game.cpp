@@ -36,9 +36,9 @@ void Game::draw()
 	renderer.begin(camera);
 	renderer.drawSkybox(skybox);
 	renderer.setShader("Phong");
-	//renderList.emplace_back(&testPlayer->getPlayerModel());
-	//renderList.emplace_back(&testPlayer->getWeapon());
-	//renderList.emplace_back(&testBox);
+	renderList.emplace_back(&testPlayer->getPlayerModel());
+	renderList.emplace_back(&testPlayer->getWeapon());
+	renderList.emplace_back(&testBox);
 	renderList.emplace_back(&testBox1);
 	renderList.emplace_back(&testBox2);
 	renderer.render(renderList);
