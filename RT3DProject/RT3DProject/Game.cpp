@@ -5,7 +5,7 @@ void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	camera.Position = glm::vec3(0, 100.0f, 100);
+	camera.Position = glm::vec3(0, 100.0f, 100.0f);
 
 	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
@@ -26,9 +26,7 @@ void Game::init()
 	testPlayer2 = new Player();
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
-	timer.Initialize();	//always init last for accurate game loop startup
-
-	
+	timer.Initialize();	//always init last for accurate game loop startup	
 }
 
 
@@ -39,6 +37,8 @@ void Game::draw()
 	renderer.setShader("Phong");
 	renderList.emplace_back(&testPlayer->getPlayerModel());
 	renderList.emplace_back(&testPlayer->getWeapon());
+	//renderList.emplace_back(&testPlayer2->getPlayerModel());
+	//renderList.emplace_back(&testPlayer2->getWeapon());
 	renderList.emplace_back(&testBox);
 	renderList.emplace_back(&testBox1);
 	renderList.emplace_back(&testBox2);
@@ -62,13 +62,13 @@ void Game::update()
 	camera.Position.y -= 50.0f * timer.GetDeltaTime();
 	testBox.update();
 	testPlayer2->setPosition(camera.Position);
+
 	testPlayer->update(timer.GetDeltaTime());
 	testPlayer2->update(timer.GetDeltaTime());
 	
 	camera.Update(timer.GetDeltaTime());
-	
-	
-	Collisions::CollisionInfo info = Collisions::TestAABBAABB(testPlayer->getAABB(), testPlayer2->getAABB());
+
+	auto info = Collisions::TestAABBAABB(testPlayer->getAABB(), testPlayer2->getAABB());
 	if (info.collision)
 	{
 		camera.Position -= info.mtv;
