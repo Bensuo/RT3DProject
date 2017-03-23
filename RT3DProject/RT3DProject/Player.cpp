@@ -21,6 +21,14 @@ void Player::loadContent(Utilities::ResourceManager content, const std::string& 
 
 void Player::update(float dt)
 {
+	if (fps)
+		transform.rotation.z = atan2f(front.x, front.z) * 57.2958;
+
+	updatePosition(dt);
+
+	model.setAnimation(playerState);
+	weapon.setAnimation(playerState);
+
 	model.update(dt);
 	model.setTransform(transform);
 	weapon.update(dt);
@@ -28,6 +36,8 @@ void Player::update(float dt)
 	vpWeapon.update(dt);
 
 	collider.c = transform.position;
+
+	playerState = STAND;
 }
 
 void Player::setState(PlayerState state)
@@ -35,5 +45,3 @@ void Player::setState(PlayerState state)
 	model.setAnimation(state);
 	weapon.setAnimation(state);
 }
-
-

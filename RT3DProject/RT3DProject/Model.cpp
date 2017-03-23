@@ -21,11 +21,6 @@ namespace Rendering
 		rt3d::updateMesh(mesh, RT3D_VERTEX, m_MD2.getAnimVerts(), m_MD2.getVertDataSize());
 	}
 
-	void Model::setAnimation(const int& state)
-	{
-		m_MD2.setCurrentAnim(state);
-	}
-
 	void Model::setTransform(const Transform & transform)
 	{
 		this->transform.position.x = transform.position.x;
@@ -40,22 +35,27 @@ namespace Rendering
 	{
 		return mesh;
 	}
+
 	GLuint& Model::getCount()
 	{
 		return vertexCount;
 	}
+
 	rt3d::materialStruct& Model::getMaterial()
 	{
 		return material;
 	}
+
 	Transform& Model::getTransform()
 	{
 		return transform;
 	}
+
 	bool Model::isIndexed()
 	{
 		return false;
 	}
+
 	GLuint& Model::getTexture()
 	{
 		return *texture.get();
