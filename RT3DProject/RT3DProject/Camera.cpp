@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-const void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
+void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 {
 	Yaw += -mouseMotion.x * SENSITIVTY * deltaTime;
 

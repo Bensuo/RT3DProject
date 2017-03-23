@@ -33,7 +33,7 @@ public:
 
 	const glm::vec3& GetFront() const { return this->Front; }
 
-	const void Update(const float& deltaTime, const glm::vec3& targetPos);
+	void Update(const float& deltaTime, const glm::vec3& targetPos);
 
 	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f)) : Front(glm::vec3(0.0f, 0.0f, -1.0f))
 	{
