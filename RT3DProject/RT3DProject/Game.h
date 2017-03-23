@@ -9,6 +9,7 @@
 #include "AABB.h"
 #include "Input.h"
 #include "Timer.h"
+#include "AudioManager.h"
 
 
 #define DEG_TO_RADIAN 0.017453293
@@ -17,6 +18,7 @@ class Game
 {
 	Utilities::ResourceManager content;
 	Renderer renderer;
+	AudioManager audioManager;
 	Camera camera;
 	Input input;
 	Timer timer;
