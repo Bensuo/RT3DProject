@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player(): playerState(), weaponState()
+Player::Player(): playerState(), weaponState(), fps(false), sprint(false)
 {
 	model.setAnimation(playerState);
 	weapon.setAnimation(playerState);
@@ -38,6 +38,7 @@ void Player::update(float dt)
 	collider.c = transform.position;
 
 	playerState = STAND;
+	sprint = false;
 }
 
 void Player::setState(PlayerState state)

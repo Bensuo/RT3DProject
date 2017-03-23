@@ -145,7 +145,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 	glDepthMask(GL_FALSE);
 
 	skybox->shader.use();
-	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 1000.0f);
+	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 2000.0f);
 	glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -172,7 +172,7 @@ void Renderer::render(std::vector<IRenderable*>& models)
 
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 2000.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(camera->GetViewMatrix());
@@ -190,7 +190,7 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 2000.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(glm::mat4(1));

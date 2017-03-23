@@ -59,7 +59,13 @@ public:
 	{
 		normalise(movementNormal);
 		auto y = transform.position.y;
-		this->transform.position += this->movementNormal * (SPEED * deltaTime);
+		
+		if (!sprint) {
+			this->transform.position += this->movementNormal * (SPEED * deltaTime);
+		} else {
+			this->transform.position += this->movementNormal * (SPEED * 1.66f * deltaTime);
+		}
+
 		transform.position.y = y;
 		movementNormal = glm::vec3();
 	}
@@ -127,6 +133,16 @@ public:
 		playerState = JUMP;
 	}
 
+	void Sprint()
+	{
+		sprint = true;
+	}
+
+	void ClampPosition(const glm::vec3& min, const glm::vec3& max)
+	{
+		transform.position = clamp(transform.position, min, max);
+	}
+
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
@@ -141,6 +157,7 @@ private:
 
 	const float SPEED = 100.0;
 	bool fps;
+	bool sprint;
 
 	AABB collider{ glm::vec3(0), glm::vec3(15, 35, 15) };
 };

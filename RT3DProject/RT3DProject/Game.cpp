@@ -74,6 +74,7 @@ void Game::update()
 
 	testPlayer->update(timer.GetDeltaTime());
 	testPlayer2->update(timer.GetDeltaTime());
+	testPlayer2->ClampPosition(glm::vec3(-500, -23, -500), glm::vec3(500, 100, 500));
 
 	camera.Update(timer.GetDeltaTime(), testPlayer2->getPosition() - glm::vec3(0,-23,0));
 

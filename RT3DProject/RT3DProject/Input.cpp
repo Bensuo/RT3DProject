@@ -47,6 +47,10 @@ void Input::Update(Player* player, Camera& camera)
 	{
 		player->Jump();
 	}
+	if (currentKeyState[SDL_SCANCODE_LSHIFT] && previousKeyState[SDL_SCANCODE_LSHIFT])
+	{
+		player->Sprint();
+	}
 
 	if (currentKeyState[SDL_SCANCODE_ESCAPE])
 	{
