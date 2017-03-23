@@ -26,7 +26,7 @@ class Game
 
 	Player* testPlayer;	
 	Player* testPlayer2;
-	Player* testPlayer3;
+	//Player* testPlayer3;
 
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;

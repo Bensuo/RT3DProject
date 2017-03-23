@@ -106,13 +106,20 @@ void Renderer::draw(IRenderable* renderable)
 
 	mvStack.push(mvStack.top());
 
-	float rotation = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
-	
-	
+	float rotX = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
+	float rotY = renderable->getTransform().rotation.y * DEG_TO_RADIAN;
+	float rotZ = renderable->getTransform().rotation.z * DEG_TO_RADIAN;
+
 	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
-	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
+	mvStack.top() = rotate(mvStack.top(), -90.0f * DEG_TO_RADIAN, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	mvStack.push(rotate(mvStack.top(), rotX, glm::vec3(1.0f, 0.0f, 0.0f)));
+	mvStack.push(rotate(mvStack.top(), rotY, glm::vec3(0.0f, 1.0f, 0.0f)));
+	mvStack.push(rotate(mvStack.top(), rotZ, glm::vec3(0.0f, 0.0f, 1.0f)));
+
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
-	currentShader->setMaterial(renderable->getMaterial());
+	currentShader->setMaterial(renderable->getMaterial()) ;
+
 	if (renderable->isIndexed())
 	{
 		rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
@@ -121,6 +128,10 @@ void Renderer::draw(IRenderable* renderable)
 	{
 		rt3d::drawMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	}
+
+	//mvStack.pop();
+	mvStack.pop();
+	mvStack.pop();
 	mvStack.pop();
 	mvStack.pop();
 
@@ -161,7 +172,7 @@ void Renderer::render(std::vector<IRenderable*>& models)
 
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(camera->GetViewMatrix());
@@ -179,11 +190,11 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(glm::mat4(1));
-	float rotation = 90.0f * DEG_TO_RADIAN;
+	float rotation = -180.0f * DEG_TO_RADIAN;
 	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
 	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	glClear(GL_DEPTH_BUFFER_BIT);

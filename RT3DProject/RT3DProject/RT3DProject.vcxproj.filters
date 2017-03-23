@@ -84,7 +84,7 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="CameraThirdPerson.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Rendering\Camera</Filter>
     </ClCompile>
   </ItemGroup>
@@ -174,12 +174,6 @@
     </ClInclude>
     <ClInclude Include="Collisions.h">
       <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraThirdPerson.h">
-      <Filter>Rendering\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraII.h">
-      <Filter>Rendering\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
