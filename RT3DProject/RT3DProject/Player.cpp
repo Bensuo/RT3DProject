@@ -77,15 +77,40 @@ void Player::updatePosition(float deltaTime)
 	movementNormal = glm::vec3();
 }
 
-Rendering::PlayerModel& Player::getPlayerModel() { return model; };
-Rendering::PlayerModel& Player::getWeapon() { return weapon; };
-Rendering::ViewportWeapon& Player::getVPWeapon() { return vpWeapon; };
-const glm::vec3& Player::getPosition() { return transform.position; };
-void Player::setPosition(glm::vec3 pos) { transform.position = pos; };
+Rendering::PlayerModel& Player::getPlayerModel()
+{
+	return model;
+};
 
-const glm::vec3& Player::getPosition() const { return this->transform.position; }
+Rendering::PlayerModel& Player::getWeapon()
+{
+	return weapon;
+};
 
-const AABB& Player::getAABB() const { return collider; };
+Rendering::ViewportWeapon& Player::getVPWeapon()
+{
+	return vpWeapon;
+};
+
+const glm::vec3& Player::getPosition()
+{
+	return transform.position;
+};
+
+void Player::setPosition(glm::vec3 pos)
+{
+	transform.position = pos;
+};
+
+const glm::vec3& Player::getPosition() const
+{
+	return this->transform.position;
+}
+
+const AABB& Player::getAABB() const
+{
+	return collider;
+};
 
 void Player::UpdateVectors(const glm::vec3& front)
 {

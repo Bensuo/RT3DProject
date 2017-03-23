@@ -52,13 +52,10 @@ public:
 	Rendering::ViewportWeapon& getVPWeapon();
 	const glm::vec3& getPosition();
 	void setPosition(glm::vec3 pos);
-
 	const glm::vec3& getPosition() const;
-
 	const AABB& getAABB() const;
 	void setState(PlayerState state);
 	void UpdateVectors(const glm::vec3& front);
-	void Idle();
 	void MoveForward();
 	void MoveBackward();
 	void MoveLeft();
@@ -70,7 +67,16 @@ private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
 	Rendering::ViewportWeapon vpWeapon;
-	Transform transform{ glm::vec3(0), glm::vec3(0) };
+
+	Transform transform
+	{ 
+		glm::vec3(0), glm::vec3(0) 
+	};
+
+	AABB collider
+	{
+		glm::vec3(0), glm::vec3(15, 35, 15)
+	};
 
 	glm::vec3 front;
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -82,7 +88,5 @@ private:
 	const float SPEED = 100.0;
 	bool fps;
 	bool sprint;
-
-	AABB collider{ glm::vec3(0), glm::vec3(15, 35, 15) };
 };
 
