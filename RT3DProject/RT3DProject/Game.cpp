@@ -1,9 +1,13 @@
 #include "Game.h"
 #include <iostream>
 #include "Collisions.h"
+
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+
+	audioManager.PlayMusic("fortress sneaking.mp3");
+	audioManager.PlaySound("impact.wav", 0.25f);
 
 	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
@@ -21,12 +25,12 @@ void Game::init()
 	testPlayer = new Player();
 	testPlayer->loadContent(content, "rampage");
 	testPlayer->setState(Player::STAND);
-	testPlayer->setPosition(glm::vec3(0, 23, -150));
+	testPlayer->setPosition(glm::vec3(0, 15, -150));
 	testPlayer2 = new Player();
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
-	testPlayer2->setPosition(glm::vec3(0, 23, -200));
-	timer.Initialize();	//always init last for accurate game loop startup	
+	testPlayer2->setPosition(glm::vec3(0, 15, -200));
+	timer.Initialize();	//always init last for accurate game loop startup
 }
 
 
