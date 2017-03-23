@@ -41,8 +41,135 @@ void Player::update(float dt)
 	sprint = false;
 }
 
+void Player::setFPS(bool fps)
+{
+	this->fps = fps;
+}
+
 void Player::setState(PlayerState state)
 {
 	model.setAnimation(state);
 	weapon.setAnimation(state);
+}
+
+const glm::vec3& Player::normalise(glm::vec3& vector) const
+{
+	if (vector != glm::vec3(0))
+	{
+		return vector = normalize(vector);
+	}
+	return vector;
+}
+
+void Player::updatePosition(float deltaTime)
+{
+	normalise(movementNormal);
+	auto y = transform.position.y;
+
+	if (!sprint) {
+		this->transform.position += this->movementNormal * (SPEED * deltaTime);
+	}
+	else {
+		this->transform.position += this->movementNormal * (SPEED * 1.66f * deltaTime);
+	}
+
+	transform.position.y = y;
+	movementNormal = glm::vec3();
+}
+
+Rendering::PlayerModel& Player::getPlayerModel()
+{
+	return model;
+};
+
+Rendering::PlayerModel& Player::getWeapon()
+{
+	return weapon;
+};
+
+Rendering::ViewportWeapon& Player::getVPWeapon()
+{
+	return vpWeapon;
+};
+
+const glm::vec3& Player::getPosition()
+{
+	return transform.position;
+};
+
+void Player::setPosition(glm::vec3 pos)
+{
+	transform.position = pos;
+};
+
+const glm::vec3& Player::getPosition() const
+{
+	return this->transform.position;
+}
+
+const AABB& Player::getAABB() const
+{
+	return collider;
+};
+
+void Player::UpdateVectors(const glm::vec3& front)
+{
+	this->front = normalize(front);
+	this->right = normalize(cross(this->front, this->worldUp));
+	this->up = normalize(cross(this->right, this->front));
+}
+
+void Player::MoveForward()
+{
+	movementNormal += this->front;
+
+	if (!fps)
+		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
+
+	playerState = RUN;
+}
+
+void Player::MoveBackward()
+{
+	movementNormal -= this->front;
+
+	if (!fps)
+		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
+
+	playerState = RUN;
+}
+
+void Player::MoveLeft()
+{
+	movementNormal -= this->right;
+
+	if (!fps)
+		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
+
+	playerState = RUN;
+}
+
+void Player::MoveRight()
+{
+	movementNormal += this->right;
+
+	if (!fps)
+		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
+
+	playerState = RUN;
+}
+
+void Player::Jump()
+{
+	playerState = JUMP;
+}
+
+void Player::Sprint()
+{
+	sprint = true;
+}
+
+void Player::ClampPosition(const glm::vec3& min, const glm::vec3& max)
+{
+	transform.position = clamp(transform.position, min, max);
 }
