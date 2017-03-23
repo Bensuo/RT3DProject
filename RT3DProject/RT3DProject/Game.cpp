@@ -80,24 +80,27 @@ void Game::update()
 	testPlayer2->update(timer.GetDeltaTime());
 	testPlayer2->ClampPosition(glm::vec3(-500, -23, -500), glm::vec3(500, 100, 500));
 
-	camera.Update(timer.GetDeltaTime(), testPlayer2->getPosition() - glm::vec3(0,-23,0));
+	camera.Update(timer.GetDeltaTime(), testPlayer2->getPosition() - glm::vec3(0,-24,0));
 
 	auto info = Collisions::TestAABBAABB(testPlayer->getAABB(), testPlayer2->getAABB());
 	if (info.collision)
 	{
-		testPlayer2->setPosition(testPlayer2->getPosition() -= info.mtv);
+		auto pos = testPlayer2->getPosition();
+		testPlayer2->setPosition(pos -= info.mtv);
 	}
 
 	info = Collisions::TestAABBAABB(testPlayer2->getAABB(), floor);
 	if (info.collision)
 	{
-		testPlayer2->setPosition(testPlayer2->getPosition() += info.mtv);
+		auto pos = testPlayer2->getPosition();
+		testPlayer2->setPosition(pos += info.mtv);
 	}
 
 	info = Collisions::TestAABBAABB(testPlayer->getAABB(), floor);
 	if (info.collision)
 	{
-		testPlayer->setPosition(testPlayer->getPosition() += info.mtv);
+		auto pos = testPlayer->getPosition();
+		testPlayer->setPosition(pos += info.mtv);
 	}
 
 	testBox1 = Rendering::Box(testPlayer->getAABB().r * 2.0f, testPlayer->getAABB().c);

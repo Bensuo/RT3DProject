@@ -44,105 +44,28 @@ public:
 	virtual ~Player();
 	void loadContent(Utilities::ResourceManager content, const std::string& skin);
 	void update(float dt);
-	void setFPS(bool fps) { this->fps = fps; }
+	void setFPS(bool fps);
+	const glm::vec3& normalise(glm::vec3& vector) const;
+	void updatePosition(float deltaTime);
+	Rendering::PlayerModel& getPlayerModel();
+	Rendering::PlayerModel& getWeapon();
+	Rendering::ViewportWeapon& getVPWeapon();
+	const glm::vec3& getPosition();
+	void setPosition(glm::vec3 pos);
 
-	const glm::vec3& normalise(glm::vec3& vector) const
-	{
-		if (vector != glm::vec3(0))
-		{
-			return vector = normalize(vector);
-		}
-		return vector;
-	}
+	const glm::vec3& getPosition() const;
 
-	void updatePosition(float deltaTime)
-	{
-		normalise(movementNormal);
-		auto y = transform.position.y;
-		
-		if (!sprint) {
-			this->transform.position += this->movementNormal * (SPEED * deltaTime);
-		} else {
-			this->transform.position += this->movementNormal * (SPEED * 1.66f * deltaTime);
-		}
-
-		transform.position.y = y;
-		movementNormal = glm::vec3();
-	}
-
-	Rendering::PlayerModel& getPlayerModel() { return model; };
-	Rendering::PlayerModel& getWeapon() { return weapon; };
-	Rendering::ViewportWeapon& getVPWeapon() { return vpWeapon; };
-	glm::vec3 getPosition() { return transform.position; };
-	void setPosition(glm::vec3 pos) { transform.position = pos; };
-
-	const glm::vec3& getPosition() const { return this->transform.position; }
-
-	const AABB& getAABB() const { return collider; };
+	const AABB& getAABB() const;
 	void setState(PlayerState state);
-
-	void UpdateVectors(const glm::vec3& front)
-	{
-		this->front = normalize(front);
-		this->right = normalize(cross(this->front, this->worldUp));
-		this->up = normalize(cross(this->right, this->front));
-	}
-
-	void MoveForward()
-	{
-		movementNormal += this->front;
-
-		if(!fps)
-			transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
-
-		playerState = RUN;
-	}
-
-	void MoveBackward()
-	{
-		movementNormal -= this->front;
-
-		if (!fps)
-			transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
-
-		playerState = RUN;
-	}
-
-	void MoveLeft()
-	{
-		movementNormal -= this->right;
-
-		if (!fps)
-			transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
-
-		playerState = RUN;
-	}
-
-	void MoveRight()
-	{
-		movementNormal += this->right;
-
-		if (!fps)
-			transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
-
-		playerState = RUN;
-	}
-
-	void Jump()
-	{
-		playerState = JUMP;
-	}
-
-	void Sprint()
-	{
-		sprint = true;
-	}
-
-	void ClampPosition(const glm::vec3& min, const glm::vec3& max)
-	{
-		transform.position = clamp(transform.position, min, max);
-	}
-
+	void UpdateVectors(const glm::vec3& front);
+	void Idle();
+	void MoveForward();
+	void MoveBackward();
+	void MoveLeft();
+	void MoveRight();
+	void Jump();
+	void Sprint();
+	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
@@ -153,7 +76,8 @@ private:
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 right = normalize(cross(up, front));
-	glm::vec3 movementNormal;
+	glm::vec3 movementNormal, targetNormal;
+	glm::vec3 velocity;
 
 	const float SPEED = 100.0;
 	bool fps;

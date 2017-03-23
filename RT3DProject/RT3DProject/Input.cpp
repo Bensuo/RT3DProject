@@ -51,6 +51,13 @@ void Input::Update(Player* player, Camera& camera)
 	{
 		player->Sprint();
 	}
+	if (!currentKeyState[SDL_SCANCODE_W] &&
+		!currentKeyState[SDL_SCANCODE_S] &&
+		!currentKeyState[SDL_SCANCODE_A] &&
+		!currentKeyState[SDL_SCANCODE_D])
+	{
+		//player->Idle();
+	}
 
 	if (currentKeyState[SDL_SCANCODE_ESCAPE])
 	{
