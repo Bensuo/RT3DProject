@@ -29,7 +29,7 @@ void Game::init()
 	testPlayer2 = new Player();
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
-	testPlayer2->setPosition(glm::vec3(0, 15, -200));
+	testPlayer2->setPosition(glm::vec3(100, 15, -200));
 	timer.Initialize();	//always init last for accurate game loop startup
 }
 

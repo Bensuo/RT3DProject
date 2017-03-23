@@ -18,6 +18,8 @@ void Input::Update(Player* player, Camera& camera)
 		case SDL_MOUSEWHEEL:
 			camera.ProcessMouseScroll(-event.wheel.y);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			break;
 		case SDL_QUIT:
 			quit = true;
 			break;

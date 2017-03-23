@@ -2,14 +2,14 @@
 
 void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 {
-	Yaw += -mouseMotion.x * SENSITIVTY * deltaTime;
+	yaw += -mouseMotion.x * SENSITIVTY * deltaTime;
 
-	Pitch += mouseMotion.y * SENSITIVTY * deltaTime;
+	pitch += mouseMotion.y * SENSITIVTY * deltaTime;
 
 	if (!isFPS()) {
-		Pitch = glm::clamp(Pitch, -0.1f, 1.5f);
+		pitch = glm::clamp(pitch, -0.1f, 1.5f);
 	} else {
-		Pitch = glm::clamp(Pitch, -1.5f, 1.5f);
+		pitch = glm::clamp(pitch, -1.5f, 1.5f);
 	}
 
 	float camX;
@@ -18,20 +18,20 @@ void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 
 	if (distance == 0)
 	{
-		camX = cos(Yaw) * cos(Pitch);
-		camY = sin(Pitch);
-		camZ = sin(Yaw) * cos(Pitch);
+		camX = cos(yaw) * cos(pitch);
+		camY = sin(pitch);
+		camZ = sin(yaw) * cos(pitch);
 	}
 	else
 	{
-		camX = distance * cos(Yaw) * cos(Pitch);
-		camY = distance * sin(Pitch);
-		camZ = distance * sin(Yaw) * cos(Pitch);
+		camX = distance * cos(yaw) * cos(pitch);
+		camY = distance * sin(pitch);
+		camZ = distance * sin(yaw) * cos(pitch);
 	}
 
-	Position = glm::vec3(camX, camY, camZ);
+	position = glm::vec3(camX, camY, camZ);
 
-	view = lookAt(glm::vec3(Position),
+	view = lookAt(glm::vec3(position),
 		glm::vec3(0.0, 0.0, 0.0),
 		glm::vec3(0.0, 1.0, 0.0));
 
@@ -39,5 +39,49 @@ void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 
 	mouseMotion = glm::vec3(0);
 
-	updateCameraVectors(Position);
+	updateCameraVectors(position);
+}
+
+const glm::vec3& Camera::GetFront() const
+{
+	return this->front;
+}
+
+void Camera::updateCameraVectors(const glm::vec3& targetPos)
+{
+	this->front = normalize(-targetPos);
+	this->right = normalize(cross(this->front, this->worldUp));
+	this->up = normalize(cross(this->right, this->front));
+}
+
+Camera::Camera(glm::vec3 position, glm::vec3 up) : front(glm::vec3(0.0f, 0.0f, -1.0f))
+{
+	this->position = position;
+	this->worldUp = up;
+	this->yaw = 0;
+	this->pitch = 0;
+}
+
+glm::mat4 Camera::GetViewMatrix() const
+{
+	return view;
+}
+
+void Camera::ProcessMouseMovement(float xoffset, float yoffset)
+{
+	if (isFPS())
+		mouseMotion = glm::vec2(xoffset, yoffset);
+
+	mouseMotion = glm::vec2(-xoffset, -yoffset);
+}
+
+void Camera::ProcessMouseScroll(float yoffset)
+{
+	distance += yoffset * SCROLL_SENSITIVTY;
+	distance = glm::clamp(distance, 0.0f, MAX_DISTANCE);
+}
+
+bool Camera::isFPS() const
+{
+	return distance == 0;
 }
