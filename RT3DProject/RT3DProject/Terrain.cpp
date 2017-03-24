@@ -51,13 +51,17 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 		vertData.push_back((-0.5f + xVal) * scale.x);
 		vertData.push_back((float(red) / 255.0f) * scale.y);
 		vertData.push_back((-0.5f + zVal) * scale.z);
+
 		//Get data from normal map, rgb=xyz of the normal
 		pixel = norms[z*cols + x];
 		SDL_GetRGB(pixel, normFormat, &red, &green, &blue);
+
 		//Add normal, scaling between 0 and 1
-		normalData.push_back((float)red/255.0f);
-		normalData.push_back((float)green/255.0f);
-		normalData.push_back((float)blue/255.0f);
+		auto test = glm::vec3(2.0f * ((float)red / 255.0f) - 1.0f, 2.0f * ((float)blue / 255.0f) - 1.0f, 2.0f * ((float)green / 255.0f) - 1.0f);
+
+		normalData.push_back(test.x);
+		normalData.push_back(test.y);
+		normalData.push_back(test.z);
 
 		coordData.push_back(texU*xVal);
 		coordData.push_back(texV*zVal);
@@ -88,22 +92,19 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
-
 	//Normals
 	glGenBuffers(1, &normVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, normVBO);
 	glBufferData(GL_ARRAY_BUFFER, 3 * rows*cols * sizeof(GLfloat), normalData.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	
 
 	//Texture coords
 	glGenBuffers(1, &texVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, texVBO);
 	glBufferData(GL_ARRAY_BUFFER, 2 * rows*cols * sizeof(GLfloat), coordData.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, 0);	
 
 	//Indices
 	glGenBuffers(1, &indexEBO);
