@@ -90,6 +90,10 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Rendering\Camera</Filter>
     </ClCompile>
+
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
@@ -120,6 +124,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="minimal.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="terrain.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -180,7 +187,15 @@
     </ClInclude>
     <ClInclude Include="Collisions.h">
       <Filter>Utilities</Filter>
+
     </ClInclude>
+    <ClInclude Include="CameraThirdPerson.h">
+      <Filter>Rendering\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
+
     <ClInclude Include="resource.h" />
     <ClInclude Include="AudioManager.h">
       <Filter>Audio</Filter>
@@ -190,5 +205,6 @@
     <ResourceCompile Include="RT3DProject.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+
   </ItemGroup>
 </Project>

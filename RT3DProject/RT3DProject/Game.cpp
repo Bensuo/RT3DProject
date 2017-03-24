@@ -29,6 +29,8 @@ void Game::init()
 	testPlayer2 = new Player();
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
+	terrain.setScale(glm::vec3(2000.0f, 100.0f, 2000.0f));
+	terrain.loadContent("heightmap.bmp", "heightmap-norm.bmp", content);
 	testPlayer2->setPosition(glm::vec3(100, 15, -200));
 	timer.Initialize();	//always init last for accurate game loop startup
 }
@@ -38,6 +40,7 @@ void Game::draw()
 {
 	renderer.begin(camera);
 	renderer.drawSkybox(skybox);
+	renderer.drawTerrain(&terrain);
 	renderer.setShader("Phong");
 	renderList.emplace_back(&testPlayer->getPlayerModel());
 	renderList.emplace_back(&testPlayer->getWeapon());
@@ -69,7 +72,6 @@ bool Game::Quit() const
 void Game::update()
 {
 	running = !Quit();
-
 	testPlayer2->UpdateVectors(camera.GetFront());
 	testPlayer2->setFPS(camera.isFPS());
 
