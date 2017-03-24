@@ -19,9 +19,9 @@ void Input::Update(Player* player, Camera& camera)
 			camera.ProcessMouseScroll(-event.wheel.y);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			camera.SnapDistance(player->getAimDistance());
 			if (event.button.button == SDL_BUTTON_RIGHT)
 			{
+				camera.SnapDistance(player->getAimDistance());
 				player->Aim();
 			}
 			break;

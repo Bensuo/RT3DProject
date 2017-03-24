@@ -90,8 +90,8 @@ private:
 
 	const float SPEED = 100.0f;
 	const float AIM_DISTANCE = 50.0f;
-	bool fps;
-	bool sprint;
-	bool aiming;
+	bool fps = false;
+	bool sprint = false;
+	bool aiming = false;
 };
 
