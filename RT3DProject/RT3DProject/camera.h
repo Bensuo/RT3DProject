@@ -6,7 +6,7 @@
 class Camera
 {
 	const float SPEED = 100.0f;
-	const float SENSITIVTY = 0.1f;
+	const float SENSITIVTY = 0.7f;
 	const float SCROLL_SENSITIVTY = 10.0f;
 	const float MAX_FOV = 45.1f;
 	const float MIN_FOV = 45.0f;

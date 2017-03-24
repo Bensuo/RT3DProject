@@ -2,7 +2,7 @@
 #include <SDL_mixer.h>
 #include <cstdio>
 #include <SDL.h>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
 AudioManager::AudioManager()
 {

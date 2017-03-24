@@ -12,7 +12,7 @@ Renderer::Renderer()
 		exit(1);
 	}
 	std::cout << glGetString(GL_VERSION) << std::endl;
-		lightPos = glm::vec4(-10.0f, 10.0f, 10.0f, 1.0f); //light position
+		lightPos = glm::vec4(-10.0f, 100.0f, 10.0f, 1.0f); //light position
 	init();
 }
 

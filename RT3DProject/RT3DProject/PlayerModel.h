@@ -12,7 +12,9 @@ namespace Rendering {
 		~PlayerModel();
 		void setAnimation(const int& state) override
 		{
-			if(state == 6)
+			m_MD2.setCurrentAnim(state);
+			
+			/*if(state == 6)
 			{
 				jumping = true;
 				m_MD2.setCurrentAnim(state);
@@ -32,7 +34,8 @@ namespace Rendering {
 				{
 					m_MD2.setCurrentAnim(state);
 				}
-			}
+			}*/
 		}
+		void resetAnimation() { m_MD2.ResetAnimation(); }
 	};
 }

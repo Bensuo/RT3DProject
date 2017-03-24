@@ -92,6 +92,9 @@ public:
 	void Animate(const float& dt) { Animate(currentAnim, dt); }
 	void setCurrentAnim(const int& n) { currentAnim = n; }
 	void SetUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
+	void ResetAnimation() {
+		currentFrame = 0;
+	}
 protected:
 	md2_model_t mdl;
 	int currentAnim = 0;

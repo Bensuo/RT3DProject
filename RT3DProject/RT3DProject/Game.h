@@ -47,6 +47,7 @@ class Game
 		0.2f  // shininess
 	};
 	Terrain terrain;
+	void terrainCollision(Player* p, Terrain* terrain);
 public:
 	void init(void);
 	void draw();

@@ -35,9 +35,12 @@ void Player::update(float dt)
 	vpWeapon.update(dt);
 
 	collider.c = transform.position;
-
-	playerState = STAND;
-	sprint = false;
+	if (playerState != JUMP)
+	{
+		playerState = STAND;
+		sprint = false;
+	}
+	
 }
 
 void Player::setFPS(bool fps)
@@ -63,18 +66,26 @@ const glm::vec3& Player::normalise(glm::vec3& vector) const
 void Player::updatePosition(float deltaTime)
 {
 	normalise(movementNormal);
+	//Remove uneeded y component of movement normal
+	movementNormal.y = 0;
 	auto y = transform.position.y;
-
-	if (!sprint) 
-	{
-		this->transform.position += this->movementNormal * (SPEED * deltaTime);
+	float maxSpeed;
+	if (!sprint) {
+		this->movementNormal *= (SPEED * deltaTime);
+		maxSpeed = (SPEED * deltaTime);
 	}
-	else
-	{
-		this->transform.position += this->movementNormal * (SPEED * 1.66f * deltaTime);
+	else {
+		this->movementNormal *=  (SPEED * 1.66f * deltaTime);
+		maxSpeed = (SPEED * 1.66f *  deltaTime);
 	}
+	this->velocity.x = movementNormal.x;
+	this->velocity.y -= 8.0f * deltaTime;
+	this->velocity.z = movementNormal.z;
+	
+	velocity = glm::clamp(velocity, glm::vec3(-maxSpeed, -10, -maxSpeed), glm::vec3(maxSpeed, 40, maxSpeed));
+	velocity.y *= 0.97f;
+	this->transform.position += velocity;
 
-	transform.position.y = y;
 	movementNormal = glm::vec3();
 }
 
@@ -131,8 +142,11 @@ void Player::MoveForward()
 
 	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
-
-	playerState = RUN;
+	if (playerState != JUMP)
+	{
+		playerState = RUN;
+	}
+	
 }
 
 void Player::MoveBackward()
@@ -142,7 +156,10 @@ void Player::MoveBackward()
 	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
-	playerState = RUN;
+	if (playerState != JUMP)
+	{
+		playerState = RUN;
+	}
 }
 
 void Player::MoveLeft()
@@ -152,7 +169,10 @@ void Player::MoveLeft()
 	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
-	playerState = RUN;
+	if (playerState != JUMP)
+	{
+		playerState = RUN;
+	}
 }
 
 void Player::MoveRight()
@@ -162,12 +182,33 @@ void Player::MoveRight()
 	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
-	playerState = RUN;
+	if (playerState != JUMP)
+	{
+		playerState = RUN;
+	}
 }
 
 void Player::Jump()
 {
-	playerState = JUMP;
+	if (playerState != JUMP)
+	{
+		model.resetAnimation();
+		weapon.resetAnimation();
+		playerState = JUMP;
+		velocity.y = 4.0f;
+	}
+
+}
+
+void Player::Land()
+{
+	velocity.y = 0;
+	if (playerState == JUMP)
+	{
+		
+		playerState = STAND;
+	}
+	
 }
 
 void Player::Sprint()
