@@ -3,7 +3,7 @@
 Input::Input()
 {
 	currentKeyState = SDL_GetKeyboardState(nullptr);
-	previousKeyState = currentKeyState;
+
 }
 
 void Input::Update(Player* player, Camera& camera)
@@ -48,33 +48,27 @@ void Input::Update(Player* player, Camera& camera)
 	}
 
 	currentKeyState = SDL_GetKeyboardState(nullptr);
-	if (currentKeyState[SDL_SCANCODE_W] && previousKeyState[SDL_SCANCODE_W])
+	if (currentKeyState[SDL_SCANCODE_W])
 	{
 		player->MoveForward();
 	}
-	if (currentKeyState[SDL_SCANCODE_S] && previousKeyState[SDL_SCANCODE_S])
+	if (currentKeyState[SDL_SCANCODE_S])
 	{
 		player->MoveBackward();
 	}
-	if (currentKeyState[SDL_SCANCODE_A] && previousKeyState[SDL_SCANCODE_A])
+	if (currentKeyState[SDL_SCANCODE_A])
 	{
 		player->MoveLeft();
 	}
-	if (currentKeyState[SDL_SCANCODE_D] && previousKeyState[SDL_SCANCODE_D])
+	if (currentKeyState[SDL_SCANCODE_D])
 	{
 		player->MoveRight();
 	}
 	if (currentKeyState[SDL_SCANCODE_SPACE])
 	{
-		int space = previousKeyState[SDL_SCANCODE_SPACE];
-		space = space;
-	}
-	
-	if (currentKeyState[SDL_SCANCODE_SPACE] && previousKeyState[SDL_SCANCODE_SPACE])
-	{
 		player->Jump();
 	}
-	if (currentKeyState[SDL_SCANCODE_LSHIFT] && previousKeyState[SDL_SCANCODE_LSHIFT])
+	if (currentKeyState[SDL_SCANCODE_LSHIFT])
 	{
 		player->Sprint();
 	}
@@ -91,7 +85,7 @@ void Input::Update(Player* player, Camera& camera)
 		quit = true;
 	}
 
-	previousKeyState = currentKeyState;
+
 }
 
 bool Input::Quit() const
