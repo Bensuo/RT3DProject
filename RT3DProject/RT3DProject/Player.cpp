@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <iostream>
 
 Player::Player(): playerState(), weaponState(), fps(false), sprint(false)
 {
@@ -66,10 +65,12 @@ void Player::updatePosition(float deltaTime)
 	normalise(movementNormal);
 	auto y = transform.position.y;
 
-	if (!sprint) {
+	if (!sprint) 
+	{
 		this->transform.position += this->movementNormal * (SPEED * deltaTime);
 	}
-	else {
+	else
+	{
 		this->transform.position += this->movementNormal * (SPEED * 1.66f * deltaTime);
 	}
 
@@ -117,9 +118,9 @@ const float& Player::getAimDistance() const
 	return AIM_DISTANCE;
 }
 
-void Player::UpdateVectors(const glm::vec3& front)
+void Player::UpdateVectors(const glm::vec3& cameraFront)
 {
-	this->front = normalize(front);
+	this->front = normalize(glm::vec3(cameraFront.x, 0.0f, cameraFront.z));
 	this->right = normalize(cross(this->front, this->worldUp));
 	this->up = normalize(cross(this->right, this->front));
 }

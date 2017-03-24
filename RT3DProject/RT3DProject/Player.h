@@ -56,7 +56,7 @@ public:
 	const AABB& getAABB() const;
 	const float& getAimDistance() const;
 	void setState(PlayerState state);
-	void UpdateVectors(const glm::vec3& front);
+	void UpdateVectors(const glm::vec3& cameraFront);
 	void MoveForward();
 	void MoveBackward();
 	void MoveLeft();
