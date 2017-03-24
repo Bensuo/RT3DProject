@@ -7,7 +7,7 @@ void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 	pitch += mouseMotion.y * SENSITIVTY * deltaTime;
 
 	if (!isFPS()) {
-		pitch = glm::clamp(pitch, -0.1f, 1.5f);
+		pitch = glm::clamp(pitch, -0.3f, 1.5f);
 	} else {
 		pitch = glm::clamp(pitch, -1.5f, 1.5f);
 	}
@@ -67,12 +67,12 @@ glm::mat4 Camera::GetViewMatrix() const
 	return view;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset)
+void Camera::ProcessMouseMovement(const glm::vec2& offset)
 {
 	if (isFPS())
-		mouseMotion = glm::vec2(xoffset, yoffset);
+		mouseMotion = offset;
 
-	mouseMotion = glm::vec2(-xoffset, -yoffset);
+	mouseMotion = -offset;
 }
 
 void Camera::ProcessMouseScroll(float yoffset)

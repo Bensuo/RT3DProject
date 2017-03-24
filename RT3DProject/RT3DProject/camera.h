@@ -32,7 +32,7 @@ public:
 	void Update(const float& deltaTime, const glm::vec3& targetPos);
 	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 GetViewMatrix() const;
-	void ProcessMouseMovement(float xoffset, float yoffset);
+	void ProcessMouseMovement(const glm::vec2& offset);
 	void ProcessMouseScroll(float yoffset);
 	void SnapDistance(const float& distance);
 	bool isFPS() const;
