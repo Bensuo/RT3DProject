@@ -26,10 +26,10 @@ void Game::init()
 	testPlayer2 = new Player();
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
+
+	terrain.setScale(glm::vec3(2000.0f, 100.0f, 2000.0f));
+	terrain.loadContent("heightmap.bmp", "heightmap-norm.bmp", content);
 	timer.Initialize();	//always init last for accurate game loop startup
-	terrain.setScale(glm::vec3(40.0f, 5.0f, 40.0f));
-	terrain.loadContent("hm.bmp", content);
-	
 }
 
 

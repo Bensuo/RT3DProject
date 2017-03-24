@@ -9,7 +9,7 @@ class Terrain
 public:
 	Terrain();
 	virtual ~Terrain();
-	void loadContent(const char* fname, Utilities::ResourceManager& content);
+	void loadContent(const char* fname, const char * normname, Utilities::ResourceManager& content);
 	int getNumIndices() { return indexCount; }
 	GLuint getVAO() { return vao; }
 	Rendering::Shader& getShader() { return shader; }
