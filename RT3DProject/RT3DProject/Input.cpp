@@ -13,12 +13,31 @@ void Input::Update(Player* player, Camera& camera)
 		switch (event.type)
 		{
 		case SDL_MOUSEMOTION:
-			camera.ProcessMouseMovement(event.motion.xrel, -event.motion.yrel);
+			camera.ProcessMouseMovement(glm::vec2(event.motion.xrel, -event.motion.yrel));
 			break;
 		case SDL_MOUSEWHEEL:
 			camera.ProcessMouseScroll(-event.wheel.y);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
+			if (event.button.button == SDL_BUTTON_RIGHT)
+			{
+				camera.SnapDistance(player->getAimDistance());
+				player->Aim();
+			}
+			if (event.button.button == SDL_BUTTON_MIDDLE)
+			{
+				camera.SnapToMaxDistance();
+			}
+			break;
+		case SDL_MOUSEBUTTONUP:
+			if (event.button.button == SDL_BUTTON_RIGHT)
+			{
+				player->StopAim();
+			}
+			if (event.button.button == SDL_BUTTON_MIDDLE)
+			{
+				camera.SnapToMaxDistance();
+			}
 			break;
 		case SDL_QUIT:
 			quit = true;

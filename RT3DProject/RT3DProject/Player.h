@@ -54,6 +54,7 @@ public:
 	void setPosition(glm::vec3 pos);
 	const glm::vec3& getPosition() const;
 	const AABB& getAABB() const;
+	const float& getAimDistance() const;
 	void setState(PlayerState state);
 	void UpdateVectors(const glm::vec3& front);
 	void MoveForward();
@@ -62,7 +63,9 @@ public:
 	void MoveRight();
 	void Jump();
 	void Sprint();
+	void Aim();
 	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
+	void StopAim();
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
@@ -85,8 +88,10 @@ private:
 	glm::vec3 movementNormal, targetNormal;
 	glm::vec3 velocity;
 
-	const float SPEED = 100.0;
-	bool fps;
-	bool sprint;
+	const float SPEED = 100.0f;
+	const float AIM_DISTANCE = 75.0f;
+	bool fps = false;
+	bool sprint = false;
+	bool aiming = false;
 };
 
