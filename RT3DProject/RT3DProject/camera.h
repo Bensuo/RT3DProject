@@ -5,122 +5,38 @@
 
 class Camera
 {
-	const GLfloat YAW = -90.0f;
-	const GLfloat PITCH = 0.0f;
-	const GLfloat SPEED = 100.0f;
-	const GLfloat SENSITIVTY = 0.05f;
-	const GLfloat ZOOM = 45.0f;
-	const GLfloat MAX_FOV = 45.1f;
-	const GLfloat MIN_FOV = 45.0f;
+	const float SPEED = 100.0f;
+	const float SENSITIVTY = 0.1f;
+	const float SCROLL_SENSITIVTY = 10.0f;
+	const float MAX_FOV = 45.1f;
+	const float MIN_FOV = 45.0f;
 
-	glm::vec3 MovementNormal;
-	glm::vec3 Front;
-	glm::vec3 Up;
-	glm::vec3 Right;
-	glm::vec3 WorldUp;
+	glm::vec2 mouseMotion;
 
-	GLfloat Yaw;
-	GLfloat Pitch;
+	glm::vec3 position;
+	glm::vec3 movementNormal;
+	glm::vec3 front;
+	glm::vec3 up;
+	glm::vec3 right;
+	glm::vec3 worldUp;
 
+	float yaw;
+	float pitch;
+
+	glm::mat4 view;
+
+	float distance = 0;
+	const float MAX_DISTANCE = 150.0f;
 public:
-	glm::vec3 Position;
-	float currentZoom = ZOOM;
-
-	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f)) : Front(glm::vec3(0.0f, 0.0f, -1.0f))
-	{
-		this->Position = position;
-		this->WorldUp = up;
-		this->Yaw = YAW;
-		this->Pitch = PITCH;
-		this->updateCameraVectors();
-	}
-
-	glm::mat4 GetViewMatrix() const
-	{
-		return lookAt(this->Position, this->Position + this->Front, this->Up);
-	}
-
-	void MoveForward()
-	{
-		MovementNormal += this->Front;
-	}
-
-	void MoveBackward()
-	{
-		MovementNormal -= this->Front;
-	}
-
-	void MoveLeft()
-	{
-		MovementNormal -= this->Right;
-	}
-
-	void MoveRight()
-	{
-		MovementNormal += this->Right;
-	}
-
-	const glm::vec3& Normalise(glm::vec3& vector) const
-	{
-		if (vector != glm::vec3(0))
-		{
-			return vector = normalize(vector);
-		}
-		return vector;
-	}
-
-	void Update(float deltaTime)
-	{
-		Normalise(MovementNormal);
-
-		auto y = Position.y;
-
-		auto velocity = this->SPEED * deltaTime;
-		this->Position += this->MovementNormal * velocity;
-
-		Position.y = y;
-		MovementNormal = glm::vec3();
-	}
-
-	void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true)
-	{
-		xoffset *= this->SENSITIVTY;
-		yoffset *= this->SENSITIVTY;
-
-		this->Yaw += xoffset;
-		this->Pitch += yoffset;
-
-		if (constrainPitch)
-		{
-			if (this->Pitch > 89.0f)
-				this->Pitch = 89.0f;
-			if (this->Pitch < -89.0f)
-				this->Pitch = -89.0f;
-		}
-
-		this->updateCameraVectors();
-	}
-
-	void ProcessMouseScroll(GLfloat yoffset)
-	{
-		if (this->currentZoom >= 1.0f && this->currentZoom <= 45.0f)
-			this->currentZoom -= yoffset;
-		if (this->currentZoom <= 1.0f)
-			this->currentZoom = 1.0f;
-		if (this->currentZoom >= 45.0f)
-			this->currentZoom = 45.0f;
-	}
-
+	const glm::vec3& GetFront() const;
+	void Update(const float& deltaTime, const glm::vec3& targetPos);
+	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 GetViewMatrix() const;
+	void ProcessMouseMovement(const glm::vec2& offset);
+	void ProcessMouseScroll(float yoffset);
+	void SnapDistance(const float& distance);
+	bool isFPS() const;
+	void SnapToMaxDistance();
 private:
-	void updateCameraVectors()
-	{
-		glm::vec3 front;
-		front.x = cos(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-		front.y = sin(glm::radians(this->Pitch));
-		front.z = sin(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-		this->Front = normalize(front);
-
-		this->Right = normalize(cross(this->Front, this->WorldUp)); 
-		this->Up = normalize(cross(this->Right, this->Front));
-	}
+	void updateCameraVectors(const glm::vec3& targetPos);
 };

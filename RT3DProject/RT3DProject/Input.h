@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include "camera.h"
+#include "Player.h"
 
 class Input
 {
@@ -11,7 +12,7 @@ class Input
 	bool quit = false;
 public:
 	Input();
-	void Update(Camera& camera);
+	void Update(Player* player, Camera& camera);
 	bool Quit() const;
 	~Input();
 };

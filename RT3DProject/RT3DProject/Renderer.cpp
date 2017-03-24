@@ -1,7 +1,6 @@
 #include "Renderer.h"
 #include <glm/gtc/type_ptr.hpp>
 
-
 Renderer::Renderer()
 {
 	hWindow = setupRC(glContext);
@@ -40,7 +39,7 @@ SDL_Window* Renderer::setupRC(SDL_GLContext& context) const
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8); // 8 bit alpha buffering
-													   // Create 800x600 window
+
 	window = SDL_CreateWindow("RT3DProject", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (!window) // Check window was created OK
@@ -106,13 +105,20 @@ void Renderer::draw(IRenderable* renderable)
 
 	mvStack.push(mvStack.top());
 
-	float rotation = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
-	
-	
+	float rotX = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
+	float rotY = renderable->getTransform().rotation.y * DEG_TO_RADIAN;
+	float rotZ = renderable->getTransform().rotation.z * DEG_TO_RADIAN;
+
 	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
-	mvStack.push(rotate(mvStack.top(), rotation, glm::vec3(1.0f, 0.0f, 0.0f)));
+	mvStack.top() = rotate(mvStack.top(), -90.0f * DEG_TO_RADIAN, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	mvStack.push(rotate(mvStack.top(), rotX, glm::vec3(1.0f, 0.0f, 0.0f)));
+	mvStack.push(rotate(mvStack.top(), rotY, glm::vec3(0.0f, 1.0f, 0.0f)));
+	mvStack.push(rotate(mvStack.top(), rotZ, glm::vec3(0.0f, 0.0f, 1.0f)));
+
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
-	currentShader->setMaterial(renderable->getMaterial());
+	currentShader->setMaterial(renderable->getMaterial()) ;
+
 	if (renderable->isIndexed())
 	{
 		rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
@@ -121,6 +127,10 @@ void Renderer::draw(IRenderable* renderable)
 	{
 		rt3d::drawMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	}
+
+	//mvStack.pop();
+	mvStack.pop();
+	mvStack.pop();
 	mvStack.pop();
 	mvStack.pop();
 
@@ -134,7 +144,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 	glDepthMask(GL_FALSE);
 
 	skybox->shader.use();
-	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 1000.0f);
+	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 2000.0f);
 	glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -193,7 +203,7 @@ void Renderer::render(std::vector<IRenderable*>& models)
 
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 2000.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(camera->GetViewMatrix());
@@ -211,11 +221,11 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 2000.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(glm::mat4(1));
-	float rotation = 90.0f * DEG_TO_RADIAN;
+	float rotation = -180.0f * DEG_TO_RADIAN;
 	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
 	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	glClear(GL_DEPTH_BUFFER_BIT);

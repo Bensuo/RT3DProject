@@ -107,4 +107,6 @@ public:
 	GLuint getVertDataSize() const { return vertDataSize; }
 	GLuint getVertDataCount() const { return vertDataSize / 3; }
 	int getCurrentAnim() const { return currentAnim; }
+	int getCurrentFrame() const { return currentFrame; }
+	const std::vector<int>& GetAnimFrames() const { return animFrameList; }
 };

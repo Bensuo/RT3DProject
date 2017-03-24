@@ -38,6 +38,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{6640ad8d-c4d7-4b28-a3a6-d7d721de4451}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{6c273cb7-fe3f-44e5-9b02-d15e4371b4d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -84,11 +87,15 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="CameraThirdPerson.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Rendering\Camera</Filter>
     </ClCompile>
+
     <ClCompile Include="Terrain.cpp">
       <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +187,7 @@
     </ClInclude>
     <ClInclude Include="Collisions.h">
       <Filter>Utilities</Filter>
+
     </ClInclude>
     <ClInclude Include="CameraThirdPerson.h">
       <Filter>Rendering\Camera</Filter>
@@ -187,5 +195,16 @@
     <ClInclude Include="Terrain.h">
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
+
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="AudioManager.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RT3DProject.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include "Input.h"
 #include "Timer.h"
 #include "Terrain.h"
+#include "AudioManager.h"
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -17,6 +18,7 @@ class Game
 {
 	Utilities::ResourceManager content;
 	Renderer renderer;
+	AudioManager audioManager;
 	Camera camera;
 	Input input;
 	Timer timer;
@@ -26,7 +28,7 @@ class Game
 
 	Player* testPlayer;	
 	Player* testPlayer2;
-	Player* testPlayer3;
+	//Player* testPlayer3;
 
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
