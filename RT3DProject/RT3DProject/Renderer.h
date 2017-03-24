@@ -44,17 +44,25 @@ private:
 
 	//TODO: Replace with maps?
 	rt3d::lightStruct light0 = {
-		{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
-		{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse
-		{ 0.15f, 0.34f, 1.0f, 1.0f }, // specular
-		{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
+		{ 0.1f, 0.1f, 0.1f, 1.0f }, // ambient
+		{ 0.2f, 0.4f, 0.5f, 1.0f }, // diffuse
+		{ 0.15f, 0.34f, 0.7f, 0.25f }, // specular
+		{ 0.0f, 0.0f, 0.0f, 0.0f }  // position
 	};
-	rt3d::lightStruct light1 = {
-		{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
-		{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse
-		{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
-		{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
-	};
+
+	//rt3d::lightStruct light0 = {
+	//	{ 0.1f, 0.1f, 0.1f, 1.0f }, // ambient
+	//	{ 0.1f, 0.4f, 0.3f, 1.0f }, // diffuse
+	//	{ 0.15f, 0.34f, 0.7f, 0.25f }, // specular
+	//	{ 0.0f, 0.0f, 0.0f, 0.0f }  // position
+	//};
+
+	//rt3d::lightStruct light1 = {
+	//	{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
+	//	{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse
+	//	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+	//	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
+	//};
 	Camera* camera;
 	glm::vec4 lightPos; //light position
 
