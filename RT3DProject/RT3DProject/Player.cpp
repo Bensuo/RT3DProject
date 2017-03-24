@@ -21,7 +21,7 @@ void Player::loadContent(Utilities::ResourceManager content, const std::string& 
 
 void Player::update(float dt)
 {
-	if (fps)
+	if (fps || aiming)
 		transform.rotation.z = atan2f(front.x, front.z) * 57.2958;
 
 	updatePosition(dt);
@@ -110,7 +110,12 @@ const glm::vec3& Player::getPosition() const
 const AABB& Player::getAABB() const
 {
 	return collider;
-};
+}
+
+const float& Player::getAimDistance() const
+{
+	return AIM_DISTANCE;
+}
 
 void Player::UpdateVectors(const glm::vec3& front)
 {
@@ -123,7 +128,7 @@ void Player::MoveForward()
 {
 	movementNormal += this->front;
 
-	if (!fps)
+	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	playerState = RUN;
@@ -133,7 +138,7 @@ void Player::MoveBackward()
 {
 	movementNormal -= this->front;
 
-	if (!fps)
+	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	playerState = RUN;
@@ -143,7 +148,7 @@ void Player::MoveLeft()
 {
 	movementNormal -= this->right;
 
-	if (!fps)
+	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	playerState = RUN;
@@ -153,7 +158,7 @@ void Player::MoveRight()
 {
 	movementNormal += this->right;
 
-	if (!fps)
+	if (!fps && !aiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	playerState = RUN;
@@ -169,7 +174,19 @@ void Player::Sprint()
 	sprint = true;
 }
 
+void Player::Aim()
+{
+	if(!fps)
+		aiming = true;
+}
+
 void Player::ClampPosition(const glm::vec3& min, const glm::vec3& max)
 {
 	transform.position = clamp(transform.position, min, max);
+}
+
+void Player::StopAim()
+{
+	if(!fps)
+		aiming = false;
 }

@@ -81,6 +81,12 @@ void Camera::ProcessMouseScroll(float yoffset)
 	distance = glm::clamp(distance, 0.0f, MAX_DISTANCE);
 }
 
+void Camera::SnapDistance(const float& distance)
+{
+	if (!isFPS())
+		this->distance = distance;
+}
+
 bool Camera::isFPS() const
 {
 	return distance == 0;

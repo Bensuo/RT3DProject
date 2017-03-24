@@ -34,6 +34,7 @@ public:
 	glm::mat4 GetViewMatrix() const;
 	void ProcessMouseMovement(float xoffset, float yoffset);
 	void ProcessMouseScroll(float yoffset);
+	void SnapDistance(const float& distance);
 	bool isFPS() const;
 private:
 	void updateCameraVectors(const glm::vec3& targetPos);
