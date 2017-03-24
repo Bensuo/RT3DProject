@@ -36,6 +36,7 @@ public:
 	void ProcessMouseScroll(float yoffset);
 	void SnapDistance(const float& distance);
 	bool isFPS() const;
+	void SnapToMaxDistance();
 private:
 	void updateCameraVectors(const glm::vec3& targetPos);
 };

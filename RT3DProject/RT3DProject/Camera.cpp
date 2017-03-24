@@ -91,3 +91,8 @@ bool Camera::isFPS() const
 {
 	return distance == 0;
 }
+
+void Camera::SnapToMaxDistance()
+{
+	distance = MAX_DISTANCE;
+}

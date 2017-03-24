@@ -24,11 +24,19 @@ void Input::Update(Player* player, Camera& camera)
 				camera.SnapDistance(player->getAimDistance());
 				player->Aim();
 			}
+			if (event.button.button == SDL_BUTTON_MIDDLE)
+			{
+				camera.SnapToMaxDistance();
+			}
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if (event.button.button == SDL_BUTTON_RIGHT)
 			{
 				player->StopAim();
+			}
+			if (event.button.button == SDL_BUTTON_MIDDLE)
+			{
+				camera.SnapToMaxDistance();
 			}
 			break;
 		case SDL_QUIT:
