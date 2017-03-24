@@ -172,7 +172,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	//terrain->shader.setLight(light0);
 
 	glm::mat4 projection(1.0);
-	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 5000.0f);
+	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 5000.0f);
 	glm::mat4 view = camera->GetViewMatrix();
 	//view = glm::translate(view, glm::vec3(0, -50, 0));
 	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));
