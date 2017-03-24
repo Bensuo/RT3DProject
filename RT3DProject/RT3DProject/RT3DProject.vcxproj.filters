@@ -119,6 +119,9 @@
     <None Include="minimal.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="terrain.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h">

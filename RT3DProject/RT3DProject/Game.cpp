@@ -27,7 +27,8 @@ void Game::init()
 	testPlayer2->loadContent(content, "rampage");
 	testPlayer2->setState(Player::STAND);
 	timer.Initialize();	//always init last for accurate game loop startup
-	terrain.loadContent("heightmap.bmp");
+	terrain.setScale(glm::vec3(40.0f, 5.0f, 40.0f));
+	terrain.loadContent("hm.bmp", content);
 	
 }
 
@@ -36,10 +37,11 @@ void Game::draw()
 {
 	renderer.begin(camera);
 	renderer.drawSkybox(skybox);
+	renderer.drawTerrain(&terrain);
 	renderer.setShader("Phong");
 	renderList.emplace_back(&testPlayer->getPlayerModel());
-	renderList.emplace_back(&testPlayer->getWeapon());
-	renderList.emplace_back(&testBox);
+	//renderList.emplace_back(&testPlayer->getWeapon());
+	//renderList.emplace_back(&testBox);
 	//renderList.emplace_back(&testBox1);
 	//renderList.emplace_back(&testBox2);
 	renderer.render(renderList);
@@ -59,7 +61,7 @@ void Game::update()
 	running = !Quit();
 	input.Update(camera);
 	//Simulate some gravity!
-	camera.Position.y -= 50.0f * timer.GetDeltaTime();
+	//camera.Position.y -= 50.0f * timer.GetDeltaTime();
 	testBox.update();
 	testPlayer2->setPosition(camera.Position);
 	testPlayer->update(timer.GetDeltaTime());
@@ -76,7 +78,7 @@ void Game::update()
 	info = Collisions::TestAABBAABB(testPlayer2->getAABB(), floor);
 	if (info.collision)
 	{
-		camera.Position += info.mtv;
+		//camera.Position += info.mtv;
 	}
 	//testBox1 = Rendering::Box(testPlayer->getAABB().r, testPlayer->getAABB().c);
 	//testBox1.setMaterial(material);

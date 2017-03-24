@@ -13,7 +13,7 @@
 #include "ViewportWeapon.h"
 #include <map>
 #include "IRenderable.h"
-
+#include "Terrain.h"
 //The Renderer handles window creation and management as well as drawing to the screen using
 //OpenGL
 class Renderer
@@ -26,6 +26,7 @@ public:
 	void end() const;
 	void draw(IRenderable* renderable);
 	void drawSkybox(Rendering::Skybox* skybox) const;
+	void drawTerrain(Terrain* terrain) const;
 	void render(std::vector<IRenderable*>& models);
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);

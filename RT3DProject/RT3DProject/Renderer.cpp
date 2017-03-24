@@ -71,7 +71,7 @@ void Renderer::setShader(std::string name)
 	if (shaders.find(name) != shaders.end())
 	{
 		currentShader = &shaders[name];
-		currentShader->use();
+		//currentShader->use();
 	}
 }
 
@@ -150,6 +150,38 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 	//clear the depth to ensure Skybox is always drawn on bottom
 	glClear(GL_DEPTH_BUFFER_BIT);
 	skybox->shader.disable();
+}
+
+void Renderer::drawTerrain(Terrain * terrain) const
+{
+	glCullFace(GL_BACK);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthMask(GL_TRUE);
+	terrain->shader.use();
+	terrain->shader.setLight(light0);
+	//terrain->shader.setLight(light0);
+
+	glm::mat4 projection(1.0);
+	projection = glm::perspective(camera->currentZoom, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 500.0f);
+	glm::mat4 view = camera->GetViewMatrix();
+	//view = glm::translate(view, glm::vec3(0, -50, 0));
+	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));
+	terrain->shader.setUniformMatrix4fv("modelview", glm::value_ptr(view));
+	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "modelview"), 1, GL_FALSE, glm::value_ptr(view));
+	glBindTexture(GL_TEXTURE_2D, *terrain->getTexture());
+	glBindVertexArray(terrain->getVAO());
+	//glEnable(GL_PRIMITIVE_RESTART);
+	
+	//glPrimitiveRestartIndex(terrain->getRows() * terrain->getColumns());
+	//rt3d::drawIndexedMesh(terrain->getVAO(), terrain->getNumIndices(), GL_TRIANGLES);
+	glDrawElements(GL_TRIANGLES, terrain->getNumIndices(), GL_UNSIGNED_INT, 0);
+	//glDisable(GL_PRIMITIVE_RESTART);
+	glBindVertexArray(0);
+
+	
+	glCullFace(GL_BACK);
+	//glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 //Renders all objects in the provided list based on the camera provided in begin() and the currently
