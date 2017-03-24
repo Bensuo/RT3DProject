@@ -3,7 +3,8 @@
 #include <glm/glm.hpp>
 #include "Shader.h"
 #include "ResourceManager.h"
-
+#include <vector>
+#include "Transform.h"
 class Terrain
 {
 public:
@@ -20,8 +21,10 @@ public:
 	GLuint* getTexture() { 
 		return texture.lock().get();
 	}
+	float getHeightAtPosition(float x, float z);
 	Rendering::Shader shader;
 private:
+	float getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 	int rows;
 	int cols;
 	int indexCount;
@@ -30,7 +33,7 @@ private:
 	//OpenGL buffers
 	//GLuint vertVBO, texCoordVBO, indicesVBO, normalsVBO;
 	GLuint vao;
-	
+	std::vector<std::vector<float>> heights;
 	std::weak_ptr<GLuint> texture;
 	rt3d::materialStruct material = {
 		{ 0.4f, 0.4f, 1.0f, 1.0f }, // ambient
@@ -38,5 +41,6 @@ private:
 		{ 0.8f, 0.8f, 0.8f, 1.0f }, // specular
 		1.0f  // shininess
 	};
+	Transform transform{ glm::vec3(0), glm::vec3(0) };
 };
 

@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Collisions.h"
 
+
+
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -80,7 +82,7 @@ void Game::update()
 
 	testPlayer->update(timer.GetDeltaTime());
 	testPlayer2->update(timer.GetDeltaTime());
-	testPlayer2->ClampPosition(glm::vec3(-500, -23, -500), glm::vec3(500, 100, 500));
+	testPlayer2->ClampPosition(glm::vec3(-terrain.getScale().x/2-1, 0, -terrain.getScale().z / 2-1), glm::vec3(terrain.getScale().x / 2-1, 250, terrain.getScale().z / 2-1));
 
 	camera.Update(timer.GetDeltaTime(), testPlayer2->getPosition() - glm::vec3(0,-24,0));
 
@@ -98,12 +100,14 @@ void Game::update()
 		testPlayer2->setPosition(pos += info.mtv);
 	}
 
-	info = Collisions::TestAABBAABB(testPlayer->getAABB(), floor);
+	/*info = Collisions::TestAABBAABB(testPlayer->getAABB(), floor);
 	if (info.collision)
 	{
 		auto pos = testPlayer->getPosition();
 		testPlayer->setPosition(pos += info.mtv);
-	}
+	}*/
+	terrainCollision(testPlayer, &terrain);
+	terrainCollision(testPlayer2, &terrain);
 
 	testBox1 = Rendering::Box(testPlayer->getAABB().r * 2.0f, testPlayer->getAABB().c);
 	testBox1.setMaterial(material);
@@ -140,4 +144,16 @@ Game::Game()
 		}
 	}
 	renderer.quit();
+}
+
+void Game::terrainCollision(Player * p, Terrain * terrain)
+{
+	float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
+	if (p->getPosition().y - p->getAABB().r.y < h)
+	{
+		glm::vec3 newPos = p->getPosition();
+		newPos.y = h + p->getAABB().r.y;
+		p->setPosition(newPos);
+		p->Land();
+	}
 }

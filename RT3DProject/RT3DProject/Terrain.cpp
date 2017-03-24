@@ -1,6 +1,5 @@
 #include "Terrain.h"
 #include <SDL.h>
-#include <vector>
 #include "rt3d.h"
 
 Terrain::Terrain()
@@ -29,6 +28,7 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	Uint32 pixel;
 	cols = tmpSurface->w;
 	rows = tmpSurface->h;
+	heights = std::vector<std::vector<float>>(cols, std::vector<float>(rows));
 	std::vector<GLfloat> vertData;
 	std::vector<GLfloat> normalData;
 	std::vector<GLfloat> coordData;
@@ -49,15 +49,19 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 		float zVal = (float)z / float(rows - 1);
 		//Add vertex and scale it
 		vertData.push_back((-0.5f + xVal) * scale.x);
-		vertData.push_back((float(red) / 255.0f) * scale.y);
+		float h = (float(red) / 255.0f) * scale.y;
+		heights[x][z] = h;
+		vertData.push_back(h);
 		vertData.push_back((-0.5f + zVal) * scale.z);
 		//Get data from normal map, rgb=xyz of the normal
 		pixel = norms[z*cols + x];
 		SDL_GetRGB(pixel, normFormat, &red, &green, &blue);
 		//Add normal, scaling between 0 and 1
-		normalData.push_back((float)red/255.0f);
-		normalData.push_back((float)green/255.0f);
-		normalData.push_back((float)blue/255.0f);
+		glm::vec3 n((float)red / 255.0f, (float)green / 255.0f, (float)blue / 255.0f);
+		n = glm::normalize(n);
+		normalData.push_back(n.x);
+		normalData.push_back(n.y);
+		normalData.push_back(n.z);
 
 		coordData.push_back(texU*xVal);
 		coordData.push_back(texV*zVal);
@@ -113,10 +117,44 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	shader = Rendering::Shader("terrain.vert", "phong-tex.frag");
+	shader = Rendering::Shader("phong-tex.vert", "phong-tex.frag");
 	shader.setMaterial(material);
 	texture = content.loadTexture("terrainTex.bmp");
 	//Cleanup
 	SDL_FreeSurface(tmpSurface);
 	SDL_FreeSurface(normSurface);
+}
+
+float Terrain::getHeightAtPosition(float x, float z)
+{
+	float value;
+	float tX = x - transform.position.x + (scale.x/2);
+	float tZ = z - transform.position.z + (scale.z / 2);
+	float gridSquareSize = scale.x / (cols - 1);
+	int gridX = (int)(tX / gridSquareSize);
+	int gridZ = (int)(tZ / gridSquareSize);
+
+	float xCoord = fmod(tX, gridSquareSize) / gridSquareSize;
+	float zCoord = fmod(tZ ,gridSquareSize) / gridSquareSize;
+	glm::vec3 u;
+	if (xCoord <= zCoord)
+	{
+		return getBarycentricHeight(glm::vec2(xCoord, zCoord), glm::vec3(0, heights[gridX][gridZ], 0), glm::vec3(1, heights[gridX + 1][gridZ + 1], 1),
+			glm::vec3(0, heights[gridX][gridZ + 1], 1));
+	}
+	else
+	{
+		return getBarycentricHeight(glm::vec2(xCoord, zCoord), glm::vec3(0, heights[gridX][gridZ], 0), glm::vec3(1, heights[gridX + 1][gridZ + 1], 1),
+			glm::vec3(1, heights[gridX + 1][gridZ], 0));
+	}
+	
+}
+
+float Terrain::getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+{
+	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+	float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
+	float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+	float l3 = 1.0f - l1 - l2;
+	return l1 * p1.y + l2 * p2.y + l3 * p3.y;
 }

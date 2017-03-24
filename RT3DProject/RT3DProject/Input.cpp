@@ -64,6 +64,12 @@ void Input::Update(Player* player, Camera& camera)
 	{
 		player->MoveRight();
 	}
+	if (currentKeyState[SDL_SCANCODE_SPACE])
+	{
+		int space = previousKeyState[SDL_SCANCODE_SPACE];
+		space = space;
+	}
+	
 	if (currentKeyState[SDL_SCANCODE_SPACE] && previousKeyState[SDL_SCANCODE_SPACE])
 	{
 		player->Jump();

@@ -62,6 +62,7 @@ public:
 	void MoveLeft();
 	void MoveRight();
 	void Jump();
+	void Land();
 	void Sprint();
 	void Aim();
 	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
@@ -78,7 +79,7 @@ private:
 
 	AABB collider
 	{
-		glm::vec3(0), glm::vec3(15, 35, 15)
+		glm::vec3(0), glm::vec3(15, 25, 15)
 	};
 
 	glm::vec3 front;
