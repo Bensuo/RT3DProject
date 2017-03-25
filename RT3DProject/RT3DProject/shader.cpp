@@ -128,11 +128,11 @@ namespace Rendering
 	void Shader::setLight(const rt3d::lightStruct& light) const
 	{
 		// pass in light data to Shader
-		int uniformIndex = glGetUniformLocation(m_program, "light.ambient");
+		int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
 		glUniform4fv(uniformIndex, 1, light.ambient);
-		uniformIndex = glGetUniformLocation(m_program, "light.diffuse");
+		uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
 		glUniform4fv(uniformIndex, 1, light.diffuse);
-		uniformIndex = glGetUniformLocation(m_program, "light.specular");
+		uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
 		glUniform4fv(uniformIndex, 1, light.specular);
 		uniformIndex = glGetUniformLocation(m_program, "lightPosition");
 		glUniform4fv(uniformIndex, 1, light.position);
