@@ -57,12 +57,12 @@ private:
 	//	{ 0.0f, 0.0f, 0.0f, 0.0f }  // position
 	//};
 
-	//rt3d::lightStruct light1 = {
-	//	{ 0.66f, 0.66f, 0.75f, 1.0f }, // ambient
-	//	{ 0.08f, 0.13f, 0.26f, 1.0f }, // diffuse
-	//	{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
-	//	{ -10.0f, 10.0f, 10.0f, 1.0f }  // position
-	//};
+	rt3d::lightStruct light1 = {
+		{ 0.0f, 0.0f, 0.0f, 0.0f }, // ambient
+		{ 0.0f, 0.0f, 0.0f, 1.0f }, // diffuse
+		{ 0.0f, 0.0f, 0.0f, 0.0f }, // specular
+		{ 0.0f, 20.0f, 0.0f, 0.0f }  // position
+	};
 	Camera* camera;
 	glm::vec4 lightPos; //light position
 

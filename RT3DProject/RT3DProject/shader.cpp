@@ -125,19 +125,55 @@ namespace Rendering
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
 	}
 
-	void Shader::setLight(const rt3d::lightStruct& light) const
+	void Shader::setLight1(const rt3d::lightStruct& light)
 	{
 		// pass in light data to Shader
+		//int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
+		//glUniform4fv(uniformIndex, 1, light.ambient);
+		//uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
+		//glUniform4fv(uniformIndex, 1, light.diffuse);
+		//uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
+		//glUniform4fv(uniformIndex, 1, light.specular);
+		//uniformIndex = glGetUniformLocation(m_program, "lightPosition");
+		//glUniform4fv(uniformIndex, 1, light.position);
+		//m_lightCount++;
+
 		int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
 		glUniform4fv(uniformIndex, 1, light.ambient);
 		uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
 		glUniform4fv(uniformIndex, 1, light.diffuse);
 		uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
 		glUniform4fv(uniformIndex, 1, light.specular);
-		uniformIndex = glGetUniformLocation(m_program, "lightPosition");
+		uniformIndex = glGetUniformLocation(m_program, "lightPosition[0]");
 		glUniform4fv(uniformIndex, 1, light.position);
+
+		m_lightCount++;
 	}
 
+	void Shader::setLight2(const rt3d::lightStruct& light)
+	{
+		// pass in light data to Shader
+		//int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
+		//glUniform4fv(uniformIndex, 1, light.ambient);
+		//uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
+		//glUniform4fv(uniformIndex, 1, light.diffuse);
+		//uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
+		//glUniform4fv(uniformIndex, 1, light.specular);
+		//uniformIndex = glGetUniformLocation(m_program, "lightPosition");
+		//glUniform4fv(uniformIndex, 1, light.position);
+		//m_lightCount++;
+
+		int uniformIndex = glGetUniformLocation(m_program, "light[1].ambient");
+		glUniform4fv(uniformIndex, 1, light.ambient);
+		uniformIndex = glGetUniformLocation(m_program, "light[1].diffuse");
+		glUniform4fv(uniformIndex, 1, light.diffuse);
+		uniformIndex = glGetUniformLocation(m_program, "light[1].specular");
+		glUniform4fv(uniformIndex, 1, light.specular);
+		uniformIndex = glGetUniformLocation(m_program, "lightPosition[1]");
+		glUniform4fv(uniformIndex, 1, light.position);
+
+		m_lightCount++;
+	}
 
 	void Shader::setMaterial(const rt3d::materialStruct& material) const
 	{

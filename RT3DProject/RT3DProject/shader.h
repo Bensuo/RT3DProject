@@ -11,6 +11,7 @@ namespace Rendering
 	class Shader
 	{
 		GLuint m_program;
+		int m_lightCount = 0;
 	public:
 		Shader(){}
 		Shader(const std::string& vertexPath, const std::string& fragmentPath);
@@ -22,7 +23,8 @@ namespace Rendering
 		void setMatrices(const GLfloat* proj, const GLfloat* mv, const GLfloat* mvp) const;
 		void setLightPos(const GLfloat* lightPos) const;
 		void setProjection(const GLfloat* data) const;
-		void setLight(const rt3d::lightStruct& light) const;
+		void setLight1(const rt3d::lightStruct& light);
+		void setLight2(const rt3d::lightStruct & light);
 		void setMaterial(const rt3d::materialStruct& material) const;
 	};
 }

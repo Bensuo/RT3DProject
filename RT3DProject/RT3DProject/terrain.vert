@@ -1,5 +1,7 @@
 #version 330
 
+#define NR_LIGHTS 4
+
 uniform mat4 modelview;
 uniform mat4 projection;
 uniform vec4 lightPosition;
@@ -10,7 +12,7 @@ in vec3 in_Normal;
 in vec2 in_TexCoord;
 out vec3 ex_N;
 out vec3 ex_V;
-out vec3 ex_L;
+out vec3 ex_L[NR_LIGHTS];
 out vec2 ex_TexCoord;
 
 // multiply each vertex position by the MVP matrix
@@ -32,7 +34,8 @@ void main(void) {
 	ex_N = normalize(normalmatrix * in_Normal);
 
 	// L - to light source from vertex
-	ex_L = normalize(lightPosition.xyz - vertexPosition.xyz);
+	for(int i = 0; i < NR_LIGHTS; i++)
+		ex_L[i] = normalize(lightPosition[i].xyz - vertexPosition.xyz);
 
 	ex_TexCoord = in_TexCoord;
 
