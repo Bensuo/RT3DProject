@@ -11,6 +11,9 @@
 #include "Timer.h"
 #include "Terrain.h"
 #include "AudioManager.h"
+#include "Scene.h"
+#include "UI.h"
+
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -22,13 +25,7 @@ class Game
 	Camera camera;
 	Input input;
 	Timer timer;
-	Rendering::Box testBox;
-	AABB floor;
-	Rendering::Skybox* skybox;
-
-	Player* testPlayer;	
-	Player* testPlayer2;
-	//Player* testPlayer3;
+	Scene* scene;
 
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
@@ -37,7 +34,8 @@ class Game
 
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
-
+	Rendering::UI* uiTest;
+	Rendering::UI* uiTest2;
 	Rendering::Box testBox1;
 	Rendering::Box testBox2;
 	rt3d::materialStruct material = {
@@ -46,8 +44,7 @@ class Game
 		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
 		0.2f  // shininess
 	};
-	Terrain terrain;
-	void terrainCollision(Player* p, Terrain* terrain);
+	void checkCollisions();
 public:
 	void init(void);
 	void draw();

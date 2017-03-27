@@ -90,12 +90,18 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Rendering\Camera</Filter>
     </ClCompile>
-
     <ClCompile Include="Terrain.cpp">
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="UI.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="rt3dObjLoader.cpp">
+      <Filter>Rendering\RT3D Library</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,24 +193,25 @@
     </ClInclude>
     <ClInclude Include="Collisions.h">
       <Filter>Utilities</Filter>
-
-    </ClInclude>
-    <ClInclude Include="CameraThirdPerson.h">
-      <Filter>Rendering\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>Rendering\Renderables</Filter>
     </ClInclude>
-
     <ClInclude Include="resource.h" />
     <ClInclude Include="AudioManager.h">
       <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="UI.h">
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="rt3dObjLoader.h">
+      <Filter>Rendering\RT3D Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-
   </ItemGroup>
 </Project>

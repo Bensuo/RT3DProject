@@ -1,5 +1,7 @@
 #pragma once
 #include "AABB.h"
+#include "Terrain.h"
+#include "Player.h"
 namespace Collisions
 {
 	
@@ -74,6 +76,16 @@ namespace Collisions
 		return info;
 	}
 
-
+	void terrainCollision(Player * p, Terrain * terrain)
+	{
+		float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
+		if (p->getPosition().y - p->getAABB().r.y < h)
+		{
+			glm::vec3 newPos = p->getPosition();
+			newPos.y = h + p->getAABB().r.y;
+			p->setPosition(newPos);
+			p->Land();
+		}
+	}
 
 }
