@@ -7,11 +7,12 @@
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-
+	scene = new Scene();
+	scene->loadContent(content);
 	audioManager.PlayMusic("fortress sneaking.mp3");
 	audioManager.PlaySound("impact.wav", 0.25f);
 
-	skybox = new Rendering::Skybox("res/textures/front.bmp",
+	/*skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
 		"res/textures/top.bmp",
 		"res/textures/bottom.bmp",
@@ -33,32 +34,34 @@ void Game::init()
 	testPlayer2->setState(Player::STAND);
 	terrain.setScale(glm::vec3(2000.0f, 100.0f, 2000.0f));
 	terrain.loadContent("heightmap.bmp", "heightmap-norm.bmp", content);
-	testPlayer2->setPosition(glm::vec3(100, 15, -200));
+	testPlayer2->setPosition(glm::vec3(100, 15, -200));*/
 	timer.Initialize();	//always init last for accurate game loop startup
 }
 
 
 void Game::draw()
 {
-	renderer.begin(camera);
-	renderer.drawSkybox(skybox);
-	renderer.drawTerrain(&terrain);
-	renderer.setShader("Phong");
-	renderList.emplace_back(&testPlayer->getPlayerModel());
-	renderList.emplace_back(&testPlayer->getWeapon());
-
+	//Populate render list
+	std::vector<Player*>& npcs = scene->getNPCs();
 	if (!camera.isFPS()) {
-		renderList.emplace_back(&testPlayer2->getPlayerModel());
-		renderList.emplace_back(&testPlayer2->getWeapon());
+		renderList.push_back(&scene->getPlayer()->getPlayerModel());
+		renderList.push_back(&scene->getPlayer()->getWeapon());
 	}
+	for (int i = 0; i < npcs.size(); i++)
+	{
+		renderList.push_back(&npcs[i]->getPlayerModel());
+		renderList.push_back(&npcs[i]->getWeapon());
+	}
+	
+	renderer.begin(camera);
+	renderer.drawSkybox(scene->getSkybox());
+	renderer.drawTerrain(scene->getTerrain());
+	renderer.setShader("Phong");
 
-	renderList.emplace_back(&testBox);
-	renderList.emplace_back(&testBox1);
-	renderList.emplace_back(&testBox2);
 	renderer.render(renderList);
 
 	if (camera.isFPS()) {
-		renderer.renderFirstPerson(&testPlayer2->getVPWeapon());
+		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
 
 	renderer.end();
@@ -74,48 +77,25 @@ bool Game::Quit() const
 void Game::update()
 {
 	running = !Quit();
-	testPlayer2->UpdateVectors(camera.GetFront());
-	testPlayer2->setFPS(camera.isFPS());
+	scene->getPlayer()->UpdateVectors(camera.GetFront());
+	scene->getPlayer()->setFPS(camera.isFPS());
 
-	input.Update(testPlayer2, camera);
-	testBox.update();
-
-	testPlayer->update(timer.GetDeltaTime());
-	testPlayer2->update(timer.GetDeltaTime());
-	testPlayer2->ClampPosition(glm::vec3(-terrain.getScale().x/2-1, 0, -terrain.getScale().z / 2-1), glm::vec3(terrain.getScale().x / 2-1, 250, terrain.getScale().z / 2-1));
-
-	camera.Update(timer.GetDeltaTime(), testPlayer2->getPosition() - glm::vec3(0,-24,0));
-
-	auto info = Collisions::TestAABBAABB(testPlayer->getAABB(), testPlayer2->getAABB());
-	if (info.collision)
+	input.Update(scene->getPlayer(), camera);
+	
+	std::vector<Player*>&npcs = scene->getNPCs();
+	for (size_t i = 0; i < npcs.size(); i++)
 	{
-		auto pos = testPlayer2->getPosition();
-		testPlayer2->setPosition(pos -= info.mtv);
+		npcs[i]->update(timer.GetDeltaTime());
 	}
+	
+	scene->getPlayer()->update(timer.GetDeltaTime());
+	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, 250, scene->getTerrain()->getScale().z / 2-1));
+	checkCollisions();
+	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
 
-	info = Collisions::TestAABBAABB(testPlayer2->getAABB(), floor);
-	if (info.collision)
-	{
-		auto pos = testPlayer2->getPosition();
-		testPlayer2->setPosition(pos += info.mtv);
-	}
 
-	/*info = Collisions::TestAABBAABB(testPlayer->getAABB(), floor);
-	if (info.collision)
-	{
-		auto pos = testPlayer->getPosition();
-		testPlayer->setPosition(pos += info.mtv);
-	}*/
-	terrainCollision(testPlayer, &terrain);
-	terrainCollision(testPlayer2, &terrain);
+	
 
-	testBox1 = Rendering::Box(testPlayer->getAABB().r * 2.0f, testPlayer->getAABB().c);
-	testBox1.setMaterial(material);
-	testBox1.loadContent(content);
-
-	testBox2 = Rendering::Box(testPlayer2->getAABB().r * 2.0f, testPlayer2->getAABB().c);
-	testBox2.setMaterial(material);
-	testBox2.loadContent(content);
 }
 
 Game::Game()
@@ -146,14 +126,22 @@ Game::Game()
 	renderer.quit();
 }
 
-void Game::terrainCollision(Player * p, Terrain * terrain)
+void playerCollision(Player* p1, Player* p2)
 {
-	float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
-	if (p->getPosition().y - p->getAABB().r.y < h)
+	auto info = Collisions::TestAABBAABB(p1->getAABB(), p2->getAABB());
+	if (info.collision)
 	{
-		glm::vec3 newPos = p->getPosition();
-		newPos.y = h + p->getAABB().r.y;
-		p->setPosition(newPos);
-		p->Land();
+		auto pos = p1->getPosition();
+		p1->setPosition(pos += info.mtv);
+	}
+}
+void Game::checkCollisions()
+{
+	std::vector<Player*>&npcs = scene->getNPCs();
+	Collisions::terrainCollision(scene->getPlayer(), scene->getTerrain());
+	for (size_t i = 0; i < npcs.size(); i++)
+	{
+		playerCollision(scene->getPlayer(), npcs[i]);
+		Collisions::terrainCollision(npcs[i], scene->getTerrain());
 	}
 }
