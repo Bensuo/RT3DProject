@@ -14,6 +14,7 @@
 #include <map>
 #include "IRenderable.h"
 #include "Terrain.h"
+
 //The Renderer handles window creation and management as well as drawing to the screen using
 //OpenGL
 class Renderer
@@ -30,6 +31,7 @@ public:
 	void render(std::vector<IRenderable*>& models);
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);
+	void renderUI(IRenderable * renderable, glm::vec3 position, glm::vec3 size);
 private:
 	void init();
 	std::stack<glm::mat4> mvStack;
