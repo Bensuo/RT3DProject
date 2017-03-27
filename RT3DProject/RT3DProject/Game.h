@@ -12,6 +12,8 @@
 #include "Terrain.h"
 #include "AudioManager.h"
 #include "Scene.h"
+#include "UI.h"
+
 
 #define DEG_TO_RADIAN 0.017453293
 
@@ -32,7 +34,8 @@ class Game
 
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
-
+	Rendering::UI* uiTest;
+	Rendering::UI* uiTest2;
 	Rendering::Box testBox1;
 	Rendering::Box testBox2;
 	rt3d::materialStruct material = {

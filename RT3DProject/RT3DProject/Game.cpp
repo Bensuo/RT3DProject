@@ -11,7 +11,8 @@ void Game::init()
 	scene->loadContent(content);
 	audioManager.PlayMusic("fortress sneaking.mp3");
 	audioManager.PlaySound("impact.wav", 0.25f);
-
+	uiTest = new Rendering::UI("HEALTH:", true);
+	uiTest2 = new Rendering::UI("res/textures/Crosshair.png", false);
 	/*skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
 		"res/textures/top.bmp",
@@ -63,7 +64,8 @@ void Game::draw()
 	if (camera.isFPS()) {
 		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
-
+	renderer.renderUI(uiTest, glm::vec3(-0.8f, 0.8f, 0.0f), glm::vec3(0.10f, 0.045f, 0.0f));//position and size of text
+	renderer.renderUI(uiTest2, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
 	renderer.end();
 	renderList.clear();
 	auto test = 0;
@@ -92,9 +94,6 @@ void Game::update()
 	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
 	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
-
-
-	
 
 }
 

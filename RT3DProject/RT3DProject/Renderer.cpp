@@ -232,3 +232,19 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	draw(renderable);
 	mvStack.pop();
 }
+
+void Renderer::renderUI(IRenderable * renderable, glm::vec3 position, glm::vec3 size) {
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glm::mat4 projection(1.0);
+	mvStack.push(glm::mat4(1.0));
+	mvStack.top() = glm::translate(mvStack.top(), position);//position
+
+	auto ratio = SCREEN_WIDTH / (float)SCREEN_HEIGHT;
+	auto newSize = glm::vec3(size.x, size.y * ratio, 1);
+
+	mvStack.top() = glm::scale(mvStack.top(), newSize);//size
+	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
+	draw(renderable);
+	mvStack.pop();
+	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
+}

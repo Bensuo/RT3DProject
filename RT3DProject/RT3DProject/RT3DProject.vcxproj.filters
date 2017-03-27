@@ -97,6 +97,12 @@
       <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="UI.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="rt3dObjLoader.cpp">
+      <Filter>Rendering\RT3D Library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -196,6 +202,12 @@
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="UI.h">
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="rt3dObjLoader.h">
+      <Filter>Rendering\RT3D Library</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">
