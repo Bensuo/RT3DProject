@@ -6,8 +6,8 @@ class AudioManager
 {
 public:
 	AudioManager();
-	void PlaySound(const std::string& path, const float& volume = 128);
-	void PlayMusic(const std::string& path, const float& volume = 128, bool loop = true);
+	void PlaySound(const std::string& path, const float& volume = 1);
+	void PlayMusic(const std::string& path, const float& volume = 1, bool loop = true);
 	void StopMusic() const;
 	void PauseMusic() const;
 	void Close();

@@ -10,19 +10,23 @@ namespace Rendering
 {
 	class Shader
 	{
-		GLuint m_program;
+		GLuint program;
+		int lightCount = 0;
 	public:
-		Shader(){}
+		Shader(): program(0)
+		{
+		}
+
 		Shader(const std::string& vertexPath, const std::string& fragmentPath);
 		char* loadFile(const char *fname, GLint &fSize) const;
 		void use() const;
-		const GLuint& getProgram() const { return this->m_program; }
+		const GLuint& getProgram() const { return this->program; }
 		void disable() const;
 		void setUniformMatrix4fv(const char* uniformName, const GLfloat* data) const;
 		void setMatrices(const GLfloat* proj, const GLfloat* mv, const GLfloat* mvp) const;
 		void setLightPos(const GLfloat* lightPos) const;
 		void setProjection(const GLfloat* data) const;
-		void setLight(const rt3d::lightStruct& light) const;
+		void addLight(const rt3d::lightStruct& light, const int& index) const;
 		void setMaterial(const rt3d::materialStruct& material) const;
 	};
 }

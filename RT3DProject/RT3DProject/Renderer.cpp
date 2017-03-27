@@ -58,9 +58,8 @@ void Renderer::init()
 
 	//Set up shaders
 	shaders.insert(std::make_pair("Phong", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
-	shaders["Phong"].setLight(light0);
-	//shaders.insert(std::make_pair("Phong2", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
-	//shaders["Phong2"].setLight(light1);
+	shaders["Phong"].addLight(light0, 0);
+	shaders["Phong"].addLight(light1, 1);
 
 }
 
@@ -168,8 +167,8 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthMask(GL_TRUE);
 	terrain->shader.use();
-	terrain->shader.setLight(light0);
-	//terrain->shader.setLight(light0);
+	terrain->shader.addLight(light0, 0);
+	terrain->shader.addLight(light1, 1);
 
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 5000.0f);

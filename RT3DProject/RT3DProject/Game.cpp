@@ -7,10 +7,10 @@
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+	audioManager.PlayMusic("02 - Rip & Tear.mp3");
+	//audioManager.PlaySound("impact.wav", 0.25f);
 	scene = new Scene();
 	scene->loadContent(content);
-	audioManager.PlayMusic("fortress sneaking.mp3");
-	audioManager.PlaySound("impact.wav", 0.25f);
 	uiTest = new Rendering::UI("HEALTH:", true);
 	uiTest2 = new Rendering::UI("res/textures/Crosshair.png", false);
 	/*skybox = new Rendering::Skybox("res/textures/front.bmp",

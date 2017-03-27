@@ -3,16 +3,27 @@
 // Calculates and passes on V, L, N vectors for use in fragment shader, phong2.frag
 #version 330
 
+#define NR_LIGHTS 4
+
+struct lightStruct
+{
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 position;
+};
+
 uniform mat4 modelview;
 uniform mat4 projection;
-uniform vec4 lightPosition;
+
+uniform lightStruct light[NR_LIGHTS];
 //uniform mat3 normalmatrix;
 
 in  vec3 in_Position;
 in  vec3 in_Normal;
 out vec3 ex_N;
 out vec3 ex_V;
-out vec3 ex_L;
+out vec3 ex_L[NR_LIGHTS];
 
 in vec2 in_TexCoord;
 out vec2 ex_TexCoord;
@@ -36,7 +47,8 @@ void main(void) {
 	ex_N = normalize(normalmatrix * in_Normal);
 
 	// L - to light source from vertex
-	ex_L = normalize(lightPosition.xyz - vertexPosition.xyz);
+	for(int i = 0; i < NR_LIGHTS; i++)
+		ex_L[i] = normalize(light[i].position.xyz - vertexPosition.xyz);
 
 	ex_TexCoord = in_TexCoord;
 

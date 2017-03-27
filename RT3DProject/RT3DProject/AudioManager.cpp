@@ -6,13 +6,17 @@
 
 AudioManager::AudioManager()
 {
-	if (SDL_Init(SDL_INIT_AUDIO) < 0) // Initialize video
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+	// start SDL with audio support
+	if (SDL_Init(SDL_INIT_AUDIO) == -1) {
+		printf("SDL_Init: %s\n", SDL_GetError());
+		exit(1);
+	}
 
-	//Initialize SDL_mixer
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-	{
-		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+	// open 44.1KHz, signed 16bit, system byte order,
+	// stereo audio, using 1024 byte chunks
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+		printf("Mix_OpenAudio: %s\n", Mix_GetError());
+		exit(2);
 	}
 }
 
@@ -46,9 +50,9 @@ void AudioManager::PlaySound(const std::string& path, const float& volume)
 
 void AudioManager::PlayMusic(const std::string& path, const float& volume, bool loop)
 {
-	glm::clamp(volume, 0.0f, 1.0f);
+	auto newVolume = glm::clamp(volume, 0.0f, 1.0f);
 
-	Mix_VolumeMusic(volume * MIX_MAX_VOLUME);
+	Mix_VolumeMusic(newVolume * MIX_MAX_VOLUME);
 
 	auto iterator = music.find(path);
 
