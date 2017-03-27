@@ -7,9 +7,8 @@
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-
-	audioManager.PlayMusic("fortress sneaking.mp3");
-	audioManager.PlaySound("impact.wav", 0.25f);
+	audioManager.PlayMusic("02 - Rip & Tear.mp3");
+	//audioManager.PlaySound("impact.wav", 0.25f);
 
 	skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",

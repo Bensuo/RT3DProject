@@ -40,18 +40,18 @@ namespace Rendering
 			rt3d::printShaderError(f);
 		}
 
-		m_program = glCreateProgram();
+		program = glCreateProgram();
 
-		glAttachShader(m_program, v);
-		glAttachShader(m_program, f);
+		glAttachShader(program, v);
+		glAttachShader(program, f);
 
-		glBindAttribLocation(m_program, RT3D_VERTEX, "in_Position");
-		glBindAttribLocation(m_program, RT3D_COLOUR, "in_Color");
-		glBindAttribLocation(m_program, RT3D_NORMAL, "in_Normal");
-		glBindAttribLocation(m_program, RT3D_TEXCOORD, "in_TexCoord");
+		glBindAttribLocation(program, RT3D_VERTEX, "in_Position");
+		glBindAttribLocation(program, RT3D_COLOUR, "in_Color");
+		glBindAttribLocation(program, RT3D_NORMAL, "in_Normal");
+		glBindAttribLocation(program, RT3D_TEXCOORD, "in_TexCoord");
 
-		glLinkProgram(m_program);
-		glUseProgram(m_program);
+		glLinkProgram(program);
+		glUseProgram(program);
 
 		delete[] vs; // dont forget to free allocated memory
 		delete[] fs; // we allocated this in the loadFile function...
@@ -87,7 +87,7 @@ namespace Rendering
 	// Uses the current Shader
 	void Shader::use() const
 	{
-		glUseProgram(m_program);
+		glUseProgram(program);
 	}
 
 	void Shader::disable() const
@@ -97,94 +97,57 @@ namespace Rendering
 
 	void Shader::setUniformMatrix4fv(const char* uniformName, const GLfloat *data) const
 	{
-		int uniformIndex = glGetUniformLocation(m_program, uniformName);
+		int uniformIndex = glGetUniformLocation(program, uniformName);
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
 	}
 
 	// set matrices untested... likely to change - not totally happy with this for now.
 	void Shader::setMatrices(const GLfloat *proj, const GLfloat *mv, const GLfloat *mvp) const
 	{
-		int uniformIndex = glGetUniformLocation(m_program, "modelview");
+		int uniformIndex = glGetUniformLocation(program, "modelview");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, mv);
-		uniformIndex = glGetUniformLocation(m_program, "projection");
+		uniformIndex = glGetUniformLocation(program, "projection");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, proj);
-		uniformIndex = glGetUniformLocation(m_program, "MVP");
+		uniformIndex = glGetUniformLocation(program, "MVP");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, mvp);
-		uniformIndex = glGetUniformLocation(m_program, "normalmatrix");
+		uniformIndex = glGetUniformLocation(program, "normalmatrix");
 	}
 
 	void Shader::setLightPos(const GLfloat *lightPos) const
 	{
-		int uniformIndex = glGetUniformLocation(m_program, "lightPosition");
+		int uniformIndex = glGetUniformLocation(program, "lightPosition");
 		glUniform4fv(uniformIndex, 1, lightPos);
 	}
 
 	void Shader::setProjection(const GLfloat *data) const
 	{
-		int uniformIndex = glGetUniformLocation(m_program, "projection");
+		int uniformIndex = glGetUniformLocation(program, "projection");
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
 	}
 
-	void Shader::setLight1(const rt3d::lightStruct& light)
+	void Shader::addLight(const rt3d::lightStruct& light, const int& index) const
 	{
-		// pass in light data to Shader
-		//int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
-		//glUniform4fv(uniformIndex, 1, light.ambient);
-		//uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
-		//glUniform4fv(uniformIndex, 1, light.diffuse);
-		//uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
-		//glUniform4fv(uniformIndex, 1, light.specular);
-		//uniformIndex = glGetUniformLocation(m_program, "lightPosition");
-		//glUniform4fv(uniformIndex, 1, light.position);
-		//m_lightCount++;
-
-		int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
+		auto number = std::to_string(index);
+		auto uniformIndex = glGetUniformLocation(program, ("light[" + number + "].ambient").c_str());
 		glUniform4fv(uniformIndex, 1, light.ambient);
-		uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
+		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].diffuse").c_str());
 		glUniform4fv(uniformIndex, 1, light.diffuse);
-		uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
+		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].specular").c_str());
 		glUniform4fv(uniformIndex, 1, light.specular);
-		uniformIndex = glGetUniformLocation(m_program, "lightPosition[0]");
+		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].position").c_str());
 		glUniform4fv(uniformIndex, 1, light.position);
-
-		m_lightCount++;
-	}
-
-	void Shader::setLight2(const rt3d::lightStruct& light)
-	{
-		// pass in light data to Shader
-		//int uniformIndex = glGetUniformLocation(m_program, "light[0].ambient");
-		//glUniform4fv(uniformIndex, 1, light.ambient);
-		//uniformIndex = glGetUniformLocation(m_program, "light[0].diffuse");
-		//glUniform4fv(uniformIndex, 1, light.diffuse);
-		//uniformIndex = glGetUniformLocation(m_program, "light[0].specular");
-		//glUniform4fv(uniformIndex, 1, light.specular);
-		//uniformIndex = glGetUniformLocation(m_program, "lightPosition");
-		//glUniform4fv(uniformIndex, 1, light.position);
-		//m_lightCount++;
-
-		int uniformIndex = glGetUniformLocation(m_program, "light[1].ambient");
-		glUniform4fv(uniformIndex, 1, light.ambient);
-		uniformIndex = glGetUniformLocation(m_program, "light[1].diffuse");
-		glUniform4fv(uniformIndex, 1, light.diffuse);
-		uniformIndex = glGetUniformLocation(m_program, "light[1].specular");
-		glUniform4fv(uniformIndex, 1, light.specular);
-		uniformIndex = glGetUniformLocation(m_program, "lightPosition[1]");
-		glUniform4fv(uniformIndex, 1, light.position);
-
-		m_lightCount++;
 	}
 
 	void Shader::setMaterial(const rt3d::materialStruct& material) const
 	{
 		// pass in material data to Shader 
-		int uniformIndex = glGetUniformLocation(m_program, "material.ambient");
+		int uniformIndex = glGetUniformLocation(program, "material.ambient");
 		glUniform4fv(uniformIndex, 1, material.ambient);
-		uniformIndex = glGetUniformLocation(m_program, "material.diffuse");
+		uniformIndex = glGetUniformLocation(program, "material.diffuse");
 		glUniform4fv(uniformIndex, 1, material.diffuse);
-		uniformIndex = glGetUniformLocation(m_program, "material.specular");
+		uniformIndex = glGetUniformLocation(program, "material.specular");
 		glUniform4fv(uniformIndex, 1, material.specular);
-		uniformIndex = glGetUniformLocation(m_program, "material.shininess");
+		uniformIndex = glGetUniformLocation(program, "material.shininess");
 		glUniform1f(uniformIndex, material.shininess);
 	}
 }

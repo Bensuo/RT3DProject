@@ -5,11 +5,19 @@
 
 #define NR_LIGHTS 4
 
+struct lightStruct
+{
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 position;
+};
+
 uniform mat4 modelview;
 uniform mat4 projection;
-uniform vec4 lightPosition[NR_LIGHTS];
-//uniform mat3 normalmatrix;
 
+uniform lightStruct light[NR_LIGHTS];
+//uniform mat3 normalmatrix;
 
 in  vec3 in_Position;
 in  vec3 in_Normal;
@@ -40,7 +48,7 @@ void main(void) {
 
 	// L - to light source from vertex
 	for(int i = 0; i < NR_LIGHTS; i++)
-		ex_L[i] = normalize(lightPosition[i].xyz - vertexPosition.xyz);
+		ex_L[i] = normalize(light[i].position.xyz - vertexPosition.xyz);
 
 	ex_TexCoord = in_TexCoord;
 
