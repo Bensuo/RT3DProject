@@ -20,7 +20,7 @@ namespace Rendering
 			label = 0;
 			size = indices.size();
 			uiString = object;
-			mesh = rt3d::createMesh(verts.size(), verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+			mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 			if (TTF_Init() == -1)
 				std::cout << "TTF failed to initialise." << std::endl;
 
@@ -34,7 +34,7 @@ namespace Rendering
 		{
 			label = 0;
 			size = indices.size();
-			mesh = rt3d::createMesh(verts.size(), verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+			mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 			texture = IMG_Load(object.c_str());
 		}
 	}
