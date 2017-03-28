@@ -43,18 +43,20 @@ void Game::init()
 void Game::draw()
 {
 	//Populate render list
-	std::vector<Player*>& npcs = scene->getNPCs();
+	auto& npcs = scene->getNPCs();
 	if (!camera.isFPS()) {
 		renderList.push_back(&scene->getPlayer()->getPlayerModel());
 		renderList.push_back(&scene->getPlayer()->getWeapon());
 	}
-	for (int i = 0; i < npcs.size(); i++)
+	for (auto i = 0; i < npcs.size(); i++)
 	{
 		renderList.push_back(&npcs[i]->getPlayerModel());
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
 	
 	renderer.begin(camera);
+
+	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
 	renderer.drawTerrain(scene->getTerrain());
 	renderer.setShader("Phong");
@@ -69,8 +71,24 @@ void Game::draw()
 	if (scene->getPlayer()->Aiming())
 	renderer.renderUI(uiTest2, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
 
-	renderer.end();
 	renderList.clear();
+
+	glViewport(1280 - 384, 720 - 216, 384, 216);
+	glDisable(GL_DEPTH_TEST);
+	renderList.push_back(&scene->getPlayer()->getPlayerModel());
+	renderList.push_back(&scene->getPlayer()->getWeapon());
+	for (auto i = 0; i < npcs.size(); i++)
+	{
+		renderList.push_back(&npcs[i]->getPlayerModel());
+		renderList.push_back(&npcs[i]->getWeapon());
+	}
+	renderer.drawTerrain(scene->getTerrain());
+	renderer.setShader("Phong");
+	renderer.render(renderList);
+	renderList.clear();
+	glEnable(GL_DEPTH_TEST);
+
+	renderer.end();
 	auto test = 0;
 }
 
