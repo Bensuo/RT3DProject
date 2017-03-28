@@ -13,6 +13,7 @@
 #include "AudioManager.h"
 #include "Scene.h"
 #include "UI.h"
+#include "AIController.h"
 
 
 #define DEG_TO_RADIAN 0.017453293
@@ -45,9 +46,10 @@ class Game
 		0.2f  // shininess
 	};
 	void checkCollisions();
+	std::vector<AIController> npcControllers;
 public:
 	void init(void);
-	void DrawMinimap(std::vector<Player*>& npcs);
+	void DrawMinimap(std::vector<std::shared_ptr<Player>>& npcs);
 	void draw();
 	bool Quit() const;
 	void update();
