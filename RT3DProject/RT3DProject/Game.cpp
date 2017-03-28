@@ -126,11 +126,11 @@ void Game::update()
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		npcs[i]->update(timer.GetDeltaTime());
-		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
+		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 	}
 	
 	scene->getPlayer()->update(timer.GetDeltaTime());
-	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, 250, scene->getTerrain()->getScale().z / 2-1));
+	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
 	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
 }
