@@ -163,7 +163,6 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 	glEnableVertexAttribArray(RT3D_VERTEX);
 	pMeshBuffers[RT3D_VERTEX] = VBO;
 
-
 	// VBO for colour data
 	if (colours != nullptr) {
 		glGenBuffers(1, &VBO);

@@ -81,17 +81,26 @@ void Renderer::quit() const
 }
 
 //Clears buffers to begin rendering
-void Renderer::begin(Camera& camera)
+void Renderer::begin() const
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	this->camera = &camera;
+}
+
+void Renderer::setView(const glm::mat4& view)
+{
+	this->view = view;
+}
+
+void Renderer::setProjection(const glm::mat4& projection)
+{
+	this->projection = projection;
 }
 
 //Ends rendering and pushes the result to the screen
-void Renderer::end() const
+void Renderer::swapBuffers() const
 {
 	SDL_GL_SwapWindow(hWindow); //Swap buffers
 }
@@ -139,14 +148,14 @@ void Renderer::draw(IRenderable* renderable)
 
 void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 {
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 
 	skybox->shader.use();
-	auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 2000.0f);
-	glm::mat4 view = glm::mat4(glm::mat3(camera->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	auto shyboxProjection = glm::perspective(static_cast<float>(1), 1280.0f / 720, 0.1f, 5000.0f);
+	auto skyboxView = glm::mat4(glm::mat3(view));
+	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(shyboxProjection));
+	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(skyboxView));
 
 	glBindVertexArray(skybox->vao);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->texture);
@@ -170,9 +179,6 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	terrain->shader.addLight(light0, 0);
 	terrain->shader.addLight(light1, 1);
 
-	glm::mat4 projection(1.0);
-	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 5000.0f);
-	glm::mat4 view = camera->GetViewMatrix();
 	//view = glm::translate(view, glm::vec3(0, -50, 0));
 	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));
 	terrain->shader.setUniformMatrix4fv("modelview", glm::value_ptr(view));
@@ -201,11 +207,9 @@ void Renderer::render(std::vector<IRenderable*>& models)
 	glDepthMask(GL_TRUE);
 
 	//create projection from Camera data
-	glm::mat4 projection(1.0);
-	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 2000.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-	mvStack.push(camera->GetViewMatrix());
+	mvStack.push(view);
 	for (auto const& m : models)
 	{
 		draw(m);
@@ -219,8 +223,6 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	//create projection from Camera data
-	glm::mat4 projection(1.0);
-	projection = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 1.0f, 2000.0f);
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(glm::mat4(1));

@@ -48,6 +48,11 @@ void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 	updateCameraVectors(position);
 }
 
+const float& Camera::getYaw() const
+{
+	return yaw;
+}
+
 const glm::vec3& Camera::GetFront() const
 {
 	return this->front;

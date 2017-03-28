@@ -1,6 +1,7 @@
 #pragma once
 #include <stack>
 #include <glm/glm.hpp>
+#include <glm/mat4x4.hpp>
 #include <SDL.h>
 #include <GL/glew.h>
 #include <iostream>
@@ -23,8 +24,10 @@ public:
 	Renderer();
 	virtual ~Renderer();
 	void quit() const;
-	void begin(Camera& camera);
-	void end() const;
+	void begin() const;
+	void setView(const glm::mat4& view);
+	void setProjection(const glm::mat4& projection);
+	void swapBuffers() const;
 	void draw(IRenderable* renderable);
 	void drawSkybox(Rendering::Skybox* skybox) const;
 	void drawTerrain(Terrain* terrain) const;
@@ -65,7 +68,10 @@ private:
 		{ 0.0f, 0.0f, 0.0f, 0.0f }, // specular
 		{ 20.0f, 20.0f, 0.0f, 0.0f }  // position
 	};
-	Camera* camera;
+
+	glm::mat4 view;
+	glm::mat4 projection;
+
 	glm::vec4 lightPos; //light position
 
 };

@@ -47,6 +47,7 @@ class Game
 	void checkCollisions();
 public:
 	void init(void);
+	void DrawMinimap(std::vector<Player*>& npcs);
 	void draw();
 	bool Quit() const;
 	void update();

@@ -3,7 +3,6 @@
 #include "Collisions.h"
 
 
-
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -40,21 +39,58 @@ void Game::init()
 }
 
 
+void Game::DrawMinimap(std::vector<Player*>& npcs)
+{
+	auto zoom = 300.0f;
+	auto mapWidth = 256;
+	auto mapHeight = 256;
+
+	glm::mat4 view = lookAt(glm::vec3(0, zoom, 0),
+		glm::vec3(0.0, 0.0, 0.0),
+		glm::vec3(-1.0, 0.0, 0.0));
+
+	view = rotate(view, camera.getYaw(), glm::vec3(0, 1, 0));
+	view = translate(view, glm::vec3(-scene->getPlayer()->getPosition().x, 0, -scene->getPlayer()->getPosition().z));
+
+	renderer.setView(view);
+	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, -2000.0f, 2000.0f));
+	//renderer.setProjection(glm::perspective(1.0f, static_cast<float>(mapWidth) / mapHeight, 0.1f, 2000.0f));
+
+	glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
+	glDisable(GL_DEPTH_TEST);
+	renderList.push_back(&scene->getPlayer()->getPlayerModel());
+	renderList.push_back(&scene->getPlayer()->getWeapon());
+	for (auto i = 0; i < npcs.size(); i++)
+	{
+		renderList.push_back(&npcs[i]->getPlayerModel());
+		renderList.push_back(&npcs[i]->getWeapon());
+	}
+	renderer.drawTerrain(scene->getTerrain());
+	renderer.setShader("Phong");
+	renderer.render(renderList);
+	renderList.clear();
+	glEnable(GL_DEPTH_TEST);
+}
+
 void Game::draw()
 {
 	//Populate render list
-	std::vector<Player*>& npcs = scene->getNPCs();
+	auto& npcs = scene->getNPCs();
 	if (!camera.isFPS()) {
 		renderList.push_back(&scene->getPlayer()->getPlayerModel());
 		renderList.push_back(&scene->getPlayer()->getWeapon());
 	}
-	for (int i = 0; i < npcs.size(); i++)
+	for (auto i = 0; i < npcs.size(); i++)
 	{
 		renderList.push_back(&npcs[i]->getPlayerModel());
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
 	
-	renderer.begin(camera);
+	renderer.begin();
+	renderer.setView(camera.GetViewMatrix());
+	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f));
+
+	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
 	renderer.drawTerrain(scene->getTerrain());
 	renderer.setShader("Phong");
@@ -69,8 +105,11 @@ void Game::draw()
 	if (scene->getPlayer()->Aiming())
 	renderer.renderUI(uiTest2, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
 
-	renderer.end();
 	renderList.clear();
+
+	DrawMinimap(npcs);
+
+	renderer.swapBuffers();
 	auto test = 0;
 }
 

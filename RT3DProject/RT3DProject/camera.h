@@ -30,6 +30,7 @@ class Camera
 	float distance = 0;
 	const float MAX_DISTANCE = 150.0f;
 public:
+	const float& getYaw() const;
 	const glm::vec3& GetFront() const;
 	void Update(const float& deltaTime, const glm::vec3& targetPos);
 	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
