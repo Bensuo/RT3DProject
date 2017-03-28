@@ -71,6 +71,11 @@ void Game::draw()
 		renderList.push_back(&npcs[i]->getPlayerModel());
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
+	auto& staticObjects = scene->getStaticObjects();
+	for (auto i = 0; i < staticObjects.size(); i++)
+	{
+		renderList.push_back(staticObjects[i]->getModel());
+	}
 	
 	renderer.begin();
 	renderer.setView(camera.GetViewMatrix());
@@ -170,13 +175,32 @@ void playerCollision(Player* p1, Player* p2)
 void Game::checkCollisions()
 {
 	auto& npcs = scene->getNPCs();
+	auto& staticObjects = scene->getStaticObjects();
 	Collisions::terrainCollision(scene->getPlayer(), scene->getTerrain());
+	for (int i = 0; i < staticObjects.size(); i++)
+	{
+		auto info = Collisions::TestAABBAABB(staticObjects[i]->getAABB(), scene->getPlayer()->getAABB());
+		if (info.collision)
+		{
+			auto pos = scene->getPlayer()->getPosition();
+			scene->getPlayer()->setPosition(pos -= info.mtv);
+		}
+	}
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		playerCollision(scene->getPlayer(), npcs[i].get());
 		for (int j = i+1; j < npcs.size(); j++)
 		{
 			playerCollision(npcs[j].get(), npcs[i].get());
+		}
+		for (int i = 0; i < staticObjects.size(); i++)
+		{
+			auto info = Collisions::TestAABBAABB(staticObjects[i]->getAABB(), npcs[i]->getAABB());
+			if (info.collision)
+			{
+				auto pos = npcs[i]->getPosition();
+				npcs[i]->setPosition(pos -= info.mtv);
+			}
 		}
 		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
 		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());

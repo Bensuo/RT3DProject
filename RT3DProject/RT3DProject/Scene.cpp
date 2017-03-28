@@ -23,7 +23,7 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 		"res/shaders/skyboxFragment.fs");
 	terrain = new Terrain();
 	terrain->setScale(glm::vec3(2000.0f, 100.0f, 2000.0f));
-	terrain->loadContent("heightmap.bmp", "heightmap-norm.bmp", content);
+	terrain->loadContent("newhm.bmp", "newhm-normal.bmp", content);
 	player = new Player();
 	player->loadContent(content, "rampage");
 	player->setState(Player::STAND);
@@ -37,4 +37,8 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 		p->setPosition(glm::vec3(-500+ 50*i, 15, -200 + 50*i));
 		npcs.push_back(shared);
 	}
+	StaticObject* m = new StaticObject();
+	m->loadContent(content, "res/md2/triax_hoover", "res/md2/triax_hoover");
+	m->setTransform(Transform{ glm::vec3(170, terrain->getHeightAtPosition(170, 0), 0), glm::vec3(0) });
+	staticObjects.push_back(m);
 }

@@ -37,5 +37,7 @@ namespace Rendering {
 			}*/
 		}
 		void resetAnimation() { m_MD2.ResetAnimation(); }
+		GLfloat* getVerts() { return m_MD2.getAnimVerts(); }
+		int getNumVerts() { return m_MD2.getVertDataCount(); }
 	};
 }
