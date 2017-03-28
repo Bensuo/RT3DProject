@@ -13,28 +13,6 @@ namespace Rendering {
 		void setAnimation(const int& state) override
 		{
 			m_MD2.setCurrentAnim(state);
-			
-			/*if(state == 6)
-			{
-				jumping = true;
-				m_MD2.setCurrentAnim(state);
-			}
-			else
-			{
-				auto jumpEnd = m_MD2.GetAnimFrames()[6 * 2 + 1] ;
-				if (jumping == true && getCurrentFrame() == jumpEnd)
-				{
-					jumping = false;
-				}
-				else if (jumping == true && getCurrentFrame() != jumpEnd)
-				{
-					jumping = true;
-				}
-				else
-				{
-					m_MD2.setCurrentAnim(state);
-				}
-			}*/
 		}
 		void resetAnimation() { m_MD2.ResetAnimation(); }
 		GLfloat* getVerts() { return m_MD2.getAnimVerts(); }

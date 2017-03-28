@@ -6,8 +6,10 @@
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	scene = new Scene();
 	scene->loadContent(content);
+
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
@@ -19,13 +21,15 @@ void Game::init()
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
 	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
+
 	AudioManager::Init();
 	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
+
 	timer.Initialize();	//always init last for accurate game loop startup
 }
 
 
-void Game::DrawMinimap(std::vector<std::shared_ptr<Player>>& npcs)
+void Game::DrawMinimap()
 {
 	auto zoom = 300.0f;
 	auto mapWidth = 182;
@@ -40,17 +44,25 @@ void Game::DrawMinimap(std::vector<std::shared_ptr<Player>>& npcs)
 
 	renderer.setView(view);
 	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, -2000.0f, 2000.0f));
-	//renderer.setProjection(glm::perspective(1.0f, static_cast<float>(mapWidth) / mapHeight, 0.1f, 2000.0f));
 
 	glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
 	glDisable(GL_DEPTH_TEST);
 	renderList.push_back(&scene->getPlayer()->getPlayerModel());
 	renderList.push_back(&scene->getPlayer()->getWeapon());
+
+	auto& npcs = scene->getNPCs();
 	for (auto i = 0; i < npcs.size(); i++)
 	{
 		renderList.push_back(&npcs[i]->getPlayerModel());
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
+
+	auto pickups = scene->getPickups();
+	for (auto i = 0; i < pickups.size(); i++)
+	{
+		renderList.push_back(&pickups[i]->getPlayerModel());
+	}
+
 	renderer.drawTerrain(scene->getTerrain());
 	renderer.setShader("Phong");
 	renderer.render(renderList);
@@ -58,7 +70,7 @@ void Game::DrawMinimap(std::vector<std::shared_ptr<Player>>& npcs)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Game::draw()
+void Game::DrawScene()
 {
 	//Populate render list
 	auto& npcs = scene->getNPCs();
@@ -66,17 +78,26 @@ void Game::draw()
 		renderList.push_back(&scene->getPlayer()->getPlayerModel());
 		renderList.push_back(&scene->getPlayer()->getWeapon());
 	}
+
 	for (auto i = 0; i < npcs.size(); i++)
 	{
 		renderList.push_back(&npcs[i]->getPlayerModel());
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
+
 	auto& staticObjects = scene->getStaticObjects();
 	for (auto i = 0; i < staticObjects.size(); i++)
 	{
 		renderList.push_back(staticObjects[i]->getModel());
 	}
-	
+
+	auto pickups = scene->getPickups();
+	for (auto i = 0; i < pickups.size(); i++)
+	{
+		renderList.push_back(&pickups[i]->getPlayerModel());
+	}
+
+
 	renderer.begin();
 	renderer.setView(camera.GetViewMatrix());
 	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f));
@@ -95,11 +116,16 @@ void Game::draw()
 	renderer.renderUI(ammoLabel, glm::vec3(-0.866f, -0.9f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
 
 	if (scene->getPlayer()->Aiming())
-	renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
+		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
 
 	renderList.clear();
+}
 
-	DrawMinimap(npcs);
+void Game::draw()
+{
+	DrawScene();
+
+	DrawMinimap();
 
 	renderer.swapBuffers();
 	auto test = 0;
@@ -113,22 +139,31 @@ bool Game::Quit() const
 void Game::update()
 {
 	running = !Quit();
+
 	scene->getPlayer()->UpdateVectors(camera.GetFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
 
 	input.Update(scene->getPlayer(), camera);
+
 	//Update AI controllers
-	for (int i = 0; i < npcControllers.size(); i++)
+	for (auto i = 0; i < npcControllers.size(); i++)
 	{
 		npcControllers[i].update();
 	}
+
+	auto pickups = scene->getPickups();
+	for (auto i = 0; i < pickups.size(); i++)
+	{
+		pickups[i]->update(timer.GetDeltaTime());
+	}
+
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		npcs[i]->update(timer.GetDeltaTime());
 		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 	}
-	
+
 	scene->getPlayer()->update(timer.GetDeltaTime());
 	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
@@ -172,7 +207,18 @@ void playerCollision(Player* p1, Player* p2)
 		p2->setPosition(pos -= info.mtv);
 	}
 }
-void Game::checkCollisions()
+
+bool playerCollision(Player* p1, Pickup* p2)
+{
+	auto info = Collisions::TestAABBAABB(p1->getAABB(), p2->getAABB());
+	if (info.collision)
+	{
+		return true;
+	}
+	return false;
+}
+
+void Game::checkCollisions() const
 {
 	auto& npcs = scene->getNPCs();
 	auto& staticObjects = scene->getStaticObjects();
@@ -186,6 +232,19 @@ void Game::checkCollisions()
 			scene->getPlayer()->setPosition(pos -= info.mtv);
 		}
 	}
+
+	auto pickups = scene->getPickups();
+	for (auto i = 0; i < pickups.size(); i++)
+	{
+		Collisions::terrainCollision(pickups[i], scene->getTerrain());
+
+		if (playerCollision(scene->getPlayer(), pickups[i]))
+		{
+			audioManager.PlaySound("res/audio/sfx/GunPickup.wav");
+			scene->removePickup(i);
+		}
+	}
+
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		playerCollision(scene->getPlayer(), npcs[i].get());
@@ -202,7 +261,7 @@ void Game::checkCollisions()
 				npcs[i]->setPosition(pos -= info.mtv);
 			}
 		}
-		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
+		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 200, scene->getTerrain()->getScale().z / 2 - 1));
 		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());
 	}
 }

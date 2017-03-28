@@ -214,10 +214,8 @@
       <Filter>Rendering\RT3D Library</Filter>
     </ClInclude>
     <ClInclude Include="AIController.h" />
-    <ClInclude Include="Pickup.h">
-      <Filter>Rendering\Renderables</Filter>
-    </ClInclude>
     <ClInclude Include="StaticObject.h" />
+
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">

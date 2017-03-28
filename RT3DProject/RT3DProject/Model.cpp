@@ -12,8 +12,7 @@ namespace Rendering
 		auto textureFile = texturePath + ".bmp";
 		mesh = m_MD2.ReadMD2Model(meshFile.c_str());
 		texture = content.loadTexture(textureFile.c_str());
-		vertexCount = m_MD2.getVertDataCount();
-		
+		vertexCount = m_MD2.getVertDataCount();	
 	}
 
 	void Model::update(const float& dt)

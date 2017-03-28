@@ -17,6 +17,7 @@ private:
 	AudioManager();
 	enum AudioChannels
 	{
-		BASIC_SOUNDS
+		FREE_CHANNEL = -1,
+		BASIC_SOUNDS = 0
 	};
 };
