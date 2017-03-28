@@ -42,8 +42,8 @@ void Game::init()
 void Game::DrawMinimap(std::vector<Player*>& npcs)
 {
 	auto zoom = 300.0f;
-	auto mapWidth = 256;
-	auto mapHeight = 256;
+	auto mapWidth = 182;
+	auto mapHeight = 182;
 
 	glm::mat4 view = lookAt(glm::vec3(0, zoom, 0),
 		glm::vec3(0.0, 0.0, 0.0),
