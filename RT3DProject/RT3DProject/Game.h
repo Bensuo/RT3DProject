@@ -22,7 +22,7 @@ class Game
 {
 	Utilities::ResourceManager content;
 	Renderer renderer;
-	AudioManager audioManager;
+	static AudioManager audioManager;
 	Camera camera;
 	Input input;
 	Timer timer;

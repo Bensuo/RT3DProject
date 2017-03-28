@@ -4,6 +4,7 @@
 #include "ResourceManager.h"
 #include "ViewportWeapon.h"
 #include "AABB.h"
+#include "AudioManager.h"
 
 class Player
 {
@@ -95,5 +96,6 @@ private:
 	bool fps = false;
 	bool sprint = false;
 	bool aiming = false;
+	int stepCount = 40;
 };
 

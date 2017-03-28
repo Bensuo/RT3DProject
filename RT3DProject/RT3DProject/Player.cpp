@@ -35,6 +35,16 @@ void Player::update(float dt)
 	vpWeapon.update(dt);
 
 	collider.c = transform.position;
+	if (playerState == RUN)
+	{
+		if (stepCount == 40)
+		{
+			stepCount = 0;
+			AudioManager::PlaySound("res/audio/sfx/PlayerRun.wav", 0.4f);
+		}
+		stepCount++;
+		
+	}
 	if (playerState != JUMP)
 	{
 		playerState = STAND;
@@ -196,6 +206,7 @@ void Player::Jump()
 		weapon.resetAnimation();
 		playerState = JUMP;
 		velocity.y = 4.0f;
+		AudioManager::PlaySound("res/audio/sfx/PlayerJump1.wav");
 	}
 
 }
