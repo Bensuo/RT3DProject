@@ -104,6 +104,9 @@
       <Filter>Rendering\RT3D Library</Filter>
     </ClCompile>
     <ClCompile Include="AIController.cpp" />
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -210,6 +213,9 @@
       <Filter>Rendering\RT3D Library</Filter>
     </ClInclude>
     <ClInclude Include="AIController.h" />
+    <ClInclude Include="Pickup.h">
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">

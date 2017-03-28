@@ -164,6 +164,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MD2.cpp" />
     <ClCompile Include="md2model.cpp" />
+    <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MD2.h" />
     <ClInclude Include="md2model.h" />
+    <ClInclude Include="Pickup.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerModel.h" />
     <ClInclude Include="Renderer.h" />
