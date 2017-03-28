@@ -31,14 +31,14 @@ void AudioManager::Init()
 void AudioManager::PlaySound(const std::string& path, const float& volume)
 {
 	glm::clamp(volume, 0.0f, 1.0f);
-	Mix_Volume(BASIC_SOUNDS, volume * MIX_MAX_VOLUME);
+	Mix_Volume(FREE_CHANNEL, volume * MIX_MAX_VOLUME);
 
 	auto iterator = sounds.find(path);
 
 	//if the sound has been loaded, play it
 	if(iterator != sounds.end())
 	{
-		Mix_PlayChannel(BASIC_SOUNDS, sounds[path], 0);
+		Mix_PlayChannel(FREE_CHANNEL, sounds[path], 0);
 	}
 	//if the sound hasn't been loaded, load it and play it
 	else
@@ -51,7 +51,7 @@ void AudioManager::PlaySound(const std::string& path, const float& volume)
 		}
 		else {
 			sounds.emplace(path, newMusic);
-			Mix_PlayChannel(BASIC_SOUNDS, sounds[path], 0);
+			Mix_PlayChannel(FREE_CHANNEL, sounds[path], 0);
 		}
 	}
 }
