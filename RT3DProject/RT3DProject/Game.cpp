@@ -20,7 +20,8 @@ void Game::init()
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
 	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
-  audioManager.PlayMusic("02 - Rip & Tear.mp3");
+	AudioManager::Init();
+	AudioManager::PlayMusic("02 - Rip & Tear.mp3");
 	timer.Initialize();	//always init last for accurate game loop startup
 }
 

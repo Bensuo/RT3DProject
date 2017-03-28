@@ -4,7 +4,15 @@
 #include <SDL.h>
 #include <glm/glm.hpp>
 
+std::map<std::string, Mix_Music*> AudioManager::music;
+std::map<std::string, Mix_Chunk*> AudioManager::sounds;
+
 AudioManager::AudioManager()
+{
+
+}
+
+void AudioManager::Init()
 {
 	// start SDL with audio support
 	if (SDL_Init(SDL_INIT_AUDIO) == -1) {
@@ -93,12 +101,12 @@ void AudioManager::PlayMusic(const std::string& path, const float& volume, bool 
 	}
 }
 
-void AudioManager::StopMusic() const
+void AudioManager::StopMusic()
 {	
 	Mix_HaltMusic();
 }
 
-void AudioManager::PauseMusic() const
+void AudioManager::PauseMusic()
 {
 	//if the music is paused
 	if (Mix_PausedMusic() == 1)
