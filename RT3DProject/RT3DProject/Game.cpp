@@ -10,8 +10,9 @@ void Game::init()
 	//audioManager.PlaySound("impact.wav", 0.25f);
 	scene = new Scene();
 	scene->loadContent(content);
-	uiTest = new Rendering::UI("HEALTH:", true);
-	uiTest2 = new Rendering::UI("res/textures/Crosshair.png", false);
+	healthLabel = new Rendering::UI("HEALTH: 100", true);
+	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
+	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
 	/*skybox = new Rendering::Skybox("res/textures/front.bmp",
 		"res/textures/back.bmp",
 		"res/textures/top.bmp",
@@ -100,10 +101,11 @@ void Game::draw()
 	if (camera.isFPS()) {
 		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
-	renderer.renderUI(uiTest, glm::vec3(-0.8f, 0.8f, 0.0f), glm::vec3(0.10f, 0.045f, 0.0f));//position and size of text
-	
+	renderer.renderUI(healthLabel, glm::vec3(-0.866f, -0.8f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
+	renderer.renderUI(ammoLabel, glm::vec3(-0.866f, -0.9f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
+
 	if (scene->getPlayer()->Aiming())
-	renderer.renderUI(uiTest2, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
+	renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
 
 	renderList.clear();
 
@@ -125,8 +127,8 @@ void Game::update()
 	scene->getPlayer()->setFPS(camera.isFPS());
 
 	input.Update(scene->getPlayer(), camera);
-	
-	std::vector<Player*>&npcs = scene->getNPCs();
+
+	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		npcs[i]->update(timer.GetDeltaTime());
@@ -136,7 +138,6 @@ void Game::update()
 	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
 	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
-
 }
 
 Game::Game()
@@ -178,7 +179,7 @@ void playerCollision(Player* p1, Player* p2)
 }
 void Game::checkCollisions()
 {
-	std::vector<Player*>&npcs = scene->getNPCs();
+	auto& npcs = scene->getNPCs();
 	Collisions::terrainCollision(scene->getPlayer(), scene->getTerrain());
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
