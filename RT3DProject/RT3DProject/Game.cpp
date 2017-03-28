@@ -222,6 +222,7 @@ void Game::checkCollisions() const
 
 		if (playerCollision(scene->getPlayer(), pickups[i]))
 		{
+			audioManager.PlaySound("res/audio/sfx/GunPickup.wav");
 			scene->removePickup(i);
 		}
 	}
