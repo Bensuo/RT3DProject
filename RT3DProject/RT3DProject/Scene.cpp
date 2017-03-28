@@ -31,9 +31,10 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 	for (int i = 0; i < 2; i++)
 	{
 		Player* p = new Player();
+		std::shared_ptr<Player> shared(p);
 		p->loadContent(content, "rampage");
 		p->setState(Player::STAND);
-		p->setPosition(glm::vec3(100+ 200*i, 15, -200));
-		npcs.push_back(p);
+		p->setPosition(glm::vec3(-500+ 50*i, 15, -200 + 50*i));
+		npcs.push_back(shared);
 	}
 }

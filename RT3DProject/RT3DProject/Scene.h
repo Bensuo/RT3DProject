@@ -12,14 +12,14 @@ public:
 	Player* getPlayer() { return player; }
 	Rendering::Skybox* getSkybox() { return skybox; }
 	Terrain* getTerrain() { return terrain; }
-	std::vector<Player*>& getNPCs() { return npcs; }
+	std::vector<std::shared_ptr<Player>>& getNPCs() { return npcs; }
 
 private:
 	//Scene objects
 	Rendering::Skybox* skybox;
 	Terrain* terrain;
 	Player* player;
-	std::vector<Player*> npcs;
+	std::vector<std::shared_ptr<Player>> npcs;
 	std::vector<rt3d::lightStruct> lights;
 };
 

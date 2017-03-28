@@ -6,41 +6,26 @@
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-	audioManager.PlayMusic("02 - Rip & Tear.mp3");
 	//audioManager.PlaySound("impact.wav", 0.25f);
 	scene = new Scene();
 	scene->loadContent(content);
+	auto& npcs = scene->getNPCs();
+	for (size_t i = 0; i < npcs.size(); i++)
+	{
+		npcControllers.push_back(AIController());
+		npcControllers[i].setActor(npcs[i]);
+		npcControllers[i].setTarget(scene->getPlayer());
+	}
+	
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
 	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
-	/*skybox = new Rendering::Skybox("res/textures/front.bmp",
-		"res/textures/back.bmp",
-		"res/textures/top.bmp",
-		"res/textures/bottom.bmp",
-		"res/textures/left.bmp",
-		"res/textures/right.bmp",
-		"res/shaders/skyboxVertex.vs",
-		"res/shaders/skyboxFragment.fs");
-
-	testBox = Rendering::Box(glm::vec3(1000, 1, 1000), glm::vec3(0, -23, 0));
-	floor = AABB{ glm::vec3(0, -23, 0), glm::vec3(500, 0.5, 500) };
-	testBox.loadContent(content);
-
-	testPlayer = new Player();
-	testPlayer->loadContent(content, "rampage");
-	testPlayer->setState(Player::STAND);
-	testPlayer->setPosition(glm::vec3(0, 15, -150));
-	testPlayer2 = new Player();
-	testPlayer2->loadContent(content, "rampage");
-	testPlayer2->setState(Player::STAND);
-	terrain.setScale(glm::vec3(2000.0f, 100.0f, 2000.0f));
-	terrain.loadContent("heightmap.bmp", "heightmap-norm.bmp", content);
-	testPlayer2->setPosition(glm::vec3(100, 15, -200));*/
+  audioManager.PlayMusic("02 - Rip & Tear.mp3");
 	timer.Initialize();	//always init last for accurate game loop startup
 }
 
 
-void Game::DrawMinimap(std::vector<Player*>& npcs)
+void Game::DrawMinimap(std::vector<std::shared_ptr<Player>>& npcs)
 {
 	auto zoom = 300.0f;
 	auto mapWidth = 182;
@@ -127,11 +112,16 @@ void Game::update()
 	scene->getPlayer()->setFPS(camera.isFPS());
 
 	input.Update(scene->getPlayer(), camera);
-
+	//Update AI controllers
+	for (int i = 0; i < npcControllers.size(); i++)
+	{
+		npcControllers[i].update();
+	}
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		npcs[i]->update(timer.GetDeltaTime());
+		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
 	}
 	
 	scene->getPlayer()->update(timer.GetDeltaTime());
@@ -173,8 +163,8 @@ void playerCollision(Player* p1, Player* p2)
 	auto info = Collisions::TestAABBAABB(p1->getAABB(), p2->getAABB());
 	if (info.collision)
 	{
-		auto pos = p1->getPosition();
-		p1->setPosition(pos += info.mtv);
+		auto pos = p2->getPosition();
+		p2->setPosition(pos -= info.mtv);
 	}
 }
 void Game::checkCollisions()
@@ -183,7 +173,11 @@ void Game::checkCollisions()
 	Collisions::terrainCollision(scene->getPlayer(), scene->getTerrain());
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
-		playerCollision(scene->getPlayer(), npcs[i]);
-		Collisions::terrainCollision(npcs[i], scene->getTerrain());
+		playerCollision(scene->getPlayer(), npcs[i].get());
+		for (int j = i+1; j < npcs.size(); j++)
+		{
+			playerCollision(npcs[j].get(), npcs[i].get());
+		}
+		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());
 	}
 }

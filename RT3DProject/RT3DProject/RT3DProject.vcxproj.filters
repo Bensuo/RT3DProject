@@ -103,6 +103,7 @@
     <ClCompile Include="rt3dObjLoader.cpp">
       <Filter>Rendering\RT3D Library</Filter>
     </ClCompile>
+    <ClCompile Include="AIController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -208,6 +209,7 @@
     <ClInclude Include="rt3dObjLoader.h">
       <Filter>Rendering\RT3D Library</Filter>
     </ClInclude>
+    <ClInclude Include="AIController.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">
