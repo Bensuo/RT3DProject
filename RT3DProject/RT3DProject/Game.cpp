@@ -85,11 +85,18 @@ void Game::DrawScene()
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
 
+	auto& staticObjects = scene->getStaticObjects();
+	for (auto i = 0; i < staticObjects.size(); i++)
+	{
+		renderList.push_back(staticObjects[i]->getModel());
+	}
+
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
 	{
 		renderList.push_back(&pickups[i]->getPlayerModel());
 	}
+
 
 	renderer.begin();
 	renderer.setView(camera.GetViewMatrix());
@@ -154,11 +161,11 @@ void Game::update()
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		npcs[i]->update(timer.GetDeltaTime());
-		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
+		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 	}
 
 	scene->getPlayer()->update(timer.GetDeltaTime());
-	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, 250, scene->getTerrain()->getScale().z / 2-1));
+	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
 	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
 }
@@ -213,7 +220,18 @@ bool playerCollision(Player* p1, Pickup* p2)
 
 void Game::checkCollisions() const
 {
+	auto& npcs = scene->getNPCs();
+	auto& staticObjects = scene->getStaticObjects();
 	Collisions::terrainCollision(scene->getPlayer(), scene->getTerrain());
+	for (int i = 0; i < staticObjects.size(); i++)
+	{
+		auto info = Collisions::TestAABBAABB(staticObjects[i]->getAABB(), scene->getPlayer()->getAABB());
+		if (info.collision)
+		{
+			auto pos = scene->getPlayer()->getPosition();
+			scene->getPlayer()->setPosition(pos -= info.mtv);
+		}
+	}
 
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
@@ -227,7 +245,6 @@ void Game::checkCollisions() const
 		}
 	}
 
-	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		playerCollision(scene->getPlayer(), npcs[i].get());
@@ -235,7 +252,16 @@ void Game::checkCollisions() const
 		{
 			playerCollision(npcs[j].get(), npcs[i].get());
 		}
-		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
+		for (int k = 0; k < staticObjects.size(); k++)
+		{
+			auto info = Collisions::TestAABBAABB(staticObjects[k]->getAABB(), npcs[i]->getAABB());
+			if (info.collision)
+			{
+				auto pos = npcs[i]->getPosition();
+				npcs[i]->setPosition(pos -= info.mtv);
+			}
+		}
+		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 200, scene->getTerrain()->getScale().z / 2 - 1));
 		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());
 	}
 }

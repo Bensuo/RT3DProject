@@ -15,5 +15,7 @@ namespace Rendering {
 			m_MD2.setCurrentAnim(state);
 		}
 		void resetAnimation() { m_MD2.ResetAnimation(); }
+		GLfloat* getVerts() { return m_MD2.getAnimVerts(); }
+		int getNumVerts() { return m_MD2.getVertDataCount(); }
 	};
 }

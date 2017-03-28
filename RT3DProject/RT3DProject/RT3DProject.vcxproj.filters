@@ -104,7 +104,10 @@
       <Filter>Rendering\RT3D Library</Filter>
     </ClCompile>
     <ClCompile Include="AIController.cpp" />
-    <ClCompile Include="Pickup.cpp" />
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Rendering\Renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -211,7 +214,8 @@
       <Filter>Rendering\RT3D Library</Filter>
     </ClInclude>
     <ClInclude Include="AIController.h" />
-    <ClInclude Include="Pickup.h" />
+    <ClInclude Include="StaticObject.h" />
+
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">
