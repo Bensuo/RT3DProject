@@ -46,11 +46,12 @@ class Game
 		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
 		0.2f  // shininess
 	};
-	void checkCollisions();
+	void checkCollisions() const;
 	std::vector<AIController> npcControllers;
 public:
 	void init(void);
-	void DrawMinimap(std::vector<std::shared_ptr<Player>>& npcs);
+	void DrawMinimap();
+	void DrawScene();
 	void draw();
 	bool Quit() const;
 	void update();

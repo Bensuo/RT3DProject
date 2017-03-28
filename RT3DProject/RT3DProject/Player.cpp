@@ -30,6 +30,7 @@ void Player::update(float dt)
 
 	model.update(dt);
 	model.setTransform(transform);
+
 	weapon.update(dt);
 	weapon.setTransform(transform);
 	vpWeapon.update(dt);
@@ -40,7 +41,6 @@ void Player::update(float dt)
 		playerState = STAND;
 		sprint = false;
 	}
-	
 }
 
 void Player::setFPS(bool fps)
@@ -146,7 +146,6 @@ void Player::MoveForward()
 	{
 		playerState = RUN;
 	}
-	
 }
 
 void Player::MoveBackward()

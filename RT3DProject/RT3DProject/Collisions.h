@@ -88,4 +88,14 @@ namespace Collisions
 		}
 	}
 
+	void terrainCollision(Pickup * p, Terrain * terrain)
+	{
+		float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
+		if (p->getPosition().y - p->getAABB().r.y < h)
+		{
+			glm::vec3 newPos = p->getPosition();
+			newPos.y = h + p->getAABB().r.y;
+			p->setPosition(newPos);
+		}
+	}
 }

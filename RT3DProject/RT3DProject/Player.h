@@ -74,7 +74,7 @@ private:
 	Rendering::ViewportWeapon vpWeapon;
 
 	Transform transform
-	{ 
+	{
 		glm::vec3(0), glm::vec3(0) 
 	};
 
