@@ -178,6 +178,7 @@ void Game::checkCollisions()
 		{
 			playerCollision(npcs[j].get(), npcs[i].get());
 		}
+		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, 250, scene->getTerrain()->getScale().z / 2 - 1));
 		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());
 	}
 }
