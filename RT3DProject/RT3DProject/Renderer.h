@@ -23,8 +23,9 @@ public:
 	Renderer();
 	virtual ~Renderer();
 	void quit() const;
-	void begin(Camera& camera);
-	void end() const;
+	void begin() const;
+	void setCamera(Camera& camera);
+	void swapBuffers() const;
 	void draw(IRenderable* renderable);
 	void drawSkybox(Rendering::Skybox* skybox) const;
 	void drawTerrain(Terrain* terrain) const;

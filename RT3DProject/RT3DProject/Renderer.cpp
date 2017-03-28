@@ -81,17 +81,21 @@ void Renderer::quit() const
 }
 
 //Clears buffers to begin rendering
-void Renderer::begin(Camera& camera)
+void Renderer::begin() const
 {
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::setCamera(Camera& camera)
+{
 	this->camera = &camera;
 }
 
 //Ends rendering and pushes the result to the screen
-void Renderer::end() const
+void Renderer::swapBuffers() const
 {
 	SDL_GL_SwapWindow(hWindow); //Swap buffers
 }

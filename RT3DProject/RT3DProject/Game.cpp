@@ -40,6 +40,24 @@ void Game::init()
 }
 
 
+void Game::DrawMinimap(std::vector<Player*>& npcs)
+{
+	glViewport(1280 - 384, 720 - 216, 384, 216);
+	glDisable(GL_DEPTH_TEST);
+	renderList.push_back(&scene->getPlayer()->getPlayerModel());
+	renderList.push_back(&scene->getPlayer()->getWeapon());
+	for (auto i = 0; i < npcs.size(); i++)
+	{
+		renderList.push_back(&npcs[i]->getPlayerModel());
+		renderList.push_back(&npcs[i]->getWeapon());
+	}
+	renderer.drawTerrain(scene->getTerrain());
+	renderer.setShader("Phong");
+	renderer.render(renderList);
+	renderList.clear();
+	glEnable(GL_DEPTH_TEST);
+}
+
 void Game::draw()
 {
 	//Populate render list
@@ -54,7 +72,8 @@ void Game::draw()
 		renderList.push_back(&npcs[i]->getWeapon());
 	}
 	
-	renderer.begin(camera);
+	renderer.begin();
+	renderer.setCamera(camera);
 
 	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
@@ -73,22 +92,9 @@ void Game::draw()
 
 	renderList.clear();
 
-	glViewport(1280 - 384, 720 - 216, 384, 216);
-	glDisable(GL_DEPTH_TEST);
-	renderList.push_back(&scene->getPlayer()->getPlayerModel());
-	renderList.push_back(&scene->getPlayer()->getWeapon());
-	for (auto i = 0; i < npcs.size(); i++)
-	{
-		renderList.push_back(&npcs[i]->getPlayerModel());
-		renderList.push_back(&npcs[i]->getWeapon());
-	}
-	renderer.drawTerrain(scene->getTerrain());
-	renderer.setShader("Phong");
-	renderer.render(renderList);
-	renderList.clear();
-	glEnable(GL_DEPTH_TEST);
+	DrawMinimap(npcs);
 
-	renderer.end();
+	renderer.swapBuffers();
 	auto test = 0;
 }
 
