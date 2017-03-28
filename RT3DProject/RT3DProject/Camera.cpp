@@ -90,8 +90,7 @@ void Camera::ProcessMouseScroll(float yoffset)
 void Camera::SnapDistance(const float& distance)
 {
 	if (!isFPS())
-		this->distance = distance;
-}
+		this->distance = distance;}
 
 bool Camera::isFPS() const
 {

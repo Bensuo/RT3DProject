@@ -67,6 +67,7 @@ public:
 	void Aim();
 	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
 	void StopAim();
+	bool Aiming() const;
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;

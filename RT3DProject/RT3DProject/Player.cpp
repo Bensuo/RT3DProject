@@ -232,3 +232,8 @@ void Player::StopAim()
 	if(!fps)
 		aiming = false;
 }
+
+bool Player::Aiming() const
+{
+	return fps || aiming;
+}

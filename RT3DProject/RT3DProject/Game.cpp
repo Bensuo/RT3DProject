@@ -65,7 +65,10 @@ void Game::draw()
 		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
 	renderer.renderUI(uiTest, glm::vec3(-0.8f, 0.8f, 0.0f), glm::vec3(0.10f, 0.045f, 0.0f));//position and size of text
+	
+	if (scene->getPlayer()->Aiming())
 	renderer.renderUI(uiTest2, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
+
 	renderer.end();
 	renderList.clear();
 	auto test = 0;
