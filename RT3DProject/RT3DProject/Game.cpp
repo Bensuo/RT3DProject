@@ -6,7 +6,6 @@
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-	//audioManager.PlaySound("impact.wav", 0.25f);
 	scene = new Scene();
 	scene->loadContent(content);
 	auto& npcs = scene->getNPCs();
@@ -21,7 +20,7 @@ void Game::init()
 	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
 	AudioManager::Init();
-	//AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
+	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
 	timer.Initialize();	//always init last for accurate game loop startup
 }
 
