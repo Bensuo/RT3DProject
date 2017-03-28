@@ -15,11 +15,10 @@ namespace Rendering
 	public:
 		virtual ~Model();
 		void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
-		void update(const float& dt);
-		
+		void update(const float& dt);	
 		int getCurrentFrame() const { return m_MD2.getCurrentFrame(); }
-		virtual void setAnimation(const int& state) = 0;
-		virtual void SetUpAnimationData() = 0;
+		virtual void setAnimation(const int& state) {}
+		virtual void SetUpAnimationData() {}
 		virtual void setTransform(const Transform& transform);
 		GLuint& getMesh() override;
 		GLuint& getTexture() override;

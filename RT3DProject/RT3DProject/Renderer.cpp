@@ -113,11 +113,13 @@ void Renderer::draw(IRenderable* renderable)
 
 	mvStack.push(mvStack.top());
 
-	float rotX = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
-	float rotY = renderable->getTransform().rotation.y * DEG_TO_RADIAN;
-	float rotZ = renderable->getTransform().rotation.z * DEG_TO_RADIAN;
+	auto rotX = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
+	auto rotY = renderable->getTransform().rotation.y * DEG_TO_RADIAN;
+	auto rotZ = renderable->getTransform().rotation.z * DEG_TO_RADIAN;
 
-	mvStack.top() = translate(mvStack.top(), renderable->getTransform().position);
+	auto position = renderable->getTransform().position;
+
+	mvStack.top() = translate(mvStack.top(), position);
 	mvStack.top() = rotate(mvStack.top(), -90.0f * DEG_TO_RADIAN, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mvStack.push(rotate(mvStack.top(), rotX, glm::vec3(1.0f, 0.0f, 0.0f)));
