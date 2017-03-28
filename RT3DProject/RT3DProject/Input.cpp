@@ -10,10 +10,12 @@ void Input::Update(Player* player, Camera& camera)
 {
 	while (SDL_PollEvent(&event))
 	{
+		auto motion = glm::vec2();
 		switch (event.type)
 		{
 		case SDL_MOUSEMOTION:
-			camera.ProcessMouseMovement(glm::vec2(event.motion.xrel, -event.motion.yrel));
+			motion = glm::vec2(event.motion.xrel, -event.motion.yrel);
+			camera.ProcessMouseMovement(motion);
 			break;
 		case SDL_MOUSEWHEEL:
 			camera.ProcessMouseScroll(-event.wheel.y);

@@ -22,6 +22,8 @@ class Camera
 
 	float yaw;
 	float pitch;
+	float interpolation = 15.0f;
+	float deadZone = 0.0075f;
 
 	glm::mat4 view;
 

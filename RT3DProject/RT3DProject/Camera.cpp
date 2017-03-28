@@ -1,15 +1,21 @@
 #include "Camera.h"
+#include <cstdio>
+#include <string>
 
 void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 {
-	yaw += -mouseMotion.x * SENSITIVTY * deltaTime;
+	if (length(mouseMotion * SENSITIVTY * deltaTime) >= deadZone && mouseMotion != glm::vec2(0,0))
+	{
+		yaw += -mouseMotion.x * SENSITIVTY * deltaTime;
 
-	pitch += mouseMotion.y * SENSITIVTY * deltaTime;
+		pitch += mouseMotion.y * SENSITIVTY * deltaTime;
 
-	if (!isFPS()) {
-		pitch = glm::clamp(pitch, -0.3f, 1.5f);
-	} else {
-		pitch = glm::clamp(pitch, -1.5f, 1.5f);
+		if (!isFPS()) {
+			pitch = glm::clamp(pitch, -0.3f, 1.5f);
+		}
+		else {
+			pitch = glm::clamp(pitch, -1.5f, 1.5f);
+		}
 	}
 
 	float camX;
@@ -29,7 +35,7 @@ void Camera::Update(const float & deltaTime, const glm::vec3 & targetPos)
 		camZ = distance * sin(yaw) * cos(pitch);
 	}
 
-	position = glm::vec3(camX, camY, camZ);
+	position += (interpolation * deltaTime) * (glm::vec3(camX, camY, camZ) - position);
 
 	view = lookAt(glm::vec3(position),
 		glm::vec3(0.0, 0.0, 0.0),
