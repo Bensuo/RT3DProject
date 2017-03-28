@@ -9,8 +9,6 @@ namespace Rendering
 	{
 		const float SIZE = 1;
 		GLuint vbo;
-
-		
 		bool loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name);
 	public:
 		Skybox(const char* front,

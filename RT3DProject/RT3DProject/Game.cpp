@@ -112,11 +112,13 @@ void Game::DrawScene()
 	if (camera.isFPS()) {
 		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
-	renderer.renderUI(healthLabel, glm::vec3(-0.866f, -0.8f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
-	renderer.renderUI(ammoLabel, glm::vec3(-0.866f, -0.9f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
+
+	renderer.setShader("UI");
+	renderer.renderUI(healthLabel, glm::vec3(-0.866f, -0.8f, 0.0f), glm::vec3(0.1f, 0.025f, 1.0f));
+	renderer.renderUI(ammoLabel, glm::vec3(-0.866f, -0.9f, 0.0f), glm::vec3(0.1f, 0.025f, 1.0f));
 
 	if (scene->getPlayer()->Aiming())
-		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
+		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));
 
 	renderList.clear();
 }

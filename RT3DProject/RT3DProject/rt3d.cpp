@@ -305,7 +305,6 @@ void updateMesh(const GLuint mesh, const unsigned int bufferType, const GLfloat 
 	pMeshBuffers[RT3D_VERTEX] = VBO;
 
 	glBindVertexArray(0);
-
 }
 
 } // namespace rt3d
