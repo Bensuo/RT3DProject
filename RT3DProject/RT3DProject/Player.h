@@ -89,7 +89,7 @@ private:
 	glm::vec3 movementNormal, targetNormal;
 	glm::vec3 velocity;
 
-	const float SPEED = 100.0f;
+	const float SPEED = 150.0f;
 	const float AIM_DISTANCE = 75.0f;
 	bool fps = false;
 	bool sprint = false;
