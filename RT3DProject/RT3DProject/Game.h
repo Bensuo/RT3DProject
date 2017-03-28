@@ -35,8 +35,9 @@ class Game
 
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
-	Rendering::UI* uiTest;
-	Rendering::UI* uiTest2;
+	Rendering::UI* healthLabel;
+	Rendering::UI* ammoLabel;
+	Rendering::UI* crosshair;
 	Rendering::Box testBox1;
 	Rendering::Box testBox2;
 	rt3d::materialStruct material = {
