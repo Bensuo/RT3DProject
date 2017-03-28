@@ -236,53 +236,26 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	mvStack.pop();
 }
 
-void Renderer::renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size) {
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+void Renderer::renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size) 
+{
+	glDisable(GL_DEPTH_TEST);
+	
 	glm::mat4 projection(1.0);
-	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), position);//position
 
-	auto ratio = SCREEN_WIDTH / (float)SCREEN_HEIGHT;
+	mvStack.push(glm::mat4(1.0));
+	mvStack.top() = glm::translate(mvStack.top(), position);
+
+	auto ratio = SCREEN_WIDTH / static_cast<float>(SCREEN_HEIGHT);
 	auto newSize = glm::vec3(size.x, size.y * ratio, 1);
 
-	mvStack.top() = scale(mvStack.top(), newSize);//size
+	mvStack.top() = scale(mvStack.top(), glm::vec3(newSize));
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 
-	//draw start
 	glCullFace(GL_FRONT);
-	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
-
-	mvStack.push(mvStack.top());
-
-	auto rotX = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
-	auto rotY = renderable->getTransform().rotation.y * DEG_TO_RADIAN;
-	auto rotZ = renderable->getTransform().rotation.z * DEG_TO_RADIAN;
-
-	mvStack.top() = rotate(mvStack.top(), -90.0f * DEG_TO_RADIAN, glm::vec3(0.0f, 1.0f, 0.0f));
-
-	mvStack.push(rotate(mvStack.top(), rotX, glm::vec3(1.0f, 0.0f, 0.0f)));
-	mvStack.push(rotate(mvStack.top(), rotY, glm::vec3(0.0f, 1.0f, 0.0f)));
-	mvStack.push(rotate(mvStack.top(), rotZ, glm::vec3(0.0f, 0.0f, 1.0f)));
-
-	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
-	currentShader->setMaterial(renderable->getMaterial());
-
-	if (renderable->isIndexed())
-	{
+		glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
+		currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 		rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
-	}
-	else
-	{
-		rt3d::drawMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
-	}
-
-	//mvStack.pop();
-	mvStack.pop();
-	mvStack.pop();
-	mvStack.pop();
-
 	glCullFace(GL_BACK);
 	
-	mvStack.pop();
-	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
+	glEnable(GL_DEPTH_TEST);
 }
