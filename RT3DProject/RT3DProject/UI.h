@@ -4,23 +4,25 @@
 #include "rt3d.h"
 #include <SDL.h>
 #include "rt3dObjLoader.h"
-#include <string>
+#include "Shader.h"
 
 namespace Rendering 
 {
 	class UI : public IRenderable
 	{
 	public:
-		UI(std::string object, bool isText);
+		UI(const std::string& object, bool isText);
 		virtual ~UI();
-		GLuint & getMesh() override;
-		GLuint & getTexture() override;
-		GLuint & getCount() override;
-		rt3d::materialStruct & getMaterial() override;
-		Transform & getTransform() override;
+		Shader& getShader();
+		GLuint& getMesh() override;
+		GLuint& getTexture() override;
+		GLuint& getCount() override;
+		rt3d::materialStruct& getMaterial() override;
+		Transform& getTransform() override;
 		bool isIndexed() override;
-		void setText(std::string txt) { uiString = txt; }
+		void setText(const std::string& txt) { uiString = txt; }
 	private:
+		Shader shader;
 		std::vector<GLfloat> verts;
 		std::vector<GLfloat> norms;
 		std::vector<GLfloat> tex_coords;

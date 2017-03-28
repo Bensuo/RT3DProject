@@ -5,7 +5,7 @@
 
 namespace Rendering 
 {
-	UI::UI(std::string object, bool isText)
+	UI::UI(const std::string& object, bool isText) : shader("res/shaders/UI.vert", "res/shaders/UI.frag")
 	{
 		this->isText = isText;
 		int imgFlags = IMG_INIT_PNG;
@@ -29,7 +29,6 @@ namespace Rendering
 				std::cout << "Failed to open font." << std::endl;
 			SDL_Color sdl_Color = { 255, 255, 255, 255 };
 			texture = TTF_RenderText_Blended(textFont, object.c_str(), sdl_Color);
-			transform.rotation.y = 90;
 		}
 		else
 		{
@@ -41,6 +40,11 @@ namespace Rendering
 	}
 
 	UI::~UI(){}
+
+	Shader& UI::getShader()
+	{
+		return shader;
+	}
 
 	GLuint & UI::getTexture() {
 		return label = genTexture();

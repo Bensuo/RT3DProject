@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "UI.h"
 
 Renderer::Renderer()
 {
@@ -57,10 +58,9 @@ void Renderer::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Set up shaders
-	shaders.insert(std::make_pair("Phong", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
+	shaders.insert(std::make_pair("Phong", Rendering::Shader("res/shaders/phong-tex.vert", "res/shaders/phong-tex.frag")));
 	shaders["Phong"].addLight(light0, 0);
 	shaders["Phong"].addLight(light1, 1);
-
 }
 
 //Set the shader to be used for rendering
@@ -236,7 +236,7 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	mvStack.pop();
 }
 
-void Renderer::renderUI(IRenderable * renderable, glm::vec3 position, glm::vec3 size) {
+void Renderer::renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size) {
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 	glm::mat4 projection(1.0);
 	mvStack.push(glm::mat4(1.0));
@@ -245,9 +245,44 @@ void Renderer::renderUI(IRenderable * renderable, glm::vec3 position, glm::vec3 
 	auto ratio = SCREEN_WIDTH / (float)SCREEN_HEIGHT;
 	auto newSize = glm::vec3(size.x, size.y * ratio, 1);
 
-	mvStack.top() = glm::scale(mvStack.top(), newSize);//size
+	mvStack.top() = scale(mvStack.top(), newSize);//size
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-	draw(renderable);
+
+	//draw start
+	glCullFace(GL_FRONT);
+	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
+
+	mvStack.push(mvStack.top());
+
+	auto rotX = renderable->getTransform().rotation.x * DEG_TO_RADIAN;
+	auto rotY = renderable->getTransform().rotation.y * DEG_TO_RADIAN;
+	auto rotZ = renderable->getTransform().rotation.z * DEG_TO_RADIAN;
+
+	mvStack.top() = rotate(mvStack.top(), -90.0f * DEG_TO_RADIAN, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	mvStack.push(rotate(mvStack.top(), rotX, glm::vec3(1.0f, 0.0f, 0.0f)));
+	mvStack.push(rotate(mvStack.top(), rotY, glm::vec3(0.0f, 1.0f, 0.0f)));
+	mvStack.push(rotate(mvStack.top(), rotZ, glm::vec3(0.0f, 0.0f, 1.0f)));
+
+	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
+	currentShader->setMaterial(renderable->getMaterial());
+
+	if (renderable->isIndexed())
+	{
+		rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
+	}
+	else
+	{
+		rt3d::drawMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
+	}
+
+	//mvStack.pop();
+	mvStack.pop();
+	mvStack.pop();
+	mvStack.pop();
+
+	glCullFace(GL_BACK);
+	
 	mvStack.pop();
 	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
 }
