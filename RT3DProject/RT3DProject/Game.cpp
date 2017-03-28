@@ -3,7 +3,6 @@
 #include "Collisions.h"
 
 
-
 void Game::init()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -42,7 +41,22 @@ void Game::init()
 
 void Game::DrawMinimap(std::vector<Player*>& npcs)
 {
-	glViewport(1280 - 384, 720 - 216, 384, 216);
+	auto zoom = 300.0f;
+	auto mapWidth = 256;
+	auto mapHeight = 256;
+
+	glm::mat4 view = lookAt(glm::vec3(0, zoom, 0),
+		glm::vec3(0.0, 0.0, 0.0),
+		glm::vec3(-1.0, 0.0, 0.0));
+
+	view = rotate(view, camera.getYaw(), glm::vec3(0, 1, 0));
+	view = translate(view, glm::vec3(-scene->getPlayer()->getPosition().x, 0, -scene->getPlayer()->getPosition().z));
+
+	renderer.setView(view);
+	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, -2000.0f, 2000.0f));
+	//renderer.setProjection(glm::perspective(1.0f, static_cast<float>(mapWidth) / mapHeight, 0.1f, 2000.0f));
+
+	glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
 	glDisable(GL_DEPTH_TEST);
 	renderList.push_back(&scene->getPlayer()->getPlayerModel());
 	renderList.push_back(&scene->getPlayer()->getWeapon());
@@ -73,7 +87,8 @@ void Game::draw()
 	}
 	
 	renderer.begin();
-	renderer.setCamera(camera);
+	renderer.setView(camera.GetViewMatrix());
+	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f));
 
 	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
