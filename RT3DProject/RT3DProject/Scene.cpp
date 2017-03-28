@@ -22,7 +22,7 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 		"res/shaders/skyboxVertex.vs",
 		"res/shaders/skyboxFragment.fs");
 	terrain = new Terrain();
-	terrain->setScale(glm::vec3(2000.0f, 100.0f, 2000.0f));
+	terrain->setScale(glm::vec3(4000.0f, 200.0f, 4000.0f));
 	terrain->loadContent("newhm.bmp", "newhm-normal.bmp", content);
 	player = new Player();
 	player->loadContent(content, "rampage");
@@ -38,7 +38,15 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 		npcs.push_back(shared);
 	}
 	StaticObject* m = new StaticObject();
-	m->loadContent(content, "res/md2/triax_hoover", "res/md2/triax_hoover");
-	m->setTransform(Transform{ glm::vec3(170, terrain->getHeightAtPosition(170, 0), 0), glm::vec3(0) });
+	m->loadContent(content, "res/md2/triax_tracks", "res/md2/triax_tracks");
+	m->setTransform(Transform{ glm::vec3(210, terrain->getHeightAtPosition(210, 0), 0), glm::vec3(0) });
+	staticObjects.push_back(m);
+	m = new StaticObject();
+	m->loadContent(content, "res/md2/triax_wheels", "res/md2/triax_wheels");
+	m->setTransform(Transform{ glm::vec3(190, terrain->getHeightAtPosition(190, -300), -300), glm::vec3(0) });
+	staticObjects.push_back(m);
+	m = new StaticObject();
+	m->loadContent(content, "res/md2/triax_tracks", "res/md2/triax_tracks");
+	m->setTransform(Transform{ glm::vec3(-100, terrain->getHeightAtPosition(-100, -500), -500), glm::vec3(0) });
 	staticObjects.push_back(m);
 }

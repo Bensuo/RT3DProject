@@ -193,9 +193,9 @@ void Game::checkCollisions()
 		{
 			playerCollision(npcs[j].get(), npcs[i].get());
 		}
-		for (int i = 0; i < staticObjects.size(); i++)
+		for (int k = 0; k < staticObjects.size(); k++)
 		{
-			auto info = Collisions::TestAABBAABB(staticObjects[i]->getAABB(), npcs[i]->getAABB());
+			auto info = Collisions::TestAABBAABB(staticObjects[k]->getAABB(), npcs[i]->getAABB());
 			if (info.collision)
 			{
 				auto pos = npcs[i]->getPosition();
