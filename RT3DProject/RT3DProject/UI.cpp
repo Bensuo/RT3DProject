@@ -5,9 +5,8 @@
 
 namespace Rendering 
 {
-	UI::UI(const std::string& object, bool isText) : shader("res/shaders/UI.vert", "res/shaders/UI.frag")
+	UI::UI(const std::string& path) : shader("res/shaders/UI.vert", "res/shaders/UI.frag")
 	{
-		this->isText = isText;
 		int imgFlags = IMG_INIT_PNG;
 		if (!(IMG_Init(imgFlags) & imgFlags))//lazyfoo
 		{
@@ -16,29 +15,36 @@ namespace Rendering
 
 		rt3d::loadObj(objPath.c_str(), verts, norms, tex_coords, indices);
 
-		if (isText) {
-			label = 0;
-			size = indices.size();
-			uiString = object;
-			mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
-			if (TTF_Init() == -1)
-				std::cout << "TTF failed to initialise." << std::endl;
+		label = 0;
+		size = indices.size();
+		mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+		texture = IMG_Load(path.c_str());
+		genTexture();
+	}
 
-			auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", 24);
-			if (textFont == nullptr)
-				std::cout << "Failed to open font." << std::endl;
-			SDL_Color sdl_Color = { 255, 255, 255, 255 };
-			texture = TTF_RenderText_Blended(textFont, object.c_str(), sdl_Color);
-			genTexture();
-		}
-		else
+	UI::UI(const std::string& string, int textSize) : shader("res/shaders/UI.vert", "res/shaders/UI.frag")
+	{
+		int imgFlags = IMG_INIT_PNG;
+		if (!(IMG_Init(imgFlags) & imgFlags))//lazyfoo
 		{
-			label = 0;
-			size = indices.size();
-			mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
-			texture = IMG_Load(object.c_str());
-			genTexture();
+			std::cout << "image failed to initialise." << std::endl;
 		}
+
+		rt3d::loadObj(objPath.c_str(), verts, norms, tex_coords, indices);
+
+		label = 0;
+		size = indices.size();
+		uiString = string;
+		mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+		if (TTF_Init() == -1)
+			std::cout << "TTF failed to initialise." << std::endl;
+
+		auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", textSize);
+		if (textFont == nullptr)
+			std::cout << "Failed to open font." << std::endl;
+		SDL_Color sdl_Color = { 255, 255, 255, 255 };
+		texture = TTF_RenderText_Blended(textFont, string.c_str(), sdl_Color);
+		genTexture();
 	}
 
 	UI::~UI(){}

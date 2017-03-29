@@ -252,6 +252,7 @@ void Player::shoot()
 		canShoot = true;
 		AudioManager::PlaySound("res/audio/sfx/gunshot.wav");
 		weaponState = POW;
+		playerState = ATTACK;
 	}
 }
 

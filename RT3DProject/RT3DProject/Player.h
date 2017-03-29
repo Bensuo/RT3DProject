@@ -74,6 +74,7 @@ public:
 	void takeDamage(int amount)
 	{
 		health -= amount; 
+		health = glm::clamp(health, 0, 100);
 		if (health <= 0) isDead = true;
 	}
 	const int& getHealth() const { return health; }

@@ -11,7 +11,8 @@ namespace Rendering
 	class UI : public IRenderable
 	{
 	public:
-		UI(const std::string& object, bool isText);
+		UI(const std::string& path);
+		UI(const std::string& string, int size);
 		virtual ~UI();
 		int getWidth() const;
 		int getHeight() const;
@@ -34,7 +35,6 @@ namespace Rendering
 		GLuint label;
 		GLuint mesh;
 		GLuint size;
-		bool isText = false;
 		SDL_Surface* texture;
 		rt3d::materialStruct material = {
 			{ 1.0f, 1.0f, 1.0f, 1.0f }, // ambient
