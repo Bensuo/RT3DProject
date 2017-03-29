@@ -73,6 +73,7 @@ public:
 	void hasShot() { canShoot = false; }
 	void takeDamage(int amount) { health -= amount; if (health <= 0) isDead = true; }
 	bool getIsDead() { return isDead; }
+	int getHealth() { return health; }
 	bool Aiming() const;
 private:
 	Rendering::PlayerModel model;
@@ -105,6 +106,6 @@ private:
 	bool isDead = false;
 	float shootTimer = 0.0f;
 	int stepCount = 40;
-	int health;
+	int health = 100;
 };
 
