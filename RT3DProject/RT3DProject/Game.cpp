@@ -18,13 +18,13 @@ void Game::init()
 		npcControllers[i].setTarget(scene->getPlayer());
 	}
 
-	victory = new Rendering::UI("VICTORY!", 48);
-	failure = new Rendering::UI("YOU DIED.", 48);
+	victory = new Rendering::UI("VICTORY!", 48, glm::vec4(255, 215, 0, 255));
+	failure = new Rendering::UI("YOU DIED.", 48, glm::vec4(255, 0, 0, 255));
 
-	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), 24);
-	healthLabel = new Rendering::UI("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()), 24);
-	ammoLabel =	new Rendering::UI("AMMO: 100", 24);
-	timeLabel = new Rendering::UI("02:00", 24);
+	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), 24, glm::vec4(255, 132, 0, 204));
+	healthLabel = new Rendering::UI("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()), 24, glm::vec4(255, 132, 0, 204));
+	ammoLabel =	new Rendering::UI("AMMO: 100", 24, glm::vec4(255, 132, 0, 204));
+	timeLabel = new Rendering::UI("02:00", 24, glm::vec4(255, 132, 0, 204));
 	crosshair = new Rendering::UI("res/textures/Crosshair.png");
 	HUD = new Rendering::UI("res/textures/Interface.png");
 

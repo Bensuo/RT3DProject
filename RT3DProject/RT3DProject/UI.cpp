@@ -22,7 +22,7 @@ namespace Rendering
 		genTexture();
 	}
 
-	UI::UI(const std::string& string, int textSize) : shader("res/shaders/UI.vert", "res/shaders/UI.frag")
+	UI::UI(const std::string& string, int textSize, const glm::vec4& color) : shader("res/shaders/UI.vert", "res/shaders/UI.frag"), color(color)
 	{
 		int imgFlags = IMG_INIT_PNG;
 		if (!(IMG_Init(imgFlags) & imgFlags))//lazyfoo
@@ -42,7 +42,7 @@ namespace Rendering
 		auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", textSize);
 		if (textFont == nullptr)
 			std::cout << "Failed to open font." << std::endl;
-		SDL_Color sdl_Color = { 255, 255, 255, 255 };
+		SDL_Color sdl_Color = { color.b, color.g, color.r, color.a };
 		texture = TTF_RenderText_Blended(textFont, string.c_str(), sdl_Color);
 		genTexture();
 	}
@@ -68,7 +68,7 @@ namespace Rendering
 		auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", 24);
 		if (textFont == nullptr)
 			std::cout << "Failed to open font." << std::endl;
-		SDL_Color sdl_Color = { 255, 255, 255, 255 };
+		SDL_Color sdl_Color = { color.b, color.g, color.r, color.a };
 		texture = TTF_RenderText_Blended(textFont, string.c_str(), sdl_Color);
 		genTexture();
 	}

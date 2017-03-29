@@ -12,7 +12,7 @@ namespace Rendering
 	{
 	public:
 		UI(const std::string& path);
-		UI(const std::string& string, int size);
+		UI(const std::string& string, int size, const glm::vec4& color = glm::vec4(1.0f));
 		virtual ~UI();
 		int getWidth() const;
 		int getHeight() const;
@@ -42,6 +42,7 @@ namespace Rendering
 			{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
 			1.0f  // shininess
 		};
+		glm::vec4 color;
 		void genTexture();
 		void clean(GLuint textID) const;
 		Transform transform{ glm::vec3(0), glm::vec3(0) };
