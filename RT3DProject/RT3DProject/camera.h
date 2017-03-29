@@ -40,6 +40,7 @@ public:
 	void SnapDistance(const float& distance);
 	bool isFPS() const;
 	void SnapToMaxDistance();
+	glm::vec3 getPosition() const { return position; }
 private:
 	void updateCameraVectors(const glm::vec3& targetPos);
 };

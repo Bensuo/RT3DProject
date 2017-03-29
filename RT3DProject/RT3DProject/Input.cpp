@@ -30,6 +30,10 @@ void Input::Update(Player* player, Camera& camera)
 			{
 				camera.SnapToMaxDistance();
 			}
+			if (event.button.button == SDL_BUTTON_LEFT && (player->Aiming() || camera.isFPS()))
+			{
+				player->shoot();
+			}
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if (event.button.button == SDL_BUTTON_RIGHT)

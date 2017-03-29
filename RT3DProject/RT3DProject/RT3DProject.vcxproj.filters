@@ -213,6 +213,9 @@
     <ClInclude Include="AIController.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="Pickup.h" />
+    <ClInclude Include="Ray.h">
+      <Filter>Utilities</Filter>
+      </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>Game</Filter>
     </ClInclude>
