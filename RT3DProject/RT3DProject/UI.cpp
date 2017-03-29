@@ -29,6 +29,7 @@ namespace Rendering
 				std::cout << "Failed to open font." << std::endl;
 			SDL_Color sdl_Color = { 255, 255, 255, 255 };
 			texture = TTF_RenderText_Blended(textFont, object.c_str(), sdl_Color);
+			genTexture();
 		}
 		else
 		{
@@ -36,6 +37,7 @@ namespace Rendering
 			size = indices.size();
 			mesh = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 			texture = IMG_Load(object.c_str());
+			genTexture();
 		}
 	}
 
@@ -47,21 +49,19 @@ namespace Rendering
 	}
 
 	GLuint & UI::getTexture() {
-		return label = genTexture();
+		return label;
 	}
 
-	GLuint UI::genTexture() const
+	void UI::genTexture()
 	{
-		GLuint itexture = 0;
-		glGenTextures(1, &itexture);
-		glBindTexture(GL_TEXTURE_2D, itexture);
+		glGenTextures(1, &label);
+		glBindTexture(GL_TEXTURE_2D, label);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->w, texture->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->pixels);
 		glBindTexture(GL_TEXTURE_2D, NULL);
-		return itexture;
 	}
 
 	void UI::clean(GLuint textID) const

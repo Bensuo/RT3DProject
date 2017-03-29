@@ -39,7 +39,7 @@ namespace Rendering
 			{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
 			1.0f  // shininess
 		};
-		GLuint genTexture() const;
+		void genTexture();
 		void clean(GLuint textID) const;
 		Transform transform{ glm::vec3(0), glm::vec3(0) };
 		std::string objPath = "res/obj/cube.obj";

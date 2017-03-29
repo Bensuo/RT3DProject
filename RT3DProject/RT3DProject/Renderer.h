@@ -68,7 +68,7 @@ private:
 
 	rt3d::lightStruct light1 = {
 		{ 0.0f, 0.0f, 0.0f, 0.0f }, // ambient
-		{ 1.0f, 0.0f, 0.0f, 1.0f }, // diffuse
+		{ 0.0f, 0.0f, 0.0f, 0.0f }, // diffuse
 		{ 0.0f, 0.0f, 0.0f, 0.0f }, // specular
 		{ 20.0f, 20.0f, 0.0f, 0.0f }  // position
 	};
