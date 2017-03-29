@@ -37,6 +37,7 @@ class Game
 	std::vector<IRenderable*> fpRenderList;
 	Rendering::UI* healthLabel;
 	Rendering::UI* ammoLabel;
+	Rendering::UI* HUD;
 	Rendering::UI* crosshair;
 	Rendering::Box testBox1;
 	Rendering::Box testBox2;
@@ -52,6 +53,7 @@ public:
 	void init(void);
 	void DrawMinimap();
 	void DrawScene();
+	void DrawHud();
 	void draw();
 	bool Quit() const;
 	void update();

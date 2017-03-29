@@ -21,6 +21,7 @@ void Game::init()
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
 	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
+	HUD = new Rendering::UI("res/textures/Interface.png", false);
 
 	AudioManager::Init();
 	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
@@ -65,8 +66,10 @@ void Game::DrawMinimap()
 
 	renderer.drawTerrain(scene->getTerrain());
 	renderer.setShader("Phong");
+
 	renderer.render(renderList);
 	renderList.clear();
+
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -97,7 +100,6 @@ void Game::DrawScene()
 		renderList.push_back(&pickups[i]->getPlayerModel());
 	}
 
-
 	renderer.begin();
 	renderer.setView(camera.GetViewMatrix());
 	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f));
@@ -109,18 +111,25 @@ void Game::DrawScene()
 
 	renderer.render(renderList);
 
-	if (camera.isFPS()) {
+	if (camera.isFPS()) 
+	{
 		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
 
+	renderList.clear();
+}
+
+void Game::DrawHud()
+{
+	glViewport(0, 0, 1280, 720);
 	renderer.setShader("UI");
-	renderer.renderUI(healthLabel, glm::vec3(-0.866f, -0.8f, 0.0f), glm::vec3(0.1f, 0.025f, 1.0f));
-	renderer.renderUI(ammoLabel, glm::vec3(-0.866f, -0.9f, 0.0f), glm::vec3(0.1f, 0.025f, 1.0f));
+	renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f), glm::vec3(150, 25, 1.0f));
+	renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.8f, 0.0f), glm::vec3(150, 25, 1.0f));
 
 	if (scene->getPlayer()->Aiming())
-		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));
+		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1.0f));
 
-	renderList.clear();
+	renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1.0f));
 }
 
 void Game::draw()
@@ -128,6 +137,8 @@ void Game::draw()
 	DrawScene();
 
 	DrawMinimap();
+
+	DrawHud();
 
 	renderer.swapBuffers();
 	auto test = 0;

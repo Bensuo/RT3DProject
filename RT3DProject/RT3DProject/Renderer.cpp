@@ -85,7 +85,7 @@ void Renderer::quit() const
 //Clears buffers to begin rendering
 void Renderer::begin() const
 {
-	//glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -238,15 +238,14 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	mvStack.pop();
 }
 
-void Renderer::renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size) 
+void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3 size) 
 {
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
 
-	auto ratio = SCREEN_WIDTH / static_cast<float>(SCREEN_HEIGHT);
-	auto newSize = glm::vec3(size.x, size.y * ratio, 1);
+	auto newSize = glm::vec3(size.x / SCREEN_WIDTH, size.y / SCREEN_HEIGHT, 1);
 
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
 
