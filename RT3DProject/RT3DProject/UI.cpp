@@ -24,7 +24,7 @@ namespace Rendering
 			if (TTF_Init() == -1)
 				std::cout << "TTF failed to initialise." << std::endl;
 
-			auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", 48);
+			auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", 24);
 			if (textFont == nullptr)
 				std::cout << "Failed to open font." << std::endl;
 			SDL_Color sdl_Color = { 255, 255, 255, 255 };
@@ -42,6 +42,30 @@ namespace Rendering
 	}
 
 	UI::~UI(){}
+
+	int UI::getWidth() const
+	{
+		return texture->w;
+	}
+
+	int UI::getHeight() const
+	{
+		return texture->h;
+	}
+
+	void UI::setString(const std::string& string)
+	{
+		if(string == uiString)
+			return;
+
+		this->uiString = string;
+		auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", 24);
+		if (textFont == nullptr)
+			std::cout << "Failed to open font." << std::endl;
+		SDL_Color sdl_Color = { 255, 255, 255, 255 };
+		texture = TTF_RenderText_Blended(textFont, string.c_str(), sdl_Color);
+		genTexture();
+	}
 
 	Shader& UI::getShader()
 	{

@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "AABB.h"
 #include "Input.h"
-#include "Timer.h"
+#include "GameTime.h"
 #include "Terrain.h"
 #include "AudioManager.h"
 #include "Scene.h"
@@ -18,6 +18,58 @@
 
 #define DEG_TO_RADIAN 0.017453293
 
+class Timer
+{
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	std::chrono::duration<double> elapsed;
+	int duration;
+
+public:
+
+	explicit Timer(int duration) : duration(duration) {}
+
+	void startTimer()
+	{
+		start = std::chrono::system_clock::now();
+	}
+
+	void update()
+	{
+		if(elapsed.count() < duration) 
+		{
+			end = std::chrono::system_clock::now();
+			elapsed = end - start;
+		}
+	}
+
+	bool finished() const
+	{
+		return elapsed.count() >= duration;
+	}
+
+	std::string toString() const
+	{
+		std::string result;
+
+		int minutes = (duration - elapsed.count()) / 60.0f;
+		int seconds = (duration - elapsed.count()) - 60 * minutes;
+
+		if (minutes < 10) {
+			result += "0" + std::to_string(minutes) + ":";
+		} else {
+			result += std::to_string(minutes) + ":";
+		}
+
+		if (seconds < 10) {
+			result += "0" + std::to_string(seconds);
+		} else {
+			result += std::to_string(seconds);
+		}
+
+		return result;
+	}
+};
+
 class Game
 {
 	Utilities::ResourceManager content;
@@ -25,8 +77,9 @@ class Game
 	static AudioManager audioManager;
 	Camera camera;
 	Input input;
-	Timer timer;
+	GameTime gameTime;
 	Scene* scene;
+	Timer countdown;
 
 	const unsigned SCREEN_HEIGHT = 720;
 	const unsigned SCREEN_WIDTH = 1280;
@@ -37,6 +90,7 @@ class Game
 	std::vector<IRenderable*> fpRenderList;
 	Rendering::UI* healthLabel;
 	Rendering::UI* ammoLabel;
+	Rendering::UI* timeLabel;
 	Rendering::UI* HUD;
 	Rendering::UI* crosshair;
 	Rendering::Box testBox1;

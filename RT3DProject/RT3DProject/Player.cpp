@@ -207,7 +207,6 @@ void Player::Jump()
 		velocity.y = 4.0f;
 		AudioManager::PlaySound("res/audio/sfx/PlayerJump1.wav");
 	}
-
 }
 
 void Player::Land()
