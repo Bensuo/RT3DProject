@@ -44,7 +44,7 @@ void Game::DrawMinimap()
 	view = translate(view, glm::vec3(-scene->getPlayer()->getPosition().x, 0, -scene->getPlayer()->getPosition().z));
 
 	renderer.setView(view);
-	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, -2000.0f, 2000.0f));
+	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, 0.1f, 5000.0f));
 
 	glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
 	glDisable(GL_DEPTH_TEST);
@@ -102,7 +102,7 @@ void Game::DrawScene()
 
 	renderer.begin();
 	renderer.setView(camera.GetViewMatrix());
-	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f));
+	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 5000.0f));
 
 	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
