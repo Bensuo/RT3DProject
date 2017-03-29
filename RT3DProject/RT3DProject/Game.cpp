@@ -1,7 +1,7 @@
 #include "Game.h"
 #include <iostream>
 #include "Collisions.h"
-
+#include "Ray.h"
 
 void Game::init()
 {
@@ -160,8 +160,16 @@ void Game::update()
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
-		npcs[i]->update(timer.GetDeltaTime());
-		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
+		if (npcs[i]->getIsDead())
+		{
+			npcs.erase(npcs.begin() + i);
+			i--;
+		}
+		else
+		{
+			npcs[i]->update(timer.GetDeltaTime());
+			npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
+		}
 	}
 
 	scene->getPlayer()->update(timer.GetDeltaTime());
@@ -245,6 +253,19 @@ void Game::checkCollisions() const
 		}
 	}
 
+	//Construct a ray
+	Collisions::Ray ray;
+	glm::vec4 screenPos = glm::vec4(0, 0, 1.0f, 1.0f);
+	glm::mat4 proj = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f);
+	glm::mat4 view = lookAt(glm::vec3(camera.getPosition()),
+		glm::vec3(0.0, 0.0, 0.0),
+		glm::vec3(0.0, 1.0, 0.0));
+	glm::mat4 invVP = glm::inverse(proj * view);
+	glm::vec4 worldPos = invVP * screenPos;
+	//origin = glm::normalize(origin);
+	ray.origin = scene->getPlayer()->getPosition() + glm::vec3(0, 24, 0);
+	ray.dir = glm::normalize(glm::vec3(worldPos));
+
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		playerCollision(scene->getPlayer(), npcs[i].get());
@@ -260,8 +281,40 @@ void Game::checkCollisions() const
 				auto pos = npcs[i]->getPosition();
 				npcs[i]->setPosition(pos -= info.mtv);
 			}
+			
 		}
 		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 200, scene->getTerrain()->getScale().z / 2 - 1));
-		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());
+		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());		
 	}
+	if (scene->getPlayer()->getCanShoot() && (camera.isFPS() || scene->getPlayer()->Aiming()))
+	{
+		Player* npc = nullptr;
+		for (int i = 0; i < npcs.size(); i++)
+		{
+			if (Collisions::TestRayAABB(ray, npcs[i].get()->getAABB()))
+			{
+				if (npc == nullptr)
+				{
+					npc = npcs[i].get();
+				}
+				else
+				{
+					float d1 = glm::length(ray.origin - npc->getPosition());
+					float d2 = glm::length(ray.origin - npcs[i]->getPosition());
+					if (d2 < d1)
+					{
+						npc = npcs[i].get();
+					}
+				}
+			}
+		}
+		if (npc != nullptr)
+		{
+			npc->takeDamage(100);
+		}
+		
+		scene->getPlayer()->hasShot();
+		
+	}
+	
 }

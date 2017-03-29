@@ -215,7 +215,10 @@
     </ClInclude>
     <ClInclude Include="AIController.h" />
     <ClInclude Include="StaticObject.h" />
-
+    <ClInclude Include="Pickup.h" />
+    <ClInclude Include="Ray.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">

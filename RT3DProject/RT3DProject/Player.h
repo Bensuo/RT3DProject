@@ -68,6 +68,11 @@ public:
 	void Aim();
 	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
 	void StopAim();
+	void shoot();
+	bool getCanShoot() { return canShoot; }
+	void hasShot() { canShoot = false; }
+	void takeDamage(int amount) { health -= amount; if (health <= 0) isDead = true; }
+	bool getIsDead() { return isDead; }
 	bool Aiming() const;
 private:
 	Rendering::PlayerModel model;
@@ -96,6 +101,10 @@ private:
 	bool fps = false;
 	bool sprint = false;
 	bool aiming = false;
+	bool canShoot = false;
+	bool isDead = false;
+	float shootTimer = 0.0f;
 	int stepCount = 40;
+	int health;
 };
 

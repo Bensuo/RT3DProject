@@ -2,6 +2,8 @@
 #include "AABB.h"
 #include "Terrain.h"
 #include "Player.h"
+#include "Ray.h"
+#include <algorithm>
 namespace Collisions
 {
 	
@@ -75,7 +77,37 @@ namespace Collisions
 		info.mtv = getMTV(A, B);
 		return info;
 	}
+	bool TestRayAABB(const Ray& ray, const AABB& aabb)
+	{
+		glm::vec3 AABBmin(aabb.c.x - aabb.r.x, aabb.c.y - aabb.r.y, aabb.c.z - aabb.r.z);
+		glm::vec3 AABBmax(aabb.c.x + aabb.r.x, aabb.c.y + aabb.r.y, aabb.c.z + aabb.r.z);
+		float t1 = (AABBmin.x - ray.origin.x) / ray.dir.x;
+		float t2 = (AABBmax.x - ray.origin.x) / ray.dir.x;
+		float t3 = (AABBmin.y - ray.origin.y) / ray.dir.y;
+		float t4 = (AABBmax.y - ray.origin.y) / ray.dir.y;
+		float t5 = (AABBmin.z - ray.origin.z) / ray.dir.z;
+		float t6 = (AABBmax.z - ray.origin.z) / ray.dir.z;
 
+		float tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
+		float tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
+
+		// if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behing us
+		if (tmax < 0)
+		{
+			
+			return false;
+		}
+
+		// if tmin > tmax, ray doesn't intersect AABB
+		if (tmin > tmax)
+		{
+			
+			return false;
+		}
+
+		
+		return true;
+	}
 	void terrainCollision(Player * p, Terrain * terrain)
 	{
 		float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);

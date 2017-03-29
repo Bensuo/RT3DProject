@@ -27,7 +27,7 @@ void Player::update(float dt)
 
 	model.setAnimation(playerState);
 	weapon.setAnimation(playerState);
-
+	vpWeapon.setAnimation(weaponState);
 	model.update(dt);
 	model.setTransform(transform);
 
@@ -51,6 +51,8 @@ void Player::update(float dt)
 		playerState = STAND;
 		sprint = false;
 	}
+	shootTimer -= dt;
+	weaponState = IDLE2;
 }
 
 void Player::setFPS(bool fps)
@@ -241,6 +243,17 @@ void Player::StopAim()
 {
 	if(!fps)
 		aiming = false;
+}
+
+void Player::shoot()
+{
+	if (shootTimer < 0 && canShoot == false)
+	{
+		shootTimer = 0.2f;
+		canShoot = true;
+		AudioManager::PlaySound("res/audio/sfx/gunshot.wav");
+		weaponState = POW;
+	}
 }
 
 bool Player::Aiming() const
