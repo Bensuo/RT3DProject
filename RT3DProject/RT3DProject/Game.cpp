@@ -19,9 +19,9 @@ void Game::init()
 	}
 
 	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), true);
-	healthLabel = new Rendering::UI("HEALTH: 100", true);
-	ammoLabel =	  new Rendering::UI("AMMO: 100", true);
-	timeLabel =   new Rendering::UI("02:00", true);
+	healthLabel = new Rendering::UI("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()), true);
+	ammoLabel =	new Rendering::UI("AMMO: 100", true);
+	timeLabel = new Rendering::UI("02:00", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
 	HUD = new Rendering::UI("res/textures/Interface.png", false);
 
@@ -160,6 +160,7 @@ void Game::update()
 	countdown.update();
 	timeLabel->setString(countdown.toString());
 	scoreLabel->setString("SCORE: " + std::to_string(score));
+	healthLabel->setString("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()));
 	if(countdown.finished())
 	{
 		running = false;

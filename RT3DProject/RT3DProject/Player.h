@@ -71,7 +71,12 @@ public:
 	void shoot();
 	bool getCanShoot() const { return canShoot; }
 	void hasShot() { canShoot = false; }
-	void takeDamage(int amount) { health -= amount; if (health <= 0) isDead = true; }
+	void takeDamage(int amount)
+	{
+		health -= amount; 
+		if (health <= 0) isDead = true;
+	}
+	const int& getHealth() const { return health; }
 	bool getIsDead() const { return isDead; }
 	bool Aiming() const;
 private:
@@ -105,6 +110,6 @@ private:
 	bool isDead = false;
 	float shootTimer = 0.0f;
 	int stepCount = 40;
-	int health;
+	int health = 100;
 };
 
