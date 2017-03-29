@@ -17,7 +17,8 @@ void Game::init()
 		npcControllers[i].setActor(npcs[i]);
 		npcControllers[i].setTarget(scene->getPlayer());
 	}
-	
+
+	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), true);
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
 	ammoLabel =	  new Rendering::UI("AMMO: 100", true);
 	timeLabel =   new Rendering::UI("02:00", true);
@@ -124,6 +125,7 @@ void Game::DrawHud()
 {
 	glViewport(0, 0, 1280, 720);
 	renderer.setShader("UI");
+	renderer.renderUI(scoreLabel, glm::vec3(0.8575f, 0.45f, 0.0f));
 	renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f));
 	renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.84f, 0.0f));
 	renderer.renderUI(timeLabel, glm::vec3(-0.825f, -0.76f, 0.0f));
@@ -157,9 +159,10 @@ void Game::update()
 
 	countdown.update();
 	timeLabel->setString(countdown.toString());
+	scoreLabel->setString("SCORE: " + std::to_string(score));
 	if(countdown.finished())
 	{
-		//END GAME
+		running = false;
 	}
 
 	scene->getPlayer()->UpdateVectors(camera.GetFront());
@@ -240,7 +243,7 @@ bool playerCollision(Player* p1, Pickup* p2)
 	return false;
 }
 
-void Game::checkCollisions() const
+void Game::checkCollisions()
 {
 	auto& npcs = scene->getNPCs();
 	auto& staticObjects = scene->getStaticObjects();
@@ -262,6 +265,7 @@ void Game::checkCollisions() const
 
 		if (playerCollision(scene->getPlayer(), pickups[i]))
 		{
+			score += 1000;
 			audioManager.PlaySound("res/audio/sfx/GunPickup.wav");
 			scene->removePickup(i);
 		}

@@ -72,6 +72,8 @@ public:
 
 class Game
 {
+	int score = 0;
+
 	Utilities::ResourceManager content;
 	Renderer renderer;
 	static AudioManager audioManager;
@@ -88,6 +90,7 @@ class Game
 
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
+	Rendering::UI* scoreLabel;
 	Rendering::UI* healthLabel;
 	Rendering::UI* ammoLabel;
 	Rendering::UI* timeLabel;
@@ -101,7 +104,7 @@ class Game
 		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
 		0.2f  // shininess
 	};
-	void checkCollisions() const;
+	void checkCollisions();
 	std::vector<AIController> npcControllers;
 public:
 	void init(void);
@@ -113,4 +116,3 @@ public:
 	void update();
 	Game();
 };
-
