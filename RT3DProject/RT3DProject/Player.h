@@ -118,5 +118,8 @@ private:
 	int stepCount = 40;
 	int health = 100;
 	int ammo = 20;
+
+	int vWepFinalFrame = 5;
+	int wepFinalFrame = 53;
 };
 

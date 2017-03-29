@@ -41,18 +41,38 @@ void Player::update(float dt)
 		if (stepCount == 40)
 		{
 			stepCount = 0;
-			AudioManager::PlaySound("res/audio/sfx/PlayerRun.wav", 0.4f);
+			AudioManager::PlaySound("res/audio/sfx/PlayerMove1.wav", 0.4f);
 		}
 		stepCount++;
-		
 	}
-	if (playerState != JUMP)
+
+	if (playerState != JUMP && playerState != ATTACK)
 	{
-		playerState = STAND;
 		sprint = false;
+		playerState = STAND;
+	} 
+	else if (playerState == ATTACK)
+	{
+		if(model.getCurrentFrame() == wepFinalFrame)
+		{
+			sprint = false;
+			playerState = STAND;
+		}
 	}
+
+	if (weaponState != POW)
+	{
+		weaponState = IDLE2;
+	}
+	else
+	{
+		if (vpWeapon.getCurrentFrame() == vWepFinalFrame)
+		{
+			weaponState = IDLE2;
+		}
+	}
+
 	shootTimer -= dt;
-	weaponState = IDLE2;
 }
 
 void Player::setFPS(bool fps)
@@ -250,7 +270,7 @@ void Player::shoot()
 	{
 		shootTimer = 0.2f;
 		canShoot = true;
-		AudioManager::PlaySound("res/audio/sfx/gunshot.wav");
+		AudioManager::PlaySound("res/audio/sfx/magnum.wav", 0.5f);
 		weaponState = POW;
 		playerState = ATTACK;
 		ammo--;
