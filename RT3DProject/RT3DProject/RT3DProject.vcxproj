@@ -176,7 +176,7 @@
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="ViewportWeapon.cpp" />
   </ItemGroup>
@@ -219,7 +219,7 @@
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="Terrain.h" />
-    <ClInclude Include="Timer.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="ViewportWeapon.h" />

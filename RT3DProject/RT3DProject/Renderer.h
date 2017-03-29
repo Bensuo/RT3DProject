@@ -39,6 +39,7 @@ public:
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);
 	void renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size);
+	void renderUI(Rendering::UI * renderable, glm::vec3 position);
 private:
 	void init();
 	std::stack<glm::mat4> mvStack;

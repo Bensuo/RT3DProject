@@ -1,8 +1,8 @@
 #include <thread>
 #include <iostream>
-#include "Timer.h"
+#include "GameTime.h"
 
-Timer::Timer()
+GameTime::GameTime()
 {
 	startTime = std::chrono::high_resolution_clock::now();
 
@@ -13,7 +13,7 @@ Timer::Timer()
 	unprocessedTime = std::chrono::duration<float>(0);
 }
 
-double Timer::GetTime() const
+double GameTime::GetTime() const
 {
 	//find current time in miliseconds, return this data in terms of seconds
 	auto current_time = std::chrono::high_resolution_clock::now();
@@ -21,27 +21,27 @@ double Timer::GetTime() const
 	return value / 1000.0;
 }
 
-std::chrono::steady_clock::time_point Timer::GetTimePoint()
+std::chrono::steady_clock::time_point GameTime::GetTimePoint()
 {
 	return std::chrono::steady_clock::now();
 }
 
-const double& Timer::GetDeltaTime() const
+const double& GameTime::GetDeltaTime() const
 {
 	return deltaTime.count();
 }
 
-void Timer::SetFrameCap(const unsigned& frameCap)
+void GameTime::SetFrameCap(const unsigned& frameCap)
 {
 	this->frameCap = frameCap;
 }
 
-void Timer::Initialize()
+void GameTime::Initialize()
 {
 	lastTime = GetTimePoint();
 }
 
-void Timer::Reset()
+void GameTime::Reset()
 {
 	frameComplete = false;
 
@@ -63,28 +63,28 @@ void Timer::Reset()
 #endif
 }
 
-bool Timer::ProcessFrame() const
+bool GameTime::ProcessFrame() const
 {
 	return unprocessedTime > deltaTime;
 }
 
-bool Timer::FrameComplete() const
+bool GameTime::FrameComplete() const
 {
 	return frameComplete;
 }
 
-void Timer::Update()
+void GameTime::Update()
 {
 	frameComplete = true;
 	unprocessedTime -= deltaTime;
 }
 
-void Timer::IncrementFrames()
+void GameTime::IncrementFrames()
 {
 	frames++;
 }
 
-void Timer::Sleep()
+void GameTime::Sleep()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }

@@ -254,26 +254,24 @@ void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3
 
 	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	mvStack.pop();
-	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
+	glEnable(GL_DEPTH_TEST);
+}
 
-	//glDisable(GL_DEPTH_TEST);
-	//
-	//glm::mat4 projection(1.0);
+void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position)
+{
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
+	mvStack.push(glm::mat4(1.0));
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
 
-	//mvStack.push(glm::mat4(1.0));
-	//mvStack.top() = glm::translate(mvStack.top(), position);
+	auto newSize = glm::vec3(renderable->getWidth() / static_cast<float>(SCREEN_WIDTH), renderable->getHeight() / static_cast<float>(SCREEN_HEIGHT), 1);
 
-	//auto ratio = SCREEN_WIDTH / static_cast<float>(SCREEN_HEIGHT);
-	//auto newSize = glm::vec3(size.x, size.y * ratio, 1);
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
 
-	//mvStack.top() = scale(mvStack.top(), glm::vec3(newSize));
-	//currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
 
-	//glCullFace(GL_FRONT);
-	//	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
-	//	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
-	//	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
-	//glCullFace(GL_BACK);
-	//
-	//glEnable(GL_DEPTH_TEST);
+	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
+	mvStack.pop();
+	glEnable(GL_DEPTH_TEST);
 }

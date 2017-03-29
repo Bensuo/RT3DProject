@@ -13,6 +13,9 @@ namespace Rendering
 	public:
 		UI(const std::string& object, bool isText);
 		virtual ~UI();
+		int getWidth() const;
+		int getHeight() const;
+		void setString(const std::string& string);
 		Shader& getShader();
 		GLuint& getMesh() override;
 		GLuint& getTexture() override;

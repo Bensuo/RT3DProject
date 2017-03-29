@@ -19,16 +19,17 @@ void Game::init()
 	}
 	
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
-	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
+	ammoLabel =	  new Rendering::UI("AMMO: 100", true);
+	timeLabel =   new Rendering::UI("02:00", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
 	HUD = new Rendering::UI("res/textures/Interface.png", false);
 
 	AudioManager::Init();
 	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
 
-	timer.Initialize();	//always init last for accurate game loop startup
+	gameTime.Initialize();	//always init last for accurate game loop startup
+	countdown.startTimer();
 }
-
 
 void Game::DrawMinimap()
 {
@@ -123,13 +124,14 @@ void Game::DrawHud()
 {
 	glViewport(0, 0, 1280, 720);
 	renderer.setShader("UI");
-	renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f), glm::vec3(150, 25, 1.0f));
-	renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.8f, 0.0f), glm::vec3(150, 25, 1.0f));
+	renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f));
+	renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.84f, 0.0f));
+	renderer.renderUI(timeLabel, glm::vec3(-0.825f, -0.76f, 0.0f));
 
 	if (scene->getPlayer()->Aiming())
-		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1.0f));
+		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1));
 
-	renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1.0f));
+	renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1));
 }
 
 void Game::draw()
@@ -153,6 +155,13 @@ void Game::update()
 {
 	running = !Quit();
 
+	countdown.update();
+	timeLabel->setString(countdown.toString());
+	if(countdown.finished())
+	{
+		//END GAME
+	}
+
 	scene->getPlayer()->UpdateVectors(camera.GetFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
 
@@ -167,45 +176,45 @@ void Game::update()
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
 	{
-		pickups[i]->update(timer.GetDeltaTime());
+		pickups[i]->update(gameTime.GetDeltaTime());
 	}
 
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
-		npcs[i]->update(timer.GetDeltaTime());
+		npcs[i]->update(gameTime.GetDeltaTime());
 		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 	}
 
-	scene->getPlayer()->update(timer.GetDeltaTime());
+	scene->getPlayer()->update(gameTime.GetDeltaTime());
 	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
-	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
+	camera.Update(gameTime.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
 }
 
-Game::Game()
+Game::Game() : countdown(2 * 60)
 {
 	init();
 	while (running)
 	{
-		timer.Reset();
+		gameTime.Reset();
 
 		//process individual frame's worth of updates
-		while (timer.ProcessFrame())
+		while (gameTime.ProcessFrame())
 		{
-			timer.Update();
+			gameTime.Update();
 			update();
 		}
 
 		//render processed frame
-		if (timer.FrameComplete())
+		if (gameTime.FrameComplete())
 		{
-			timer.IncrementFrames();
+			gameTime.IncrementFrames();
 			draw();
 		}
 		else
 		{
-			timer.Sleep();
+			gameTime.Sleep();
 		}
 	}
 	renderer.quit();
