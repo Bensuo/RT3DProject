@@ -343,7 +343,7 @@ void Game::checkCollisions()
 		}
 		if (npc != nullptr)
 		{
-			npc->takeDamage(100);
+			npc->takeDamage(50);
 			if(npc->getIsDead())
 			{
 				score += 5000;
