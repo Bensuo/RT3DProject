@@ -284,7 +284,7 @@ void Game::checkCollisions()
 	//Construct a ray
 	Collisions::Ray ray;
 	glm::vec4 screenPos = glm::vec4(0, 0, 1.0f, 1.0f);
-	glm::mat4 proj = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f);
+	glm::mat4 proj = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 5000.0f);
 	glm::mat4 view = lookAt(glm::vec3(camera.getPosition()),
 		glm::vec3(0.0, 0.0, 0.0),
 		glm::vec3(0.0, 1.0, 0.0));
@@ -339,6 +339,10 @@ void Game::checkCollisions()
 		if (npc != nullptr)
 		{
 			npc->takeDamage(100);
+			if(npc->getIsDead())
+			{
+				score += 5000;
+			}
 		}
 		
 		scene->getPlayer()->hasShot();

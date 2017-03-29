@@ -69,10 +69,10 @@ public:
 	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
 	void StopAim();
 	void shoot();
-	bool getCanShoot() { return canShoot; }
+	bool getCanShoot() const { return canShoot; }
 	void hasShot() { canShoot = false; }
 	void takeDamage(int amount) { health -= amount; if (health <= 0) isDead = true; }
-	bool getIsDead() { return isDead; }
+	bool getIsDead() const { return isDead; }
 	bool Aiming() const;
 private:
 	Rendering::PlayerModel model;
