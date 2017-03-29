@@ -23,7 +23,7 @@ void Game::init()
 
 	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), 24, glm::vec4(255, 132, 0, 204));
 	healthLabel = new Rendering::UI("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()), 24, glm::vec4(255, 132, 0, 204));
-	ammoLabel =	new Rendering::UI("AMMO: 100", 24, glm::vec4(255, 132, 0, 204));
+	ammoLabel =	new Rendering::UI("AMMO: " + std::to_string(scene->getPlayer()->getAmmo()), 24, glm::vec4(255, 132, 0, 204));
 	timeLabel = new Rendering::UI("02:00", 24, glm::vec4(255, 132, 0, 204));
 	crosshair = new Rendering::UI("res/textures/Crosshair.png");
 	HUD = new Rendering::UI("res/textures/Interface.png");
@@ -180,6 +180,7 @@ void Game::update()
 	timeLabel->setString(countdown.toString());
 	scoreLabel->setString("SCORE: " + std::to_string(score));
 	healthLabel->setString("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()));
+	ammoLabel->setString("AMMO: " + std::to_string(scene->getPlayer()->getAmmo()));
 
 	scene->getPlayer()->UpdateVectors(camera.GetFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
@@ -294,7 +295,7 @@ void Game::checkCollisions()
 
 		if (playerCollision(scene->getPlayer(), pickups[i]))
 		{
-			score += 1000;
+			scene->getPlayer()->giveAmmo(20);
 			audioManager.PlaySound("res/audio/sfx/GunPickup.wav");
 			scene->removePickup(i);
 		}

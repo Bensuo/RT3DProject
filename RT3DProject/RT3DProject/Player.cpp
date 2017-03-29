@@ -246,13 +246,14 @@ void Player::StopAim()
 
 void Player::shoot()
 {
-	if (shootTimer < 0 && canShoot == false)
+	if (shootTimer < 0 && canShoot == false && ammo > 0)
 	{
 		shootTimer = 0.2f;
 		canShoot = true;
 		AudioManager::PlaySound("res/audio/sfx/gunshot.wav");
 		weaponState = POW;
 		playerState = ATTACK;
+		ammo--;
 	}
 }
 

@@ -70,6 +70,10 @@ public:
 	void StopAim();
 	void shoot();
 	bool getCanShoot() const { return canShoot; }
+	void giveAmmo(const int& ammo)
+	{
+		this->ammo += ammo;
+	}
 	void hasShot() { canShoot = false; }
 	void takeDamage(int amount)
 	{
@@ -78,6 +82,7 @@ public:
 		if (health <= 0) isDead = true;
 	}
 	const int& getHealth() const { return health; }
+	const int& getAmmo() const { return ammo; }
 	bool getIsDead() const { return isDead; }
 	bool Aiming() const;
 private:
@@ -112,5 +117,6 @@ private:
 	float shootTimer = 0.0f;
 	int stepCount = 40;
 	int health = 100;
+	int ammo = 20;
 };
 
