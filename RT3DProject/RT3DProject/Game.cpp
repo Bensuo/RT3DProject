@@ -193,7 +193,7 @@ void Game::update()
 		}
 		else
 		{
-			npcs[i]->update(timer.GetDeltaTime());
+			npcs[i]->update(gameTime.GetDeltaTime());
 			npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 		}
 
