@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "UI.h"
 
 Renderer::Renderer()
 {
@@ -57,10 +58,11 @@ void Renderer::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Set up shaders
-	shaders.insert(std::make_pair("Phong", Rendering::Shader("phong-tex.vert", "phong-tex.frag")));
+	shaders.insert(std::make_pair("Phong", Rendering::Shader("res/shaders/phong-tex.vert", "res/shaders/phong-tex.frag")));
 	shaders["Phong"].addLight(light0, 0);
 	shaders["Phong"].addLight(light1, 1);
 
+	shaders.insert(std::make_pair("UI", Rendering::Shader("res/shaders/textured.vert", "res/shaders/textured.frag")));
 }
 
 //Set the shader to be used for rendering
@@ -69,7 +71,7 @@ void Renderer::setShader(std::string name)
 	if (shaders.find(name) != shaders.end())
 	{
 		currentShader = &shaders[name];
-		//currentShader->use();
+		currentShader->use();
 	}
 }
 
@@ -236,18 +238,40 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	mvStack.pop();
 }
 
-void Renderer::renderUI(IRenderable * renderable, glm::vec3 position, glm::vec3 size) {
+void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3 size) 
+{
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
-	glm::mat4 projection(1.0);
+	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), position);//position
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
 
-	auto ratio = SCREEN_WIDTH / (float)SCREEN_HEIGHT;
-	auto newSize = glm::vec3(size.x, size.y * ratio, 1);
+	auto newSize = glm::vec3(size.x / SCREEN_WIDTH, size.y / SCREEN_HEIGHT, 1);
 
-	mvStack.top() = glm::scale(mvStack.top(), newSize);//size
-	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
-	draw(renderable);
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
+
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
+
+	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	mvStack.pop();
-	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position)
+{
+	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
+	mvStack.push(glm::mat4(1.0));
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
+
+	auto newSize = glm::vec3(renderable->getWidth() / static_cast<float>(SCREEN_WIDTH), renderable->getHeight() / static_cast<float>(SCREEN_HEIGHT), 1);
+
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
+
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
+
+	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
+	mvStack.pop();
+	glEnable(GL_DEPTH_TEST);
 }

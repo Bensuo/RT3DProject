@@ -116,7 +116,7 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	shader = Rendering::Shader("phong-tex.vert", "phong-tex.frag");
+	shader = Rendering::Shader("res/shaders/phong-tex.vert", "res/shaders/phong-tex.frag");
 	shader.setMaterial(material);
 	texture = content.loadTexture("terrainTex.bmp");
 	//Cleanup

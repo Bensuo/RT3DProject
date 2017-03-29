@@ -57,17 +57,18 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 		p->setPosition(glm::vec3(-500+ 50*i, 15, -200 + 50*i));
 		npcs.push_back(shared);
 	}
+
 	StaticObject* m = new StaticObject();
 	m->loadContent(content, "res/md2/triax_tracks", "res/md2/triax_tracks");
-	m->setTransform(Transform{ glm::vec3(210, terrain->getHeightAtPosition(210, 0), 0), glm::vec3(0) });
+	m->setTransform(Transform{ glm::vec3(300, terrain->getHeightAtPosition(300, 0), 0), glm::vec3(0) });
 	staticObjects.push_back(m);
 	m = new StaticObject();
 	m->loadContent(content, "res/md2/triax_wheels", "res/md2/triax_wheels");
-	m->setTransform(Transform{ glm::vec3(190, terrain->getHeightAtPosition(190, -300), -300), glm::vec3(0) });
+	m->setTransform(Transform{ glm::vec3(450, terrain->getHeightAtPosition(450, -300), -300), glm::vec3(0) });
 	staticObjects.push_back(m);
 	m = new StaticObject();
 	m->loadContent(content, "res/md2/triax_tracks", "res/md2/triax_tracks");
-	m->setTransform(Transform{ glm::vec3(-100, terrain->getHeightAtPosition(-100, -500), -500), glm::vec3(0) });
+	m->setTransform(Transform{ glm::vec3(600, terrain->getHeightAtPosition(600, -700), -700), glm::vec3(0) });
 	staticObjects.push_back(m);
 }
 

@@ -16,6 +16,10 @@
 #include "IRenderable.h"
 #include "Terrain.h"
 
+namespace Rendering {
+	class UI;
+}
+
 //The Renderer handles window creation and management as well as drawing to the screen using
 //OpenGL
 class Renderer
@@ -34,7 +38,8 @@ public:
 	void render(std::vector<IRenderable*>& models);
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);
-	void renderUI(IRenderable * renderable, glm::vec3 position, glm::vec3 size);
+	void renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size);
+	void renderUI(Rendering::UI * renderable, glm::vec3 position);
 private:
 	void init();
 	std::stack<glm::mat4> mvStack;
@@ -64,7 +69,7 @@ private:
 
 	rt3d::lightStruct light1 = {
 		{ 0.0f, 0.0f, 0.0f, 0.0f }, // ambient
-		{ 1.0f, 0.0f, 0.0f, 1.0f }, // diffuse
+		{ 0.0f, 0.0f, 0.0f, 0.0f }, // diffuse
 		{ 0.0f, 0.0f, 0.0f, 0.0f }, // specular
 		{ 20.0f, 20.0f, 0.0f, 0.0f }  // position
 	};

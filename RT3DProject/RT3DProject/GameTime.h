@@ -4,7 +4,7 @@
 
 #include <chrono>
 
-class Timer
+class GameTime
 {
 private:
 	std::chrono::time_point<std::chrono::steady_clock> startTime;
@@ -20,7 +20,7 @@ private:
 
 	bool frameComplete;
 public:
-	Timer();
+	GameTime();
 	double GetTime() const;
 	static std::chrono::steady_clock::time_point GetTimePoint();
 	const double& GetDeltaTime() const;

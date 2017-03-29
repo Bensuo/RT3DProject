@@ -84,9 +84,6 @@
     <ClCompile Include="Input.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Rendering\Camera</Filter>
     </ClCompile>
@@ -108,6 +105,9 @@
       <Filter>Rendering\Renderables</Filter>
     </ClCompile>
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="GameTime.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="mvp.vert">
@@ -193,9 +193,6 @@
     <ClInclude Include="Input.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Collisions.h">
       <Filter>Utilities</Filter>
     </ClInclude>
@@ -218,6 +215,9 @@
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="Ray.h">
       <Filter>Utilities</Filter>
+      </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

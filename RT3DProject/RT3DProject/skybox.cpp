@@ -132,7 +132,7 @@ namespace Rendering
 
 		shader.use();
 
-		auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 2000.0f);
+		auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 5000.0f);
 		glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 		glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));

@@ -17,17 +17,20 @@ void Game::init()
 		npcControllers[i].setActor(npcs[i]);
 		npcControllers[i].setTarget(scene->getPlayer());
 	}
-	
+
+	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), true);
 	healthLabel = new Rendering::UI("HEALTH: 100", true);
-	ammoLabel =	  new Rendering::UI("AMMO:   100", true);
+	ammoLabel =	  new Rendering::UI("AMMO: 100", true);
+	timeLabel =   new Rendering::UI("02:00", true);
 	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
+	HUD = new Rendering::UI("res/textures/Interface.png", false);
 
 	AudioManager::Init();
 	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
 
-	timer.Initialize();	//always init last for accurate game loop startup
+	gameTime.Initialize();	//always init last for accurate game loop startup
+	countdown.startTimer();
 }
-
 
 void Game::DrawMinimap()
 {
@@ -43,7 +46,7 @@ void Game::DrawMinimap()
 	view = translate(view, glm::vec3(-scene->getPlayer()->getPosition().x, 0, -scene->getPlayer()->getPosition().z));
 
 	renderer.setView(view);
-	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, -2000.0f, 2000.0f));
+	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, 0.1f, 5000.0f));
 
 	glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
 	glDisable(GL_DEPTH_TEST);
@@ -65,8 +68,10 @@ void Game::DrawMinimap()
 
 	renderer.drawTerrain(scene->getTerrain());
 	renderer.setShader("Phong");
+
 	renderer.render(renderList);
 	renderList.clear();
+
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -97,10 +102,9 @@ void Game::DrawScene()
 		renderList.push_back(&pickups[i]->getPlayerModel());
 	}
 
-
 	renderer.begin();
 	renderer.setView(camera.GetViewMatrix());
-	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 2000.0f));
+	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 5000.0f));
 
 	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
@@ -109,16 +113,27 @@ void Game::DrawScene()
 
 	renderer.render(renderList);
 
-	if (camera.isFPS()) {
+	if (camera.isFPS()) 
+	{
 		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
 	}
-	renderer.renderUI(healthLabel, glm::vec3(-0.866f, -0.8f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
-	renderer.renderUI(ammoLabel, glm::vec3(-0.866f, -0.9f, 0.0f), glm::vec3(0.10f, 0.025f, 0.0f));//position and size of text
-
-	if (scene->getPlayer()->Aiming())
-		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(0.05f));//position and size of crosshair
 
 	renderList.clear();
+}
+
+void Game::DrawHud()
+{
+	glViewport(0, 0, 1280, 720);
+	renderer.setShader("UI");
+	renderer.renderUI(scoreLabel, glm::vec3(0.8575f, 0.45f, 0.0f));
+	renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f));
+	renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.84f, 0.0f));
+	renderer.renderUI(timeLabel, glm::vec3(-0.825f, -0.76f, 0.0f));
+
+	if (scene->getPlayer()->Aiming())
+		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1));
+
+	renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1));
 }
 
 void Game::draw()
@@ -126,6 +141,8 @@ void Game::draw()
 	DrawScene();
 
 	DrawMinimap();
+
+	DrawHud();
 
 	renderer.swapBuffers();
 	auto test = 0;
@@ -139,6 +156,14 @@ bool Game::Quit() const
 void Game::update()
 {
 	running = !Quit();
+
+	countdown.update();
+	timeLabel->setString(countdown.toString());
+	scoreLabel->setString("SCORE: " + std::to_string(score));
+	if(countdown.finished())
+	{
+		running = false;
+	}
 
 	scene->getPlayer()->UpdateVectors(camera.GetFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
@@ -154,12 +179,13 @@ void Game::update()
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
 	{
-		pickups[i]->update(timer.GetDeltaTime());
+		pickups[i]->update(gameTime.GetDeltaTime());
 	}
 
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
+
 		if (npcs[i]->getIsDead())
 		{
 			npcs.erase(npcs.begin() + i);
@@ -170,37 +196,38 @@ void Game::update()
 			npcs[i]->update(timer.GetDeltaTime());
 			npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 		}
+
 	}
 
-	scene->getPlayer()->update(timer.GetDeltaTime());
+	scene->getPlayer()->update(gameTime.GetDeltaTime());
 	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
-	camera.Update(timer.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
+	camera.Update(gameTime.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
 }
 
-Game::Game()
+Game::Game() : countdown(2 * 60)
 {
 	init();
 	while (running)
 	{
-		timer.Reset();
+		gameTime.Reset();
 
 		//process individual frame's worth of updates
-		while (timer.ProcessFrame())
+		while (gameTime.ProcessFrame())
 		{
-			timer.Update();
+			gameTime.Update();
 			update();
 		}
 
 		//render processed frame
-		if (timer.FrameComplete())
+		if (gameTime.FrameComplete())
 		{
-			timer.IncrementFrames();
+			gameTime.IncrementFrames();
 			draw();
 		}
 		else
 		{
-			timer.Sleep();
+			gameTime.Sleep();
 		}
 	}
 	renderer.quit();
@@ -226,7 +253,7 @@ bool playerCollision(Player* p1, Pickup* p2)
 	return false;
 }
 
-void Game::checkCollisions() const
+void Game::checkCollisions()
 {
 	auto& npcs = scene->getNPCs();
 	auto& staticObjects = scene->getStaticObjects();
@@ -248,6 +275,7 @@ void Game::checkCollisions() const
 
 		if (playerCollision(scene->getPlayer(), pickups[i]))
 		{
+			score += 1000;
 			audioManager.PlaySound("res/audio/sfx/GunPickup.wav");
 			scene->removePickup(i);
 		}
