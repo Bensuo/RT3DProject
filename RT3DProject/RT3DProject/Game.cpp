@@ -234,7 +234,7 @@ Game::Game() : countdown(2 * 60)
 	renderer.quit();
 }
 
-void playerCollision(Player* p1, Player* p2)
+bool playerCollision(Player* p1, Player* p2)
 {
 	auto info = Collisions::TestAABBAABB(p1->getAABB(), p2->getAABB());
 	if (info.collision)
@@ -242,6 +242,7 @@ void playerCollision(Player* p1, Player* p2)
 		auto pos = p2->getPosition();
 		p2->setPosition(pos -= info.mtv);
 	}
+	return info.collision;
 }
 
 bool playerCollision(Player* p1, Pickup* p2)
@@ -297,7 +298,10 @@ void Game::checkCollisions()
 
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
-		playerCollision(scene->getPlayer(), npcs[i].get());
+		if (playerCollision(scene->getPlayer(), npcs[i].get()))
+		{
+			scene->getPlayer()->takeDamage(5);
+		}
 		for (int j = i+1; j < npcs.size(); j++)
 		{
 			playerCollision(npcs[j].get(), npcs[i].get());
@@ -339,7 +343,7 @@ void Game::checkCollisions()
 		}
 		if (npc != nullptr)
 		{
-			npc->takeDamage(100);
+			npc->takeDamage(50);
 			if(npc->getIsDead())
 			{
 				score += 5000;
