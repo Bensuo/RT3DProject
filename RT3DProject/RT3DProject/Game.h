@@ -90,6 +90,9 @@ class Game
 
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
+	Rendering::UI* failure;
+	Rendering::UI* victory;
+
 	Rendering::UI* scoreLabel;
 	Rendering::UI* healthLabel;
 	Rendering::UI* ammoLabel;

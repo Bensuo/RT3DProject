@@ -18,12 +18,15 @@ void Game::init()
 		npcControllers[i].setTarget(scene->getPlayer());
 	}
 
-	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), true);
-	healthLabel = new Rendering::UI("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()), true);
-	ammoLabel =	new Rendering::UI("AMMO: 100", true);
-	timeLabel = new Rendering::UI("02:00", true);
-	crosshair = new Rendering::UI("res/textures/Crosshair.png", false);
-	HUD = new Rendering::UI("res/textures/Interface.png", false);
+	victory = new Rendering::UI("VICTORY!", 48);
+	failure = new Rendering::UI("YOU DIED.", 48);
+
+	scoreLabel = new Rendering::UI("SCORE: " + std::to_string(score), 24);
+	healthLabel = new Rendering::UI("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()), 24);
+	ammoLabel =	new Rendering::UI("AMMO: 100", 24);
+	timeLabel = new Rendering::UI("02:00", 24);
+	crosshair = new Rendering::UI("res/textures/Crosshair.png");
+	HUD = new Rendering::UI("res/textures/Interface.png");
 
 	AudioManager::Init();
 	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
@@ -34,45 +37,49 @@ void Game::init()
 
 void Game::DrawMinimap()
 {
-	auto zoom = 300.0f;
-	auto mapWidth = 182;
-	auto mapHeight = 182;
-
-	glm::mat4 view = lookAt(glm::vec3(0, zoom, 0),
-		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(-1.0, 0.0, 0.0));
-
-	view = rotate(view, camera.getYaw(), glm::vec3(0, 1, 0));
-	view = translate(view, glm::vec3(-scene->getPlayer()->getPosition().x, 0, -scene->getPlayer()->getPosition().z));
-
-	renderer.setView(view);
-	renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, 0.1f, 5000.0f));
-
-	glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
-	glDisable(GL_DEPTH_TEST);
-	renderList.push_back(&scene->getPlayer()->getPlayerModel());
-	renderList.push_back(&scene->getPlayer()->getWeapon());
-
-	auto& npcs = scene->getNPCs();
-	for (auto i = 0; i < npcs.size(); i++)
+	if (!scene->getPlayer()->getIsDead() && !countdown.finished())
 	{
-		renderList.push_back(&npcs[i]->getPlayerModel());
-		renderList.push_back(&npcs[i]->getWeapon());
+		auto zoom = 300.0f;
+		auto mapWidth = 182;
+		auto mapHeight = 182;
+
+		glm::mat4 view = lookAt(glm::vec3(0, zoom, 0),
+			glm::vec3(0.0, 0.0, 0.0),
+			glm::vec3(-1.0, 0.0, 0.0));
+
+		view = rotate(view, camera.getYaw(), glm::vec3(0, 1, 0));
+		view = translate(view, glm::vec3(-scene->getPlayer()->getPosition().x, 0, -scene->getPlayer()->getPosition().z));
+
+		renderer.setView(view);
+		renderer.setProjection(glm::ortho(-zoom / 2, zoom / 2, -zoom / 2, zoom / 2, 0.1f, 5000.0f));
+
+		glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
+
+		glDisable(GL_DEPTH_TEST);
+		renderList.push_back(&scene->getPlayer()->getPlayerModel());
+		renderList.push_back(&scene->getPlayer()->getWeapon());
+
+		auto& npcs = scene->getNPCs();
+		for (auto i = 0; i < npcs.size(); i++)
+		{
+			renderList.push_back(&npcs[i]->getPlayerModel());
+			renderList.push_back(&npcs[i]->getWeapon());
+		}
+
+		auto pickups = scene->getPickups();
+		for (auto i = 0; i < pickups.size(); i++)
+		{
+			renderList.push_back(&pickups[i]->getPlayerModel());
+		}
+
+		renderer.drawTerrain(scene->getTerrain());
+		renderer.setShader("Phong");
+
+		renderer.render(renderList);
+		renderList.clear();
+
+		glEnable(GL_DEPTH_TEST);
 	}
-
-	auto pickups = scene->getPickups();
-	for (auto i = 0; i < pickups.size(); i++)
-	{
-		renderList.push_back(&pickups[i]->getPlayerModel());
-	}
-
-	renderer.drawTerrain(scene->getTerrain());
-	renderer.setShader("Phong");
-
-	renderer.render(renderList);
-	renderList.clear();
-
-	glEnable(GL_DEPTH_TEST);
 }
 
 void Game::DrawScene()
@@ -125,15 +132,27 @@ void Game::DrawHud()
 {
 	glViewport(0, 0, 1280, 720);
 	renderer.setShader("UI");
-	renderer.renderUI(scoreLabel, glm::vec3(0.8575f, 0.45f, 0.0f));
-	renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f));
-	renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.84f, 0.0f));
-	renderer.renderUI(timeLabel, glm::vec3(-0.825f, -0.76f, 0.0f));
 
-	if (scene->getPlayer()->Aiming())
-		renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1));
+	if (!scene->getPlayer()->getIsDead() && !countdown.finished())
+	{
+		renderer.renderUI(scoreLabel, glm::vec3(0.8575f, 0.45f, 0.0f));
+		renderer.renderUI(healthLabel, glm::vec3(-0.6f, 0.79f, 0.0f));
+		renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.84f, 0.0f));
+		renderer.renderUI(timeLabel, glm::vec3(-0.825f, -0.76f, 0.0f));
 
-	renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1));
+		if (scene->getPlayer()->Aiming())
+			renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1));
+
+		renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1));
+	}
+	else if (!scene->getPlayer()->getIsDead() && countdown.finished())
+	{
+		renderer.renderUI(victory, glm::vec3(0));
+	}
+	else if (scene->getPlayer()->getIsDead())
+	{
+		renderer.renderUI(failure, glm::vec3(0));
+	}
 }
 
 void Game::draw()
@@ -161,15 +180,12 @@ void Game::update()
 	timeLabel->setString(countdown.toString());
 	scoreLabel->setString("SCORE: " + std::to_string(score));
 	healthLabel->setString("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()));
-	if(countdown.finished())
-	{
-		running = false;
-	}
 
 	scene->getPlayer()->UpdateVectors(camera.GetFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
 
-	input.Update(scene->getPlayer(), camera);
+	auto freezeControls = countdown.finished() || scene->getPlayer()->getIsDead();
+	input.Update(scene->getPlayer(), camera, freezeControls);
 
 	//Update AI controllers
 	for (auto i = 0; i < npcControllers.size(); i++)
@@ -203,7 +219,8 @@ void Game::update()
 	scene->getPlayer()->update(gameTime.GetDeltaTime());
 	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
-	camera.Update(gameTime.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0,-24,0));
+
+	camera.Update(gameTime.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0, -24, 0));
 }
 
 Game::Game() : countdown(2 * 60)
