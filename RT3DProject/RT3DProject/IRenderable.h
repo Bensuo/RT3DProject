@@ -13,5 +13,6 @@ public:
 	virtual rt3d::materialStruct& getMaterial() = 0;
 	virtual Transform& getTransform() = 0;
 	virtual bool isIndexed() = 0;
+	virtual float getInterp() = 0;
 };
 

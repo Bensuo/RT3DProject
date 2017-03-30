@@ -17,6 +17,7 @@ struct vaoBuffers {
 	GLuint normal_buffer;
 	GLuint texcoord_buffer;
 	GLuint index_buffer;
+	GLuint vertex_buffer_next;
 };
 
 static map<GLuint, GLuint *> vertexArrayMap;
@@ -127,7 +128,7 @@ GLuint initShaders(const char *vertFile, const char *fragFile) {
 	glBindAttribLocation(p,RT3D_COLOUR,"in_Color");
 	glBindAttribLocation(p,RT3D_NORMAL,"in_Normal");
 	glBindAttribLocation(p,RT3D_TEXCOORD,"in_TexCoord");
-
+	glBindAttribLocation(p, RT3D_VERTEX_NEXT, "in_Position_next");
 	glLinkProgram(p);
 	glUseProgram(p);
 
@@ -205,6 +206,86 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 	// return the identifier needed to draw this mesh
 
 	vertexArrayMap.insert( pair<GLuint, GLuint *>(VAO, pMeshBuffers) );
+
+	return VAO;
+}
+
+GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat * vertices, const GLfloat * vertices_next, const GLfloat * colours, const GLfloat * normals, const GLfloat * texcoords, const GLuint indexCount, const GLuint * indices)
+{
+	GLuint VAO;
+	// generate and set up a VAO for the mesh
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	GLuint *pMeshBuffers = new GLuint[6];
+
+
+	if (vertices == nullptr) {
+		// cant create a mesh without vertices... oops
+		exitFatalError("Attempt to create a mesh with no vertices");
+	}
+
+	// generate and set up the VBOs for the data
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
+
+	// VBO for vertex data
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer((GLuint)RT3D_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(RT3D_VERTEX);
+	pMeshBuffers[RT3D_VERTEX] = VBO;
+
+	
+	// VBO for colour data
+	if (colours != nullptr) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), colours, GL_STATIC_DRAW);
+		glVertexAttribPointer((GLuint)RT3D_COLOUR, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(RT3D_COLOUR);
+		pMeshBuffers[RT3D_COLOUR] = VBO;
+	}
+
+	// VBO for normal data
+	if (normals != nullptr) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), normals, GL_STATIC_DRAW);
+		glVertexAttribPointer((GLuint)RT3D_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(RT3D_NORMAL);
+		pMeshBuffers[RT3D_NORMAL] = VBO;
+	}
+
+	// VBO for tex-coord data
+	if (texcoords != nullptr) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, 2 * numVerts * sizeof(GLfloat), texcoords, GL_STATIC_DRAW);
+		glVertexAttribPointer((GLuint)RT3D_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(RT3D_TEXCOORD);
+		pMeshBuffers[RT3D_TEXCOORD] = VBO;
+	}
+	// VBO for vertex_next data
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), vertices_next, GL_STATIC_DRAW);
+	glVertexAttribPointer((GLuint)RT3D_VERTEX_NEXT, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(RT3D_VERTEX_NEXT);
+	pMeshBuffers[RT3D_VERTEX_NEXT] = VBO;
+	if (indices != nullptr && indexCount > 0) {
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
+		pMeshBuffers[RT3D_INDEX] = VBO;
+	}
+	
+	// unbind vertex array
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	// return the identifier needed to draw this mesh
+
+	vertexArrayMap.insert(pair<GLuint, GLuint *>(VAO, pMeshBuffers));
 
 	return VAO;
 }
@@ -302,7 +383,7 @@ void updateMesh(const GLuint mesh, const unsigned int bufferType, const GLfloat 
 	glBufferData(GL_ARRAY_BUFFER, size*sizeof(GLfloat), data, GL_STATIC_DRAW);
 	glVertexAttribPointer((GLuint)bufferType, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(bufferType);
-	pMeshBuffers[RT3D_VERTEX] = VBO;
+	pMeshBuffers[bufferType] = VBO;
 
 	glBindVertexArray(0);
 }

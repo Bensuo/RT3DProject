@@ -48,13 +48,13 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 	pickup->setPosition(glm::vec3(300, 40, -300));
 	pickups.push_back(pickup);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		Player* p = new Player();
 		std::shared_ptr<Player> shared(p);
 		p->loadContent(content, "rampage");
 		p->setState(Player::STAND);
-		p->setPosition(glm::vec3(-500+ 50*i, 15, -200 + 50*i));
+		p->setPosition(glm::vec3(-500+ 15*i, 15, -500 + 15*i));
 		npcs.push_back(shared);
 	}
 

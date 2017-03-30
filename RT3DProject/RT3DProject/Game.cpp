@@ -73,7 +73,7 @@ void Game::DrawMinimap()
 		}
 
 		renderer.drawTerrain(scene->getTerrain());
-		renderer.setShader("Phong");
+		renderer.setShader("Phong-interpolated");
 
 		renderer.render(renderList);
 		renderList.clear();
@@ -116,7 +116,7 @@ void Game::DrawScene()
 	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
 	renderer.drawTerrain(scene->getTerrain());
-	renderer.setShader("Phong");
+	renderer.setShader("Phong-interpolated");
 
 	renderer.render(renderList);
 
@@ -318,7 +318,7 @@ void Game::checkCollisions()
 	{
 		if (playerCollision(scene->getPlayer(), npcs[i].get()))
 		{
-			scene->getPlayer()->takeDamage(5);
+			scene->getPlayer()->takeDamage(1);
 		}
 		for (int j = i+1; j < npcs.size(); j++)
 		{

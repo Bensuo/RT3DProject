@@ -23,6 +23,7 @@ namespace Rendering
 		const GLuint& getProgram() const { return this->program; }
 		void disable() const;
 		void setUniformMatrix4fv(const char* uniformName, const GLfloat* data) const;
+		void setUniform1f(const char* uniformName, GLfloat data) const;
 		void setMatrices(const GLfloat* proj, const GLfloat* mv, const GLfloat* mvp) const;
 		void setLightPos(const GLfloat* lightPos) const;
 		void setProjection(const GLfloat* data) const;
