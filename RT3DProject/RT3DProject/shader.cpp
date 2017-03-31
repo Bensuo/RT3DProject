@@ -134,13 +134,13 @@ namespace Rendering
 	void Shader::addLight(const rt3d::lightStruct& light, const int& index) const
 	{
 		auto number = std::to_string(index);
-		auto uniformIndex = glGetUniformLocation(program, ("light[" + number + "].ambient").c_str());
+		auto uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].ambient").c_str());
 		glUniform4fv(uniformIndex, 1, light.ambient);
-		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].diffuse").c_str());
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].diffuse").c_str());
 		glUniform4fv(uniformIndex, 1, light.diffuse);
-		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].specular").c_str());
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].specular").c_str());
 		glUniform4fv(uniformIndex, 1, light.specular);
-		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].position").c_str());
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].position").c_str());
 		glUniform4fv(uniformIndex, 1, light.position);
 	}
 
