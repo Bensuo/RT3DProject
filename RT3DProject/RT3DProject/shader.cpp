@@ -45,11 +45,11 @@ namespace Rendering
 		glAttachShader(program, v);
 		glAttachShader(program, f);
 
-		glBindAttribLocation(program, RT3D_VERTEX, "in_Position");
-		glBindAttribLocation(program, RT3D_COLOUR, "in_Color");
-		glBindAttribLocation(program, RT3D_NORMAL, "in_Normal");
-		glBindAttribLocation(program, RT3D_TEXCOORD, "in_TexCoord");
-		glBindAttribLocation(program, RT3D_VERTEX_NEXT, "in_Position_next");
+		glBindAttribLocation(program, RT3D_VERTEX, "position");
+		glBindAttribLocation(program, RT3D_COLOUR, "color");
+		glBindAttribLocation(program, RT3D_NORMAL, "normal");
+		glBindAttribLocation(program, RT3D_TEXCOORD, "texCoords");
+		glBindAttribLocation(program, RT3D_VERTEX_NEXT, "position_next");
 		glLinkProgram(program);
 		glUseProgram(program);
 
@@ -134,13 +134,13 @@ namespace Rendering
 	void Shader::addLight(const rt3d::lightStruct& light, const int& index) const
 	{
 		auto number = std::to_string(index);
-		auto uniformIndex = glGetUniformLocation(program, ("light[" + number + "].ambient").c_str());
+		auto uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].ambient").c_str());
 		glUniform4fv(uniformIndex, 1, light.ambient);
-		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].diffuse").c_str());
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].diffuse").c_str());
 		glUniform4fv(uniformIndex, 1, light.diffuse);
-		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].specular").c_str());
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].specular").c_str());
 		glUniform4fv(uniformIndex, 1, light.specular);
-		uniformIndex = glGetUniformLocation(program, ("light[" + number + "].position").c_str());
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].position").c_str());
 		glUniform4fv(uniformIndex, 1, light.position);
 	}
 
