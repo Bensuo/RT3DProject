@@ -17,15 +17,14 @@ uniform mat4 modelview;
 uniform mat4 projection;
 uniform float interp;
 uniform lightStruct light[NR_LIGHTS];
-//uniform mat3 normalmatrix;
 
-in  vec3 in_Position;
-in  vec3 in_Normal;
+in vec3 in_Position;
+in vec3 in_Normal;
+in vec2 in_TexCoord;
+
 out vec3 Normal;
 out vec3 FragPos;
 out vec3 ex_L[NR_LIGHTS];
-
-in vec2 in_TexCoord;
 out vec2 ex_TexCoord;
 
 in vec3 in_Position_next;
