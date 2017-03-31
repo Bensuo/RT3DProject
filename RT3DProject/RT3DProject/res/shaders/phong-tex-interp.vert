@@ -20,10 +20,9 @@ uniform lightStruct light[NR_LIGHTS];
 //uniform mat3 normalmatrix;
 
 in  vec3 in_Position;
-
 in  vec3 in_Normal;
-out vec3 ex_N;
-out vec3 ex_V;
+out vec3 Normal;
+out vec3 FragPos;
 out vec3 ex_L[NR_LIGHTS];
 
 in vec2 in_TexCoord;
@@ -37,7 +36,7 @@ void main(void) {
 	vec4 vertexPosition = modelview * vec4(mix(in_Position, in_Position_next, interp),1.0);
 
 	// Find V - in eye coordinates, eye is at (0,0,0)
-	ex_V = normalize(-vertexPosition).xyz;
+	FragPos = normalize(-vertexPosition).xyz;
 
 	// surface normal in eye coordinates
 	// taking the rotation part of the modelview matrix to generate the normal matrix
@@ -45,7 +44,7 @@ void main(void) {
 	// this is somewhat wasteful in compute time and should really be part of the cpu program,
 	// giving an additional uniform input
 	mat3 normalmatrix = transpose(inverse(mat3(modelview)));
-	ex_N = normalize(normalmatrix * in_Normal);
+	Normal = normalize(normalmatrix * in_Normal);
 
 	// L - to light source from vertex
 	for(int i = 0; i < NR_LIGHTS; i++)
