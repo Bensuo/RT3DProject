@@ -48,7 +48,7 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 	pickup->setPosition(glm::vec3(300, 40, -300));
 	pickups.push_back(pickup);
 
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		Player* p = new Player();
 		std::shared_ptr<Player> shared(p);

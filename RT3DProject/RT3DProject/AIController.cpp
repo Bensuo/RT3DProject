@@ -18,24 +18,27 @@ void AIController::update()
 	{
 		auto self = actor.lock();
 		glm::vec3 toTarget = target->getPosition() - self->getPosition();
-		if (glm::length(toTarget) < 300)
+		if (self->playerState != Player::PlayerState::DEATH1)
 		{
-			self->UpdateVectors(toTarget);
-			self->MoveForward();
-		}
-		else
-		{
-			if (actionCounter > 180)
+			if (glm::length(toTarget) < 300)
 			{
-				actionCounter = 0;
-				self->UpdateVectors(glm::vec3(-uniform() + uniform(), 0, -uniform() + uniform()));
-			}
-			if (actionCounter < 60)
-			{
+				self->UpdateVectors(toTarget);
 				self->MoveForward();
 			}
-			
+			else
+			{
+				if (actionCounter > 180)
+				{
+					actionCounter = 0;
+					self->UpdateVectors(glm::vec3(-uniform() + uniform(), 0, -uniform() + uniform()));
+				}
+				if (actionCounter < 60)
+				{
+					self->MoveForward();
+				}
+
+			}
+			actionCounter++;
 		}
-		actionCounter++;
 	}
 }

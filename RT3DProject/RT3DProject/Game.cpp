@@ -88,13 +88,20 @@ void Game::DrawScene()
 	auto& npcs = scene->getNPCs();
 	if (!camera.isFPS()) {
 		renderList.push_back(&scene->getPlayer()->getPlayerModel());
-		renderList.push_back(&scene->getPlayer()->getWeapon());
+		if (scene->getPlayer()->playerState != Player::PlayerState::DEATH1)
+		{
+			renderList.push_back(&scene->getPlayer()->getWeapon());
+		}
 	}
 
 	for (auto i = 0; i < npcs.size(); i++)
 	{
 		renderList.push_back(&npcs[i]->getPlayerModel());
-		renderList.push_back(&npcs[i]->getWeapon());
+		if (npcs[i]->playerState != Player::PlayerState::DEATH1)
+		{
+			renderList.push_back(&npcs[i]->getWeapon());
+		}
+		
 	}
 
 	auto& staticObjects = scene->getStaticObjects();
