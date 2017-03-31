@@ -29,7 +29,7 @@ uniform sampler2D textureUnit0;
 in vec3 Normal;
 in vec3 FragPos;
 in vec3 ex_L[NR_LIGHTS];
-in vec2 ex_TexCoord;
+in vec2 TexCoords;
 
 layout(location = 0) out vec4 out_Color;
 
@@ -58,6 +58,6 @@ vec4 CalcColor(lightStruct newLight, vec3 L)
 	specularI = specularI * pow(max(dot(R,FragPos),0), material.shininess);
 
 	// Fragment colour
-	return vec4(ambientI + diffuseI + specularI) * texture(textureUnit0, ex_TexCoord);
+	return vec4(ambientI + diffuseI + specularI) * texture(textureUnit0, TexCoords);
 	//out_Color = texture2D(textureUnit0, ex_TexCoord);
 }

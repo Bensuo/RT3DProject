@@ -26,7 +26,7 @@ out vec3 Normal;
 out vec3 FragPos;
 out vec3 ex_L[NR_LIGHTS];
 
-out vec2 ex_TexCoord;
+out vec2 TexCoords;
 
 // multiply each vertex position by the MVP matrix
 // and find V, L, N vectors for the fragment shader
@@ -50,7 +50,7 @@ void main(void) {
 	for(int i = 0; i < NR_LIGHTS; i++)
 		ex_L[i] = normalize(light[i].position.xyz - vertexPosition.xyz);
 
-	ex_TexCoord = texCoords;
+	TexCoords = texCoords;
 
     gl_Position = projection * vertexPosition;
 
