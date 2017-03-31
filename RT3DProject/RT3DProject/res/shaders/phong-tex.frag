@@ -30,6 +30,7 @@ in vec3 Normal;
 in vec3 FragPos;
 in vec3 ex_L[NR_LIGHTS];
 in vec2 ex_TexCoord;
+
 layout(location = 0) out vec4 out_Color;
 
 vec4 CalcColor(lightStruct newLight, vec3 L);

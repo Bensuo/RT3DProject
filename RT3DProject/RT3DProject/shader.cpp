@@ -45,11 +45,11 @@ namespace Rendering
 		glAttachShader(program, v);
 		glAttachShader(program, f);
 
-		glBindAttribLocation(program, RT3D_VERTEX, "in_Position");
-		glBindAttribLocation(program, RT3D_COLOUR, "in_Color");
-		glBindAttribLocation(program, RT3D_NORMAL, "in_Normal");
-		glBindAttribLocation(program, RT3D_TEXCOORD, "in_TexCoord");
-		glBindAttribLocation(program, RT3D_VERTEX_NEXT, "in_Position_next");
+		glBindAttribLocation(program, RT3D_VERTEX, "position");
+		glBindAttribLocation(program, RT3D_COLOUR, "color");
+		glBindAttribLocation(program, RT3D_NORMAL, "normal");
+		glBindAttribLocation(program, RT3D_TEXCOORD, "texCoords");
+		glBindAttribLocation(program, RT3D_VERTEX_NEXT, "position_next");
 		glLinkProgram(program);
 		glUseProgram(program);
 
