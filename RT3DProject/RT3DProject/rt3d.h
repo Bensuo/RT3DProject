@@ -8,6 +8,7 @@
 #define RT3D_NORMAL		2
 #define RT3D_TEXCOORD   3
 #define RT3D_INDEX		4
+#define RT3D_VERTEX_NEXT 5
 
 namespace rt3d {
 
@@ -32,6 +33,8 @@ namespace rt3d {
 	// Some methods for creating meshes
 	// ... including one for dealing with indexed meshes
 	GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours, const GLfloat* normals,
+		const GLfloat* texcoords, const GLuint indexCount, const GLuint* indices);
+	GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* vertices_next, const GLfloat* colours, const GLfloat* normals,
 		const GLfloat* texcoords, const GLuint indexCount, const GLuint* indices);
 	// these three create mesh functions simply provide more basic access to the full version
 	GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours, const GLfloat* normals,

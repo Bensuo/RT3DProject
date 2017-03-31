@@ -62,6 +62,10 @@ void Renderer::init()
 	shaders["Phong"].addLight(light0, 0);
 	shaders["Phong"].addLight(light1, 1);
 
+	shaders.insert(std::make_pair("Phong-interpolated", Rendering::Shader("res/shaders/phong-tex-interp.vert", "res/shaders/phong-tex.frag")));
+	shaders["Phong-interpolated"].addLight(light0, 0);
+	shaders["Phong-interpolated"].addLight(light1, 1);
+
 	shaders.insert(std::make_pair("UI", Rendering::Shader("res/shaders/textured.vert", "res/shaders/textured.frag")));
 }
 
@@ -130,7 +134,8 @@ void Renderer::draw(IRenderable* renderable)
 
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 	currentShader->setMaterial(renderable->getMaterial()) ;
-
+	//float interp = renderable->getInterp();
+	currentShader->setUniform1f("interp", renderable->getInterp());
 	if (renderable->isIndexed())
 	{
 		rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
@@ -216,6 +221,7 @@ void Renderer::render(std::vector<IRenderable*>& models)
 	mvStack.push(view);
 	for (auto const& m : models)
 	{
+		
 		draw(m);
 	}
 	mvStack.pop();

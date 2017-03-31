@@ -79,7 +79,7 @@ public:
 	{
 		health -= amount; 
 		health = glm::clamp(health, 0, 100);
-		if (health <= 0) isDead = true;
+		if (health <= 0 && playerState != DEATH1) playerState = DEATH1;
 	}
 	const int& getHealth() const { return health; }
 	const int& getAmmo() const { return ammo; }
@@ -121,5 +121,6 @@ private:
 
 	int vWepFinalFrame = 5;
 	int wepFinalFrame = 53;
+	int deathFinalFrame = 183;
 };
 

@@ -178,7 +178,7 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 
 
 	GLuint VAO;
-	VAO = rt3d::createMesh(mdl.header.num_tris * 3, vertData[0], nullptr, norms.data(), tex_coords.data());
+	VAO = rt3d::createInterpolatedMesh(mdl.header.num_tris * 3, vertData[0], vertData[0], nullptr, norms.data(), tex_coords.data(), 0, nullptr);
 
 	// actually have all the data we need, so call FreeModel
 	this->FreeModel();
@@ -248,7 +248,7 @@ void MD2::Animate(const int& animation, const float& dt)
 			nextFrame = start;
 	}
 
-	if (interp == 0.0f)
+	/*if (interp == 0.0f)
 		memcpy(animVerts, vertData[currentFrame], vertDataSize * sizeof(float));
 	else {
 		GLfloat current;
@@ -257,5 +257,5 @@ void MD2::Animate(const int& animation, const float& dt)
 			current = vertData[currentFrame][i];
 			animVerts[i] = current + interp*(vertData[nextFrame][i] - current);
 		}
-	}
+	}*/
 }

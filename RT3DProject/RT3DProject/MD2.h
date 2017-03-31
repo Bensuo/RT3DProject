@@ -95,6 +95,7 @@ public:
 	void ResetAnimation() {
 		currentFrame = 0;
 	}
+	float getInterp() { return interp; }
 protected:
 	md2_model_t mdl;
 	int currentAnim = 0;
@@ -112,4 +113,6 @@ public:
 	int getCurrentAnim() const { return currentAnim; }
 	int getCurrentFrame() const { return currentFrame; }
 	const std::vector<int>& GetAnimFrames() const { return animFrameList; }
+	GLfloat* getCurrentVerts() const { return vertData[currentFrame]; }
+	GLfloat* getNextVerts() const { return vertData[nextFrame]; }
 };

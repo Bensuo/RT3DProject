@@ -25,6 +25,7 @@ namespace Rendering
 		Transform& getTransform() override;
 		bool isIndexed() override;
 		void setText(const std::string& txt) { uiString = txt; }
+		float getInterp() override { return 0.0f; }
 	private:
 		Shader shader;
 		std::vector<GLfloat> verts;

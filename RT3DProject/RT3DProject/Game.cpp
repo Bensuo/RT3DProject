@@ -73,7 +73,7 @@ void Game::DrawMinimap()
 		}
 
 		renderer.drawTerrain(scene->getTerrain());
-		renderer.setShader("Phong");
+		renderer.setShader("Phong-interpolated");
 
 		renderer.render(renderList);
 		renderList.clear();
@@ -88,13 +88,20 @@ void Game::DrawScene()
 	auto& npcs = scene->getNPCs();
 	if (!camera.isFPS()) {
 		renderList.push_back(&scene->getPlayer()->getPlayerModel());
-		renderList.push_back(&scene->getPlayer()->getWeapon());
+		if (scene->getPlayer()->playerState != Player::PlayerState::DEATH1)
+		{
+			renderList.push_back(&scene->getPlayer()->getWeapon());
+		}
 	}
 
 	for (auto i = 0; i < npcs.size(); i++)
 	{
 		renderList.push_back(&npcs[i]->getPlayerModel());
-		renderList.push_back(&npcs[i]->getWeapon());
+		if (npcs[i]->playerState != Player::PlayerState::DEATH1)
+		{
+			renderList.push_back(&npcs[i]->getWeapon());
+		}
+		
 	}
 
 	auto& staticObjects = scene->getStaticObjects();
@@ -116,7 +123,7 @@ void Game::DrawScene()
 	glViewport(0, 0, 1280, 720);
 	renderer.drawSkybox(scene->getSkybox());
 	renderer.drawTerrain(scene->getTerrain());
-	renderer.setShader("Phong");
+	renderer.setShader("Phong-interpolated");
 
 	renderer.render(renderList);
 
@@ -318,7 +325,7 @@ void Game::checkCollisions()
 	{
 		if (playerCollision(scene->getPlayer(), npcs[i].get()))
 		{
-			scene->getPlayer()->takeDamage(5);
+			scene->getPlayer()->takeDamage(1);
 		}
 		for (int j = i+1; j < npcs.size(); j++)
 		{

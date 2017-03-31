@@ -26,6 +26,7 @@ namespace Rendering
 		rt3d::materialStruct& getMaterial() override;
 		Transform& getTransform() override;
 		bool isIndexed() override;
+		float getInterp() override { return m_MD2.getInterp(); }
 	protected:
 		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;

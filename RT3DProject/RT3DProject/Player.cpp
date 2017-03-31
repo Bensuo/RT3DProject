@@ -22,16 +22,21 @@ void Player::update(float dt)
 {
 	if (fps || aiming)
 		transform.rotation.z = atan2f(front.x, front.z) * 57.2958;
-
-	updatePosition(dt);
+	if (playerState != DEATH1)
+	{
+		updatePosition(dt);
+		weapon.setAnimation(playerState);
+		weapon.update(dt);
+	}
+	
 
 	model.setAnimation(playerState);
-	weapon.setAnimation(playerState);
+	
 	vpWeapon.setAnimation(weaponState);
 	model.update(dt);
 	model.setTransform(transform);
 
-	weapon.update(dt);
+	
 	weapon.setTransform(transform);
 	vpWeapon.update(dt);
 
@@ -46,7 +51,7 @@ void Player::update(float dt)
 		stepCount++;
 	}
 
-	if (playerState != JUMP && playerState != ATTACK)
+	if (playerState != JUMP && playerState != ATTACK && playerState != DEATH1)
 	{
 		sprint = false;
 		playerState = STAND;
@@ -71,7 +76,10 @@ void Player::update(float dt)
 			weaponState = IDLE2;
 		}
 	}
-
+	if (playerState == DEATH1 && model.getCurrentFrame() == deathFinalFrame)
+	{
+		isDead = true;
+	}
 	shootTimer -= dt;
 }
 

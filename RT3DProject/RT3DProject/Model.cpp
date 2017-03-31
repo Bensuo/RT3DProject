@@ -18,7 +18,8 @@ namespace Rendering
 	void Model::update(const float& dt)
 	{
 		m_MD2.Animate(dt * ANIMATION_SPEED);
-		rt3d::updateMesh(mesh, RT3D_VERTEX, m_MD2.getAnimVerts(), m_MD2.getVertDataSize());
+		rt3d::updateMesh(mesh, RT3D_VERTEX, m_MD2.getCurrentVerts(), m_MD2.getVertDataSize());
+		rt3d::updateMesh(mesh, RT3D_VERTEX_NEXT, m_MD2.getNextVerts(), m_MD2.getVertDataSize());
 	}
 
 	void Model::setTransform(const Transform & transform)

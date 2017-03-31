@@ -49,7 +49,7 @@ namespace Rendering
 		glBindAttribLocation(program, RT3D_COLOUR, "in_Color");
 		glBindAttribLocation(program, RT3D_NORMAL, "in_Normal");
 		glBindAttribLocation(program, RT3D_TEXCOORD, "in_TexCoord");
-
+		glBindAttribLocation(program, RT3D_VERTEX_NEXT, "in_Position_next");
 		glLinkProgram(program);
 		glUseProgram(program);
 
@@ -99,6 +99,12 @@ namespace Rendering
 	{
 		int uniformIndex = glGetUniformLocation(program, uniformName);
 		glUniformMatrix4fv(uniformIndex, 1, GL_FALSE, data);
+	}
+
+	void Shader::setUniform1f(const char * uniformName, GLfloat data) const
+	{
+		int uniformIndex = glGetUniformLocation(program, uniformName);
+		glUniform1f(uniformIndex, data);
 	}
 
 	// set matrices untested... likely to change - not totally happy with this for now.
