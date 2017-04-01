@@ -46,7 +46,7 @@ void Player::update(float dt)
 		if (stepCount == 40)
 		{
 			stepCount = 0;
-			AudioManager::PlaySound("res/audio/sfx/PlayerMove1.wav", 0.4f);
+			//AudioManager::PlaySound("res/audio/sfx/PlayerMove1.wav", 0.4f);
 		}
 		stepCount++;
 	}

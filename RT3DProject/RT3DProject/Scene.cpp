@@ -48,15 +48,15 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 	pickup->setPosition(glm::vec3(300, 40, -300));
 	pickups.push_back(pickup);
 
-	for (int i = 0; i < 30; i++)
-	{
-		Player* p = new Player();
-		std::shared_ptr<Player> shared(p);
-		p->loadContent(content, "rampage");
-		p->setState(Player::STAND);
-		p->setPosition(glm::vec3(-500+ 15*i, 15, -500 + 15*i));
-		npcs.push_back(shared);
-	}
+	//for (int i = 0; i < 30; i++)
+	//{
+	//	Player* p = new Player();
+	//	std::shared_ptr<Player> shared(p);
+	//	p->loadContent(content, "rampage");
+	//	p->setState(Player::STAND);
+	//	p->setPosition(glm::vec3(-500+ 15*i, 15, -500 + 15*i));
+	//	npcs.push_back(shared);
+	//}
 
 	StaticObject* m = new StaticObject();
 	m->loadContent(content, "res/md2/triax_tracks", "res/md2/triax_tracks");

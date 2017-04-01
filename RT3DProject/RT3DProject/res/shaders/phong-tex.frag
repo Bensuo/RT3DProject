@@ -42,22 +42,21 @@ void main(void)
 }
 
 vec4 CalcColor(PointLight light)
-{
+{	
+	// Ambient
+	vec4 ambient = light.ambient * texture(textureUnit0, TexCoords);
+
+	// Diffuse
+	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(light.position.xyz - FragPos.xyz);
-
-	// Ambient intensity
-	vec4 ambientI = light.ambient * material.ambient;
-
-	// Diffuse intensity
-	vec4 diffuseI = light.diffuse * material.diffuse;
-	diffuseI = diffuseI * max(dot(normalize(Normal),normalize(lightDir)),0);
-
-	// Specular intensity
-	vec3 reflectDir = reflect(normalize(-lightDir),normalize(Normal));
-
+	float diff = max(dot(norm, lightDir),0);
+	vec4 diffuse = light.diffuse * diff * texture(textureUnit0, TexCoords);
+	
+	// Specular
 	vec3 viewDir = normalize(-FragPos);
-	vec4 specularI = light.specular * material.specular;
-	specularI = specularI * pow(max(dot(reflectDir,viewDir),0), material.shininess);
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir),0.0), material.shininess);
+	vec4 specular = light.specular * spec * texture(textureUnit0, TexCoords);
 
-	return vec4(ambientI + diffuseI + specularI) * texture(textureUnit0, TexCoords);
+	return vec4(ambient + diffuse + specular);
 }

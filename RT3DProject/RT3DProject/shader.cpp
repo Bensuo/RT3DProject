@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include "md2model.h"
+#include <glm/detail/type_vec3.hpp>
 
 namespace Rendering
 {
@@ -142,6 +143,12 @@ namespace Rendering
 		glUniform4fv(uniformIndex, 1, light.specular);
 		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].position").c_str());
 		glUniform4fv(uniformIndex, 1, light.position);
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].constant").c_str());
+		glUniform4fv(uniformIndex, 1, &light.constant);
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].linear").c_str());
+		glUniform4fv(uniformIndex, 1, &light.linear);
+		uniformIndex = glGetUniformLocation(program, ("lights[" + number + "].quadratic").c_str());
+		glUniform4fv(uniformIndex, 1, &light.quadratic);
 	}
 
 	void Shader::setMaterial(const rt3d::materialStruct& material) const
