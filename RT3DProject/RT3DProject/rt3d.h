@@ -13,19 +13,19 @@
 namespace rt3d {
 
 	struct lightStruct {
-		GLfloat ambient[4];
-		GLfloat diffuse[4];
-		GLfloat specular[4];
-		GLfloat position[4];
+		GLfloat ambient[3];
+		GLfloat diffuse[3];
+		GLfloat specular[3];
+		GLfloat position[3];
 		GLfloat constant;
 		GLfloat linear;
 		GLfloat quadratic;
 	};
 
 	struct materialStruct {
-		GLfloat ambient[4];
-		GLfloat diffuse[4];
-		GLfloat specular[4];
+		GLfloat ambient[3];
+		GLfloat diffuse[3];
+		GLfloat specular[3];
 		GLfloat shininess;
 	};
 

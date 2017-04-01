@@ -38,9 +38,9 @@ namespace Rendering
 		GLuint size;
 		SDL_Surface* texture;
 		rt3d::materialStruct material = {
-			{ 1.0f, 1.0f, 1.0f, 1.0f }, // ambient
-			{ 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
-			{ 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+			{ 1.0f, 1.0f, 1.0f }, // ambient
+			{ 1.0f, 1.0f, 1.0f }, // diffuse
+			{ 1.0f, 1.0f, 1.0f }, // specular
 			1.0f  // shininess
 		};
 		glm::vec4 color;

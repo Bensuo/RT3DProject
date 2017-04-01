@@ -54,10 +54,10 @@ private:
 
 	//TODO: Replace with maps?
 	rt3d::lightStruct testLight = {
-		{ 0.0f, 0.0f, 1.0f, 1.0f }, // ambient
-		{ 1.0f, 0.0f, 0.0f, 1.0f }, // diffuse
-		{ 0.0f, 1.0f, 0.0f, 1.0f }, // specular
-		{ 0.0f, 0.0f, 0.0f, 0.0f },  // position
+		{ 0.0f, 0.0f, 1.0f }, // ambient
+		{ 1.0f, 0.0f, 0.0f }, // diffuse
+		{ 0.0f, 1.0f, 0.0f }, // specular
+		{ 0.0f, 0.0f, 0.0f },  // position
 		{ 1.0f, },
 		{ 0.09f },
 		{ 0.032f },

@@ -102,9 +102,9 @@ class Game
 	Rendering::Box testBox1;
 	Rendering::Box testBox2;
 	rt3d::materialStruct material = {
-		{ 0.4f, 0.4f, 1.0f, 0.2f }, // ambient
-		{ 0.8f, 0.8f, 1.0f, 0.2f }, // diffuse
-		{ 0.8f, 0.8f, 0.8f, 0.2f }, // specular
+		{ 0.4f, 0.4f, 1.0f }, // ambient
+		{ 0.8f, 0.8f, 1.0f }, // diffuse
+		{ 0.8f, 0.8f, 0.8f }, // specular
 		0.2f  // shininess
 	};
 	void checkCollisions();
