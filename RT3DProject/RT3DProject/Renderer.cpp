@@ -59,12 +59,10 @@ void Renderer::init()
 
 	//Set up shaders
 	shaders.insert(std::make_pair("Phong", Rendering::Shader("res/shaders/phong-tex.vert", "res/shaders/phong-tex.frag")));
-	shaders["Phong"].addLight(light0, 0);
-	shaders["Phong"].addLight(light1, 1);
+	shaders["Phong"].addLight(testLight, 0);
 
 	shaders.insert(std::make_pair("Phong-interpolated", Rendering::Shader("res/shaders/phong-tex-interp.vert", "res/shaders/phong-tex.frag")));
-	shaders["Phong-interpolated"].addLight(light0, 0);
-	shaders["Phong-interpolated"].addLight(light1, 1);
+	shaders["Phong-interpolated"].addLight(testLight, 0);
 
 	shaders.insert(std::make_pair("UI", Rendering::Shader("res/shaders/textured.vert", "res/shaders/textured.frag")));
 }
@@ -185,8 +183,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthMask(GL_TRUE);
 	terrain->shader.use();
-	terrain->shader.addLight(light0, 0);
-	terrain->shader.addLight(light1, 1);
+	terrain->shader.addLight(testLight, 0);
 
 	//view = glm::translate(view, glm::vec3(0, -50, 0));
 	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));

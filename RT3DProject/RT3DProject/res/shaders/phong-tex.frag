@@ -4,15 +4,18 @@
 
 precision highp float;
 
-struct lightStruct
+struct PointLight
 {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
 	vec4 position;
+	float constant;
+	float linear;
+	float quadratic;
 };
 
-struct materialStruct
+struct Material
 {
 	vec4 ambient;
 	vec4 diffuse;
@@ -20,8 +23,8 @@ struct materialStruct
 	float shininess;
 };
 
-uniform lightStruct lights[NR_LIGHTS];
-uniform materialStruct material;
+uniform PointLight lights[NR_LIGHTS];
+uniform Material material;
 uniform sampler2D textureUnit0;
 
 in vec3 Normal;
@@ -30,7 +33,7 @@ in vec2 TexCoords;
 
 layout(location = 0) out vec4 out_Color;
 
-vec4 CalcColor(lightStruct light);
+vec4 CalcColor(PointLight light);
  
 void main(void) 
 {
@@ -38,7 +41,7 @@ void main(void)
 		out_Color += CalcColor(lights[i]);
 }
 
-vec4 CalcColor(lightStruct light)
+vec4 CalcColor(PointLight light)
 {
 	vec3 lightDir = normalize(light.position.xyz - FragPos.xyz);
 

@@ -17,6 +17,9 @@ namespace rt3d {
 		GLfloat diffuse[4];
 		GLfloat specular[4];
 		GLfloat position[4];
+		GLfloat constant;
+		GLfloat linear;
+		GLfloat quadratic;
 	};
 
 	struct materialStruct {

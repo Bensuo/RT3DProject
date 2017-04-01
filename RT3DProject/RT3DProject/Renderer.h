@@ -53,25 +53,14 @@ private:
 	Rendering::Shader* currentShader;
 
 	//TODO: Replace with maps?
-	rt3d::lightStruct light0 = {
+	rt3d::lightStruct testLight = {
 		{ 0.1f, 0.1f, 0.1f, 1.0f }, // ambient
 		{ 0.2f, 0.4f, 0.5f, 1.0f }, // diffuse
 		{ 0.15f, 0.34f, 0.7f, 0.25f }, // specular
-		{ 0.0f, 0.0f, 0.0f, 0.0f }  // position
-	};
-
-	//rt3d::lightStruct light0 = {
-	//	{ 0.1f, 0.1f, 0.1f, 1.0f }, // ambient
-	//	{ 0.1f, 0.4f, 0.3f, 1.0f }, // diffuse
-	//	{ 0.15f, 0.34f, 0.7f, 0.25f }, // specular
-	//	{ 0.0f, 0.0f, 0.0f, 0.0f }  // position
-	//};
-
-	rt3d::lightStruct light1 = {
-		{ 0.0f, 0.0f, 0.0f, 0.0f }, // ambient
-		{ 0.0f, 0.0f, 0.0f, 0.0f }, // diffuse
-		{ 0.0f, 0.0f, 0.0f, 0.0f }, // specular
-		{ 20.0f, 20.0f, 0.0f, 0.0f }  // position
+		{ 0.0f, 0.0f, 0.0f, 0.0f },  // position
+		{ 1.0f, },
+		{ 0.09f },
+		{ 0.032f },
 	};
 
 	glm::mat4 view;
