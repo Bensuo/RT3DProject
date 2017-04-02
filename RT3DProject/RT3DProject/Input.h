@@ -12,7 +12,7 @@ class Input
 	bool isQuitting = false;
 public:
 	Input();
-	void update(Player* player, camera& camera, bool freezeControls);
+	void update(Player* player, Camera& camera, bool freezeControls);
 	bool quit() const;
 	~Input();
 };

@@ -2,7 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-class camera
+class Camera
 {
 	const float SPEED = 100.0f;
 	const float SENSITIVTY = 0.5f;
@@ -32,7 +32,7 @@ public:
 	const float& getYaw() const;
 	const glm::vec3& getFront() const;
 	void update(const float& deltaTime, const glm::vec3& targetPos);
-	explicit camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
+	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 getViewMatrix() const;
 	void processMouseMovement(const glm::vec2& offset);
 	void processMouseScroll(float yoffset);

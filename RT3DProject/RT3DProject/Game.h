@@ -24,7 +24,7 @@ class Game
 	Utilities::ResourceManager content;
 	Renderer renderer;
 	static AudioManager audioManager;
-	camera camera;
+	Camera camera;
 	Input input;
 	GameTime gameTime;
 	Scene* scene;

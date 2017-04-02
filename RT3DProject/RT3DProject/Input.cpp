@@ -5,7 +5,7 @@ Input::Input(): previousKeyState(nullptr)
 	currentKeyState = SDL_GetKeyboardState(nullptr);
 }
 
-void Input::update(Player* player, camera& camera, bool freezeControls)
+void Input::update(Player* player, Camera& camera, bool freezeControls)
 {
 	if (!freezeControls)
 	{

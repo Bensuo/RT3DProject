@@ -20,7 +20,7 @@ namespace Rendering
 			const char* vertexPath,
 			const char* fragmentPath);
 		~Skybox();
-		void render(camera& camera) const;
+		void render(Camera& camera) const;
 		GLuint vao;
 		GLuint texture;
 		Shader shader;

@@ -139,7 +139,7 @@ void Renderer::draw(IRenderable* renderable)
 
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 	currentShader->setMaterial(renderable->getMaterial()) ;
-	//float interp = renderable->getInterp();
+
 	currentShader->setUniform1f("interp", renderable->getInterp());
 	if (renderable->isIndexed())
 	{
