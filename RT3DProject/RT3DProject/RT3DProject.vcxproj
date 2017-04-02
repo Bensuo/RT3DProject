@@ -181,18 +181,6 @@
     <ClCompile Include="ViewportWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="gouraud.vert" />
-    <None Include="minimal.frag" />
-    <None Include="minimal.vert" />
-    <None Include="mvp.vert" />
-    <None Include="phong-tex.frag" />
-    <None Include="phong-tex.vert" />
-    <None Include="phong.frag" />
-    <None Include="phong.vert" />
-    <None Include="simple.frag" />
-    <None Include="terrain.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="AIController.h" />
     <ClInclude Include="AudioManager.h" />

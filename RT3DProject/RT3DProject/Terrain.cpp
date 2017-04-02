@@ -116,9 +116,13 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	shader = Rendering::Shader("res/shaders/phong-tex.vert", "res/shaders/phong-tex.frag");
+	shader = Rendering::Shader("res/shaders/phong-tex.vert", "res/shaders/terrain.frag");
 	shader.setMaterial(material);
-	texture = content.loadTexture("terrainTex.bmp");
+	texture[0] = *content.loadTexture("res/textures/terrain/background.bmp").get();
+	texture[1] = *content.loadTexture("res/textures/terrain/red.bmp").get();
+	texture[2] = *content.loadTexture("res/textures/terrain/green.bmp").get();
+	texture[3] = *content.loadTexture("res/textures/terrain/blue.bmp").get();
+	texture[4] = *content.loadTexture("res/textures/terrain/blendmap.bmp").get();
 	//Cleanup
 	SDL_FreeSurface(tmpSurface);
 	SDL_FreeSurface(normSurface);
