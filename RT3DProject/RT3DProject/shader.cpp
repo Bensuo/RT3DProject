@@ -107,6 +107,12 @@ namespace Rendering
 		glUniform1f(uniformIndex, data);
 	}
 
+	void Shader::setUniform1i(const char * uniformName, GLuint data) const
+	{
+		int uniformIndex = glGetUniformLocation(program, uniformName);
+		glUniform1i(uniformIndex, data);
+	}
+
 	// set matrices untested... likely to change - not totally happy with this for now.
 	void Shader::setMatrices(const GLfloat *proj, const GLfloat *mv, const GLfloat *mvp) const
 	{

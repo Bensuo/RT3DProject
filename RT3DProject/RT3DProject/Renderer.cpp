@@ -115,6 +115,7 @@ void Renderer::swapBuffers() const
 void Renderer::draw(IRenderable* renderable)
 {
 	glCullFace(GL_FRONT);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 
 	mvStack.push(mvStack.top());
@@ -167,6 +168,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 	glUniformMatrix4fv(glGetUniformLocation(skybox->shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(skyboxView));
 
 	glBindVertexArray(skybox->vao);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->texture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
@@ -191,9 +193,26 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	//view = glm::translate(view, glm::vec3(0, -50, 0));
 	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));
 	terrain->shader.setUniformMatrix4fv("modelview", glm::value_ptr(view));
+	terrain->shader.setUniform1f("rows", (float)terrain->getRows()/32.0f);
 	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "modelview"), 1, GL_FALSE, glm::value_ptr(view));
-	glBindTexture(GL_TEXTURE_2D, *terrain->getTexture());
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, terrain->getTexture(0));
+	terrain->shader.setUniform1i("bgTexture", 0);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, terrain->getTexture(1));
+	terrain->shader.setUniform1i("rTexture", 1);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, terrain->getTexture(2));
+	terrain->shader.setUniform1i("gTexture", 2);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, terrain->getTexture(3));
+	terrain->shader.setUniform1i("bTexture", 3);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, terrain->getTexture(4));
+	terrain->shader.setUniform1i("blendTexture", 4);
+
 	glBindVertexArray(terrain->getVAO());
 	//glEnable(GL_PRIMITIVE_RESTART);
 	
@@ -202,7 +221,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	glDrawElements(GL_TRIANGLES, terrain->getNumIndices(), GL_UNSIGNED_INT, 0);
 	//glDisable(GL_PRIMITIVE_RESTART);
 	glBindVertexArray(0);
-
+	
 	
 	glCullFace(GL_BACK);
 	//glClear(GL_DEPTH_BUFFER_BIT);
@@ -247,6 +266,7 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3 size) 
 {
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
@@ -266,6 +286,7 @@ void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3
 void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position)
 {
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));

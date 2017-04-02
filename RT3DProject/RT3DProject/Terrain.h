@@ -18,8 +18,8 @@ public:
 	void setScale(glm::vec3 s) { scale = s; }
 	int getRows() { return rows; }
 	int getColumns() { return cols; }
-	GLuint* getTexture() { 
-		return texture.lock().get();
+	GLuint getTexture(int index) { 
+		return texture[index];
 	}
 	float getHeightAtPosition(float x, float z);
 	Rendering::Shader shader;
@@ -34,7 +34,7 @@ private:
 	//GLuint vertVBO, texCoordVBO, indicesVBO, normalsVBO;
 	GLuint vao;
 	std::vector<std::vector<float>> heights;
-	std::weak_ptr<GLuint> texture;
+	GLuint texture[5];
 	rt3d::materialStruct material = {
 		{ 0.4f, 0.4f, 1.0f, 1.0f }, // ambient
 		{ 0.8f, 0.8f, 1.0f, 1.0f }, // diffuse
