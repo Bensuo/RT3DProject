@@ -185,7 +185,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 	skybox->shader.disable();
 }
 
-void Renderer::drawTerrain(Terrain * terrain) const
+void Renderer::drawTerrain(const Terrain * terrain) const
 {
 	glCullFace(GL_BACK);
 	//glEnable(GL_DEPTH_TEST);

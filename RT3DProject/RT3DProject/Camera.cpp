@@ -72,7 +72,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up) : front(glm::vec3(0.0f, 0.0f, -
 	this->pitch = 0;
 }
 
-glm::mat4 Camera::getViewMatrix() const
+const glm::mat4& Camera::getViewMatrix() const
 {
 	return view;
 }

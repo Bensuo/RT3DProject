@@ -9,7 +9,7 @@ public:
 	virtual ~StaticObject();
 	void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
 	Rendering::PlayerModel* getModel() const { return model; }
-	AABB getAABB() const { return boundingBox; }
+	const AABB& getAABB() const { return boundingBox; }
 	void setTransform(Transform t) {
 		boundingBox.c = t.position; 
 		boundingBox.c.y += boundingBox.r.y;

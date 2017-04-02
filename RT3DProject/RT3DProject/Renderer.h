@@ -28,7 +28,7 @@ public:
 	void swapBuffers() const;
 	void draw(IRenderable* renderable);
 	void drawSkybox(Rendering::Skybox* skybox) const;
-	void drawTerrain(Terrain* terrain) const;
+	void drawTerrain(const Terrain* terrain) const;
 	void render(const std::vector<IRenderable*>& models);
 	void renderFirstPerson(IRenderable* renderable);
 	void setShader(std::string name);

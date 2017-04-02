@@ -33,7 +33,7 @@ MD2::~MD2()
 	delete[] animVerts;
 }
 
-GLuint MD2::readMD2Model(const std::string& filename)
+const GLuint& MD2::readMD2Model(const std::string& filename)
 {
 	FILE *fp;
 	int i;

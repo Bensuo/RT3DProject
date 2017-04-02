@@ -15,14 +15,14 @@ namespace Rendering
 		void loadContent(Utilities::ResourceManager& content);
 		virtual ~Box();
 		// Inherited via IRenderable
-		GLuint& getMesh() override;
-		GLuint& getTexture() override;
-		GLuint& getCount() override;
-		rt3d::materialStruct & getMaterial() override;
-		Transform & getTransform() override;
-		bool isIndexed() override;
+		const GLuint& getMesh() override;
+		const GLuint& getTexture() override;
+		const GLuint& getCount() override;
+		const rt3d::materialStruct& getMaterial() override;
+		const Transform& getTransform() override;
+		const bool& isIndexed() override;
 		void setMaterial(rt3d::materialStruct mat) { material = mat; };
-		float getInterp() override { return 0.0f; }
+		const float& getInterp() override { return 0.0f; }
 	private:
 		GLfloat cubeVerts[24];
 		GLfloat cubeColours[24];

@@ -11,18 +11,20 @@ class Terrain
 public:
 	Terrain();
 	virtual ~Terrain();
-	void loadContent(const char* fname, const char * normname, Utilities::ResourceManager& content);
-	int getNumIndices() const { return indexCount; }
-	GLuint getVAO() const { return vao; }
-	Rendering::Shader& getShader() { return shader; }
-	glm::vec3 getScale() const { return scale; }
-	void setScale(glm::vec3 s) { scale = s; }
-	int getRows() const { return rows; }
-	int getColumns() const { return cols; }
-	GLuint getTexture(int index) { 
+	void loadContent(const char* fname, const char* normname, Utilities::ResourceManager& content);
+	const int& getNumIndices() const { return indexCount; }
+	const GLuint& getVAO() const { return vao; }
+	const Rendering::Shader& getShader() const { return shader; }
+	const glm::vec3& getScale() const { return scale; }
+	void setScale(const glm::vec3& scale) { this->scale = scale; }
+	const int& getRows() const { return rows; }
+	const int& getColumns() const { return cols; }
+	const GLuint& getTexture(const int& index) const
+	{ 
 		return texture[index];
 	}
-	float getHeightAtPosition(float x, float z);
+
+	const float& getHeightAtPosition(const float& x, const float& z) const;
 	Rendering::Shader shader;
 private:
 	float getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const;

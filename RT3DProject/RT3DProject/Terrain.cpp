@@ -127,7 +127,7 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	SDL_FreeSurface(normSurface);
 }
 
-float Terrain::getHeightAtPosition(float x, float z)
+const float& Terrain::getHeightAtPosition(const float& x, const float& z) const
 {
 	auto tX = x - transform.position.x + (scale.x/2);
 	auto tZ = z - transform.position.z + (scale.z / 2);

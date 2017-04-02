@@ -15,7 +15,7 @@ namespace Rendering {
 			model.setCurrentAnim(state);
 		}
 		void resetAnimation() { model.resetAnimation(); }
-		GLfloat* getVerts() const { return model.getAnimVerts(); }
-		int getNumVerts() const { return model.getVertDataCount(); }
+		const GLfloat* getVerts() const { return model.getAnimVerts(); }
+		const int& getNumVerts() const { return model.getVertDataCount(); }
 	};
 }

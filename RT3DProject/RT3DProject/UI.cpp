@@ -49,12 +49,12 @@ namespace Rendering
 
 	UI::~UI(){}
 
-	int UI::getWidth() const
+	const int& UI::getWidth() const
 	{
 		return texture->w;
 	}
 
-	int UI::getHeight() const
+	const int& UI::getHeight() const
 	{
 		return texture->h;
 	}
@@ -73,12 +73,12 @@ namespace Rendering
 		genTexture();
 	}
 
-	Shader& UI::getShader()
+	const Shader& UI::getShader()
 	{
 		return shader;
 	}
 
-	GLuint & UI::getTexture() {
+	const GLuint& UI::getTexture() {
 		return label;
 	}
 
@@ -102,10 +102,10 @@ namespace Rendering
 		}
 	}
 
-	GLuint & UI::getMesh() { return mesh; }
-	GLuint & UI::getCount() { return size; }
-	rt3d::materialStruct & UI::getMaterial() { return material; }
-	Transform & UI::getTransform() { return transform; }
-	bool UI::isIndexed() { return true; }
+	const GLuint& UI::getMesh() { return mesh; }
+	const GLuint& UI::getCount() { return size; }
+	const rt3d::materialStruct& UI::getMaterial() { return material; }
+	const Transform& UI::getTransform() { return transform; }
+	const bool& UI::isIndexed() { return true; }
 }
 

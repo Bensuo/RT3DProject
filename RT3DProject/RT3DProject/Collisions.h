@@ -110,7 +110,7 @@ namespace Collisions
 		return true;
 	}
 
-	inline void terrainCollision(Player * p, Terrain * terrain)
+	inline void terrainCollision(Player * p, const Terrain * terrain)
 	{
 		auto h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
 		if (p->getPosition().y - p->getAABB().r.y < h)
@@ -122,7 +122,7 @@ namespace Collisions
 		}
 	}
 
-	inline void terrainCollision(Pickup * p, Terrain * terrain)
+	inline void terrainCollision(Pickup * p, const Terrain * terrain)
 	{
 		auto h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
 		if (p->getPosition().y - p->getAABB().r.y < h)

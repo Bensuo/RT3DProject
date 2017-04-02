@@ -15,18 +15,18 @@ namespace Rendering
 	public:
 		virtual ~Model();
 		void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
-		void update(const float& dt);	
-		int getCurrentFrame() const { return model.getCurrentFrame(); }
+		void update(const float& dt);
+		const int& getCurrentFrame() const { return model.getCurrentFrame(); }
 		virtual void setAnimation(const int& state) {}
 		virtual void setUpAnimationData() {}
 		virtual void setTransform(const Transform& transform);
-		GLuint& getMesh() override;
-		GLuint& getTexture() override;
-		GLuint& getCount() override;
-		rt3d::materialStruct& getMaterial() override;
-		Transform& getTransform() override;
-		bool isIndexed() override;
-		float getInterp() override { return model.getInterp(); }
+		const GLuint& getMesh() override;
+		const GLuint& getTexture() override;
+		const GLuint& getCount() override;
+		const rt3d::materialStruct& getMaterial() override;
+		const Transform& getTransform() override;
+		const bool& isIndexed() override;
+		const float& getInterp() override { return model.getInterp(); }
 	protected:
 		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;

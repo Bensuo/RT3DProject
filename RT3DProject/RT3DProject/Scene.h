@@ -14,7 +14,7 @@ public:
 	void loadContent(Utilities::ResourceManager& content);
 	Player* getPlayer() const { return player; }
 	Rendering::Skybox* getSkybox() const { return skybox; }
-	Terrain* getTerrain() const { return terrain; }
+	const Terrain* getTerrain() const { return terrain; }
 	std::vector<std::shared_ptr<Player>>& getNPCs() { return npcs; }
 	std::vector<StaticObject*>& getStaticObjects() { return staticObjects; }
 	std::vector<Pickup*> getPickups() const { return pickups; }

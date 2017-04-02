@@ -14,18 +14,18 @@ namespace Rendering
 		UI(const std::string& path);
 		UI(const std::string& string, int size, const glm::vec4& color = glm::vec4(1.0f));
 		virtual ~UI();
-		int getWidth() const;
-		int getHeight() const;
+		const int& getWidth() const;
+		const int& getHeight() const;
 		void setString(const std::string& string);
-		Shader& getShader();
-		GLuint& getMesh() override;
-		GLuint& getTexture() override;
-		GLuint& getCount() override;
-		rt3d::materialStruct& getMaterial() override;
-		Transform& getTransform() override;
-		bool isIndexed() override;
+		const Shader& getShader();
+		const GLuint& getMesh() override;
+		const GLuint& getTexture() override;
+		const GLuint& getCount() override;
+		const rt3d::materialStruct& getMaterial() override;
+		const Transform& getTransform() override;
+		const bool& isIndexed() override;
 		void setText(const std::string& txt) { uiString = txt; }
-		float getInterp() override { return 0.0f; }
+		const float& getInterp() override { return 0.0f; }
 	private:
 		Shader shader;
 		std::vector<GLfloat> verts;

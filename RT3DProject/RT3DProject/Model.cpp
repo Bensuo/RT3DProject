@@ -31,32 +31,32 @@ namespace Rendering
 		this->transform.rotation.x -= 90.0f;
 	}
 
-	GLuint& Model::getMesh()
+	const GLuint& Model::getMesh()
 	{
 		return mesh;
 	}
 
-	GLuint& Model::getCount()
+	const GLuint& Model::getCount()
 	{
 		return vertexCount;
 	}
 
-	rt3d::materialStruct& Model::getMaterial()
+	const rt3d::materialStruct& Model::getMaterial()
 	{
 		return material;
 	}
 
-	Transform& Model::getTransform()
+	const Transform& Model::getTransform()
 	{
 		return transform;
 	}
 
-	bool Model::isIndexed()
+	const bool& Model::isIndexed()
 	{
 		return false;
 	}
 
-	GLuint& Model::getTexture()
+	const GLuint& Model::getTexture()
 	{
 		return *texture.get();
 	}
