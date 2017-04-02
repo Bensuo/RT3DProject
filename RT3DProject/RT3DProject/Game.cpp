@@ -28,7 +28,7 @@ void Game::init()
 	crosshair = new Rendering::UI("res/textures/Crosshair.png");
 	HUD = new Rendering::UI("res/textures/Interface.png");
 
-	AudioManager::Init();
+	AudioManager::Init(content);
 	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
 
 	gameTime.Initialize();	//always init last for accurate game loop startup
@@ -229,6 +229,19 @@ void Game::update()
 	checkCollisions();
 
 	camera.Update(gameTime.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0, -24, 0));
+	if (!endSoundPlayed)
+	{
+		if (scene->getPlayer()->getIsDead())
+		{
+			AudioManager::PlaySound("res/audio/sfx/YouDied.wav");
+			endSoundPlayed = true;
+		}
+		else if (countdown.finished())
+		{
+			AudioManager::PlaySound("res/audio/sfx/YouWin.wav");
+			endSoundPlayed = true;
+		}
+	}
 }
 
 Game::Game() : countdown(2 * 60)
@@ -257,6 +270,7 @@ Game::Game() : countdown(2 * 60)
 		}
 	}
 	renderer.quit();
+	content.unloadAll();
 }
 
 bool playerCollision(Player* p1, Player* p2)

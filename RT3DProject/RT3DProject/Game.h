@@ -87,7 +87,7 @@ class Game
 	const unsigned SCREEN_WIDTH = 1280;
 	
 	bool running = true;
-
+	bool endSoundPlayed = false;
 	std::vector<IRenderable*> renderList;
 	std::vector<IRenderable*> fpRenderList;
 	Rendering::UI* failure;

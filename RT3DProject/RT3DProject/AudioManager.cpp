@@ -4,15 +4,14 @@
 #include <SDL.h>
 #include <glm/glm.hpp>
 
-std::map<std::string, Mix_Music*> AudioManager::music;
-std::map<std::string, Mix_Chunk*> AudioManager::sounds;
+Utilities::ResourceManager* AudioManager::content;
 
 AudioManager::AudioManager()
 {
 
 }
 
-void AudioManager::Init()
+void AudioManager::Init(Utilities::ResourceManager& contentManager)
 {
 	// start SDL with audio support
 	if (SDL_Init(SDL_INIT_AUDIO) == -1) {
@@ -26,59 +25,45 @@ void AudioManager::Init()
 		printf("Mix_OpenAudio: %s\n", Mix_GetError());
 		exit(2);
 	}
+	content = &contentManager;
 }
 
 void AudioManager::PlaySound(const std::string& path, const float& volume)
 {
 	glm::clamp(volume, 0.0f, 1.0f);
 	Mix_Volume(FREE_CHANNEL, volume * MIX_MAX_VOLUME);
-
-	auto iterator = sounds.find(path);
-
-	//if the sound has been loaded, play it
-	if(iterator != sounds.end())
+	Mix_Chunk* chunk = content->loadSound(path);
+	if (chunk != nullptr)
 	{
-		Mix_PlayChannel(FREE_CHANNEL, sounds[path], 0);
+		Mix_PlayChannel(FREE_CHANNEL, chunk, 0);
+
 	}
-	//if the sound hasn't been loaded, load it and play it
-	else
-	{
-		auto newMusic = Mix_LoadWAV(path.c_str());
-		if (newMusic == nullptr) {
-			printf("Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError());
-			printf(path.c_str(), "\n");
-			printf("\n");
-		}
-		else {
-			sounds.emplace(path, newMusic);
-			Mix_PlayChannel(FREE_CHANNEL, sounds[path], 0);
-		}
-	}
+	
 }
 
 void AudioManager::PlayMusic(const std::string& path, const float& volume, bool loop)
 {
-	auto newVolume = glm::clamp(volume, 0.0f, 1.0f);
-
-	Mix_VolumeMusic(newVolume * MIX_MAX_VOLUME);
-
-	auto iterator = music.find(path);
-
-	int loops;
-	if(loop) {
-		loops = -1;
-	} else {
-		loops = 0;
-	}
-
-	//if the music has been loaded, play it
-	if (iterator != music.end())
+	Mix_Music* music = content->loadMusic(path);
+	if (music != nullptr)
 	{
+		auto newVolume = glm::clamp(volume, 0.0f, 1.0f);
+
+		Mix_VolumeMusic(newVolume * MIX_MAX_VOLUME);
+
+		int loops;
+		if (loop) {
+			loops = -1;
+		}
+		else {
+			loops = 0;
+		}
+
+
 		//if there is no music playing
 		if (Mix_PlayingMusic() == 0)
 		{
 			//play the music
-			Mix_PlayMusic(music[path], loops);
+			Mix_PlayMusic(music, loops);
 		}
 		//if music is being played
 		else
@@ -86,19 +71,7 @@ void AudioManager::PlayMusic(const std::string& path, const float& volume, bool 
 			PauseMusic();
 		}
 	}
-	//if the music hasn't been loaded, load it an play it
-	else
-	{
-		auto newMusic = Mix_LoadMUS(path.c_str());
-		if (newMusic == nullptr) {
-			printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
-			printf(path.c_str(), "\n");
-			printf("\n");
-		} else {
-			music.emplace(path, newMusic);
-			Mix_PlayMusic(music[path], loops);
-		}
-	}
+
 }
 
 void AudioManager::StopMusic()
@@ -124,17 +97,5 @@ void AudioManager::PauseMusic()
 
 void AudioManager::Close()
 {
-	//free the music
-	for (auto it = music.begin(); it != music.end(); ++it)
-	{
-		Mix_FreeMusic(it->second);
-	}
-	music.clear();
-
-	//free the sounds
-	for (auto it = sounds.begin(); it != sounds.end(); ++it)
-	{
-		Mix_FreeChunk(it->second);
-	}
-	sounds.clear();
+	
 }
