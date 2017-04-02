@@ -29,7 +29,7 @@ void Game::init()
 	HUD = new Rendering::UI("res/textures/Interface.png");
 
 	AudioManager::Init(content);
-	AudioManager::PlayMusic("02 - Rip & Tear.mp3", 0.5f);
+	AudioManager::PlayMusic("res/audio/music/02 - Rip & Tear.mp3", 0.5f);
 
 	gameTime.Initialize();	//always init last for accurate game loop startup
 	countdown.startTimer();

@@ -21,7 +21,7 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 
 	terrain = new Terrain();
 	terrain->setScale(glm::vec3(4000.0f, 200.0f, 4000.0f));
-	terrain->loadContent("newhm.bmp", "newhm-normal.bmp", content);
+	terrain->loadContent("res/textures/terrain/newhm.bmp", "res/textures/terrain/newhm-normal.bmp", content);
 
 	player = new Player();
 	player->loadContent(content, "rampage");

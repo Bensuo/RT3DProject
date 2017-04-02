@@ -39,7 +39,7 @@ namespace Rendering
 		if (TTF_Init() == -1)
 			std::cout << "TTF failed to initialise." << std::endl;
 
-		auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", textSize);
+		auto textFont = TTF_OpenFont("res/fonts/MavenPro-Regular.ttf", textSize);
 		if (textFont == nullptr)
 			std::cout << "Failed to open font." << std::endl;
 		SDL_Color sdl_Color = { color.b, color.g, color.r, color.a };
@@ -65,7 +65,7 @@ namespace Rendering
 			return;
 
 		this->uiString = string;
-		auto textFont = TTF_OpenFont("MavenPro-Regular.ttf", 24);
+		auto textFont = TTF_OpenFont("res/fonts/MavenPro-Regular.ttf", 24);
 		if (textFont == nullptr)
 			std::cout << "Failed to open font." << std::endl;
 		SDL_Color sdl_Color = { color.b, color.g, color.r, color.a };

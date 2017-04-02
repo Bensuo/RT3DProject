@@ -63,7 +63,7 @@ void Player::update(float dt)
 			sprint = false;
 			playerState = STAND;
 		}
-	}
+	} 
 
 	if (weaponState != POW)
 	{
