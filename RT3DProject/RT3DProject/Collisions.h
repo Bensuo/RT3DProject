@@ -4,9 +4,9 @@
 #include "Player.h"
 #include "Ray.h"
 #include <algorithm>
+
 namespace Collisions
-{
-	
+{	
 	struct CollisionInfo
 	{
 		bool collision = false;
@@ -14,17 +14,17 @@ namespace Collisions
 		
 	};
 
-	void testAxis(glm::vec3 axis, float minA, float maxA, float minB, float maxB, glm::vec3& mtvAxis, float& mtvDistance)
+	inline void testAxis(glm::vec3 axis, float minA, float maxA, float minB, float maxB, glm::vec3& mtvAxis, float& mtvDistance)
 	{
-		float axisLengthSquared = glm::dot(axis, axis);
+		auto axisLengthSquared = glm::dot(axis, axis);
 		//Calculates overlap ranges and find out if the overlap is on the left or right
-		float d0 = (maxB - minA);
-		float d1 = (maxA - minB);
-		float overlap = (d0 < d1) ? d0 : -d1;
+		auto d0 = (maxB - minA);
+		auto d1 = (maxA - minB);
+		auto overlap = (d0 < d1) ? d0 : -d1;
 
-		glm::vec3 sep = axis * (overlap / axisLengthSquared);
+		auto sep = axis * (overlap / axisLengthSquared);
 
-		float sepLengthSquared = glm::dot(sep, sep);
+		auto sepLengthSquared = dot(sep, sep);
 		if (sepLengthSquared < mtvDistance)
 		{
 			mtvDistance = sepLengthSquared;
@@ -32,30 +32,32 @@ namespace Collisions
 		}
 	}
 
-	glm::vec3 getMTV(const AABB& A, const AABB& B)
+	inline glm::vec3 getMTV(const AABB& A, const AABB& B)
 	{
-		glm::vec3 mtv = glm::vec3(0);
-		float mtvDistance = std::numeric_limits<float>::max();
-		glm::vec3 minA(A.c - A.r);
-		glm::vec3 maxA(A.c + A.r);
-		glm::vec3 minB(B.c - B.r);
-		glm::vec3 maxB(B.c + B.r);
+		auto mtv = glm::vec3(0);
+		auto mtvDistance = std::numeric_limits<float>::max();
+		auto minA(A.c - A.r);
+		auto maxA(A.c + A.r);
+		auto minB(B.c - B.r);
+		auto maxB(B.c + B.r);
 
 		//Test the X, Y and Z axis to find the MTV
 		testAxis(glm::vec3(1, 0, 0), minA.x, maxA.x, minB.x, maxB.x, mtv, mtvDistance);
 		testAxis(glm::vec3(0, 1, 0), minA.y, maxA.y, minB.y, maxB.y, mtv, mtvDistance);
 		testAxis(glm::vec3(0, 0, 1), minA.z, maxA.z, minB.z, maxB.z, mtv, mtvDistance);
+
 		if (mtvDistance > 0)
 		{
-			mtv = glm::normalize(mtv);
-			mtvDistance = (float)sqrt(mtvDistance) * 1.001f;
+			mtv = normalize(mtv);
+			mtvDistance = static_cast<float>(sqrt(mtvDistance)) * 1.001f;
 			mtv *= mtvDistance;
 		}
 
 		return mtv;
 
 	}
-	CollisionInfo TestAABBAABB(const AABB& A, const AABB& B)
+
+	inline CollisionInfo TestAABBAABB(const AABB& A, const AABB& B)
 	{
 		CollisionInfo info;
 		if (abs(A.c[0] - B.c[0]) > (A.r[0] + B.r[0]))
@@ -77,55 +79,55 @@ namespace Collisions
 		info.mtv = getMTV(A, B);
 		return info;
 	}
-	bool TestRayAABB(const Ray& ray, const AABB& aabb)
+
+	inline bool TestRayAABB(const Ray& ray, const AABB& aabb)
 	{
 		glm::vec3 AABBmin(aabb.c.x - aabb.r.x, aabb.c.y - aabb.r.y, aabb.c.z - aabb.r.z);
 		glm::vec3 AABBmax(aabb.c.x + aabb.r.x, aabb.c.y + aabb.r.y, aabb.c.z + aabb.r.z);
-		float t1 = (AABBmin.x - ray.origin.x) / ray.dir.x;
-		float t2 = (AABBmax.x - ray.origin.x) / ray.dir.x;
-		float t3 = (AABBmin.y - ray.origin.y) / ray.dir.y;
-		float t4 = (AABBmax.y - ray.origin.y) / ray.dir.y;
-		float t5 = (AABBmin.z - ray.origin.z) / ray.dir.z;
-		float t6 = (AABBmax.z - ray.origin.z) / ray.dir.z;
 
-		float tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
-		float tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
+		auto t1 = (AABBmin.x - ray.origin.x) / ray.dir.x;
+		auto t2 = (AABBmax.x - ray.origin.x) / ray.dir.x;
+		auto t3 = (AABBmin.y - ray.origin.y) / ray.dir.y;
+		auto t4 = (AABBmax.y - ray.origin.y) / ray.dir.y;
+		auto t5 = (AABBmin.z - ray.origin.z) / ray.dir.z;
+		auto t6 = (AABBmax.z - ray.origin.z) / ray.dir.z;
+
+		auto tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
+		auto tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
 
 		// if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behing us
 		if (tmax < 0)
-		{
-			
+		{		
 			return false;
 		}
 
 		// if tmin > tmax, ray doesn't intersect AABB
 		if (tmin > tmax)
-		{
-			
+		{		
 			return false;
 		}
-
 		
 		return true;
 	}
-	void terrainCollision(Player * p, Terrain * terrain)
+
+	inline void terrainCollision(Player * p, Terrain * terrain)
 	{
-		float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
+		auto h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
 		if (p->getPosition().y - p->getAABB().r.y < h)
 		{
-			glm::vec3 newPos = p->getPosition();
+			auto newPos = p->getPosition();
 			newPos.y = h + p->getAABB().r.y;
 			p->setPosition(newPos);
-			p->Land();
+			p->land();
 		}
 	}
 
-	void terrainCollision(Pickup * p, Terrain * terrain)
+	inline void terrainCollision(Pickup * p, Terrain * terrain)
 	{
-		float h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
+		auto h = terrain->getHeightAtPosition(p->getPosition().x, p->getPosition().z);
 		if (p->getPosition().y - p->getAABB().r.y < h)
 		{
-			glm::vec3 newPos = p->getPosition();
+			auto newPos = p->getPosition();
 			newPos.y = h + p->getAABB().r.y;
 			p->setPosition(newPos);
 		}

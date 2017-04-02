@@ -86,16 +86,16 @@ public:
 	explicit MD2(const std::string& filename);
 	MD2();
 	virtual ~MD2();
-	GLuint ReadMD2Model(const std::string& filename);
-	void FreeModel();
-	void Animate(const int& animation, const float& dt);
-	void Animate(const float& dt) { Animate(currentAnim, dt); }
+	GLuint readMD2Model(const std::string& filename);
+	void freeModel();
+	void animate(const int& animation, const float& dt);
+	void animate(const float& dt) { animate(currentAnim, dt); }
 	void setCurrentAnim(const int& n) { currentAnim = n; }
-	void SetUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
-	void ResetAnimation() {
+	void setUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
+	void resetAnimation() {
 		currentFrame = 0;
 	}
-	float getInterp() { return interp; }
+	float getInterp() const { return interp; }
 protected:
 	md2_model_t mdl;
 	int currentAnim = 0;

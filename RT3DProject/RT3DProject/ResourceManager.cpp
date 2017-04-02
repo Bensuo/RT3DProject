@@ -53,6 +53,7 @@ namespace Utilities
 		}
 		return textureMap[filename];
 	}
+
 	Mix_Music * ResourceManager::loadMusic(std::string filename)
 	{
 		auto iterator = musicMap.find(filename);
@@ -78,6 +79,7 @@ namespace Utilities
 		}
 		return music;
 	}
+
 	Mix_Chunk * ResourceManager::loadSound(std::string filename)
 	{
 		auto iterator = soundsMap.find(filename);
@@ -103,6 +105,7 @@ namespace Utilities
 		}
 		return chunk;
 	}
+
 	void ResourceManager::unloadAll()
 	{
 		//free the music

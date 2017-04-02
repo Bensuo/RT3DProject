@@ -5,33 +5,32 @@
 #include "ResourceManager.h"
 #include <vector>
 #include "Transform.h"
+
 class Terrain
 {
 public:
 	Terrain();
 	virtual ~Terrain();
 	void loadContent(const char* fname, const char * normname, Utilities::ResourceManager& content);
-	int getNumIndices() { return indexCount; }
-	GLuint getVAO() { return vao; }
+	int getNumIndices() const { return indexCount; }
+	GLuint getVAO() const { return vao; }
 	Rendering::Shader& getShader() { return shader; }
-	glm::vec3 getScale() { return scale; }
+	glm::vec3 getScale() const { return scale; }
 	void setScale(glm::vec3 s) { scale = s; }
-	int getRows() { return rows; }
-	int getColumns() { return cols; }
+	int getRows() const { return rows; }
+	int getColumns() const { return cols; }
 	GLuint getTexture(int index) { 
 		return texture[index];
 	}
 	float getHeightAtPosition(float x, float z);
 	Rendering::Shader shader;
 private:
-	float getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+	float getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const;
 	int rows;
 	int cols;
 	int indexCount;
 	glm::vec3 scale;
 	GLuint vertVBO, normVBO, texVBO, indexEBO;
-	//OpenGL buffers
-	//GLuint vertVBO, texCoordVBO, indicesVBO, normalsVBO;
 	GLuint vao;
 	std::vector<std::vector<float>> heights;
 	GLuint texture[5];

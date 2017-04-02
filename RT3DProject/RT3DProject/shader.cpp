@@ -1,5 +1,7 @@
 #include "Shader.h"
 #include "md2model.h"
+#include <string>
+#include <fstream>
 
 namespace Rendering
 {
@@ -66,8 +68,8 @@ namespace Rendering
 		// ios::ate opens file at the end
 		std::ifstream file(fname, std::ios::in | std::ios::binary | std::ios::ate);
 		if (file.is_open()) {
-			size = (int)file.tellg(); // get location of file pointer i.e. file size
-			fSize = (GLint)size;
+			size = static_cast<int>(file.tellg()); // get location of file pointer i.e. file size
+			fSize = static_cast<GLint>(size);
 			memblock = new char[size];
 			file.seekg(0, std::ios::beg);
 			file.read(memblock, size);

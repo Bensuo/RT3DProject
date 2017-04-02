@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-Scene::Scene()
+Scene::Scene(): skybox(nullptr), terrain(nullptr), player(nullptr)
 {
 }
 
@@ -48,9 +48,9 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 	pickup->setPosition(glm::vec3(300, 40, -300));
 	pickups.push_back(pickup);
 
-	for (int i = 0; i < 30; i++)
+	for (auto i = 0; i < 30; i++)
 	{
-		Player* p = new Player();
+		auto p = new Player();
 		std::shared_ptr<Player> shared(p);
 		p->loadContent(content, "rampage");
 		p->setState(Player::STAND);
@@ -58,7 +58,7 @@ void Scene::loadContent(Utilities::ResourceManager& content)
 		npcs.push_back(shared);
 	}
 
-	StaticObject* m = new StaticObject();
+	auto m = new StaticObject();
 	m->loadContent(content, "res/md2/triax_tracks", "res/md2/triax_tracks");
 	m->setTransform(Transform{ glm::vec3(300, terrain->getHeightAtPosition(300, 0), 0), glm::vec3(0) });
 	staticObjects.push_back(m);

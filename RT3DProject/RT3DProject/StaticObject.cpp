@@ -2,7 +2,7 @@
 
 
 
-StaticObject::StaticObject()
+StaticObject::StaticObject(): model(nullptr)
 {
 }
 
@@ -16,11 +16,11 @@ void StaticObject::loadContent(Utilities::ResourceManager & content, const std::
 	model = new Rendering::PlayerModel();
 	model->loadContent(content, meshPath, texturePath);
 	float minX = 0, minY = 0, maxX = 0, maxY = 0, minZ = 0, maxZ = 0;
-	GLfloat* verts = model->getVerts();
-	int count = model->getNumVerts();
-	for (int i = 0; i < count; i++)
+	auto verts = model->getVerts();
+	auto count = model->getNumVerts();
+	for (auto i = 0; i < count; i++)
 	{
-		float x = verts[i * 3];
+		auto x = verts[i * 3];
 		if (x < minX)
 		{
 			minX = x;
@@ -48,6 +48,6 @@ void StaticObject::loadContent(Utilities::ResourceManager & content, const std::
 			maxZ = z;
 		}
 	}
-	//boundingBox.c = model->getTransform().position;
+
 	boundingBox.r = glm::vec3((maxY - minY)/2,(maxZ - minZ) /2, (maxX - minX) / 2);
 }

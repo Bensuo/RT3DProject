@@ -5,16 +5,16 @@ namespace Rendering {
 	PlayerModel::PlayerModel()
 	{
 
-		PlayerModel::SetUpAnimationData();
+		PlayerModel::setUpAnimationData();
 	}
 
 	PlayerModel::PlayerModel(const glm::vec3& position)
 	{
 		this->transform.position = position;
-		PlayerModel::SetUpAnimationData();
+		PlayerModel::setUpAnimationData();
 	}
 
-	void PlayerModel::SetUpAnimationData()
+	void PlayerModel::setUpAnimationData()
 	{
 		std::vector<int> animFrameList = {
 			0, 39,    //stand
@@ -39,7 +39,7 @@ namespace Rendering {
 			190, 196  //death3
 		};
 
-		m_MD2.SetUpAnimationData(animFrameList);
+		model.setUpAnimationData(animFrameList);
 	}
 
 	PlayerModel::~PlayerModel()

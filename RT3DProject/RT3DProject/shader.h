@@ -1,9 +1,6 @@
 #pragma once
-#include <fstream>
 #include <GL/glew.h>
-#include <SDL_opengl.h>
 #include <iostream>
-#include <sstream>
 #include "rt3d.h"
 
 namespace Rendering

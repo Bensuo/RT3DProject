@@ -1,6 +1,10 @@
 #include "Renderer.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "UI.h"
+#include <GL/glew.h>
+#include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include "Model.h"
 
 Renderer::Renderer()
 {
@@ -229,7 +233,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 
 //Renders all objects in the provided list based on the camera provided in begin() and the currently
 //active shader
-void Renderer::render(std::vector<IRenderable*>& models)
+void Renderer::render(const std::vector<IRenderable*>& models)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -251,11 +255,12 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
+	
 	//create projection from Camera data
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(glm::mat4(1));
-	float rotation = -180.0f * DEG_TO_RADIAN;
+	auto rotation = -180.0f * DEG_TO_RADIAN;
 	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
 	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -265,18 +270,18 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 
 void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3 size) 
 {
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
+	mvStack.top() = translate(mvStack.top(), glm::vec3(position));
 
 	auto newSize = glm::vec3(size.x / SCREEN_WIDTH, size.y / SCREEN_HEIGHT, 1);
 
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
+	mvStack.top() = scale(mvStack.top(), glm::vec3(newSize));
 
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", value_ptr(mvStack.top()));
 
 	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	mvStack.pop();
@@ -285,18 +290,18 @@ void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3
 
 void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position)
 {
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
+	mvStack.top() = translate(mvStack.top(), glm::vec3(position));
 
 	auto newSize = glm::vec3(renderable->getWidth() / static_cast<float>(SCREEN_WIDTH), renderable->getHeight() / static_cast<float>(SCREEN_HEIGHT), 1);
 
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
+	mvStack.top() = scale(mvStack.top(), glm::vec3(newSize));
 
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", value_ptr(mvStack.top()));
 
 	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	mvStack.pop();

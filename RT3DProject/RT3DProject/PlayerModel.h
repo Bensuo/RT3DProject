@@ -8,14 +8,14 @@ namespace Rendering {
 	public:
 		PlayerModel();
 		explicit PlayerModel(const glm::vec3& position);
-		void SetUpAnimationData() override;
+		void setUpAnimationData() override;
 		~PlayerModel();
 		void setAnimation(const int& state) override
 		{
-			m_MD2.setCurrentAnim(state);
+			model.setCurrentAnim(state);
 		}
-		void resetAnimation() { m_MD2.ResetAnimation(); }
-		GLfloat* getVerts() { return m_MD2.getAnimVerts(); }
-		int getNumVerts() { return m_MD2.getVertDataCount(); }
+		void resetAnimation() { model.resetAnimation(); }
+		GLfloat* getVerts() const { return model.getAnimVerts(); }
+		int getNumVerts() const { return model.getVertDataCount(); }
 	};
 }

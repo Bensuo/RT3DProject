@@ -4,12 +4,11 @@
 #include "shader.h"
 #include "stb_image.h"
 #include <glm/gtc/type_ptr.hpp>
-#include <cstdlib>
 
 namespace Rendering
 {
-	bool Skybox::loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name) {
-
+	bool Skybox::loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name) const
+	{
 		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 
 		int x, y, n;
@@ -125,7 +124,7 @@ namespace Rendering
 	{
 	}
 
-	void Skybox::render(Camera& camera) const
+	void Skybox::render(camera& camera) const
 	{
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(GL_FALSE);
@@ -133,7 +132,7 @@ namespace Rendering
 		shader.use();
 
 		auto projection = glm::perspective(static_cast<float>(1), 1600.0f / 900, 0.1f, 5000.0f);
-		glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+		glm::mat4 view = glm::mat4(glm::mat3(camera.getViewMatrix()));
 		glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 

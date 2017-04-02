@@ -8,14 +8,14 @@
 
 MD2::MD2(const std::string& filename)
 {
-	ReadMD2Model(filename);
+	readMD2Model(filename);
 	currentAnim = 0;
 	currentFrame = 0;
 	nextFrame = 1;
 	interp = 0.0f;
 }
 
-MD2::MD2()
+MD2::MD2(): vertDataSize(0), animVerts(nullptr)
 {
 	currentAnim = 0;
 	currentFrame = 0;
@@ -25,7 +25,7 @@ MD2::MD2()
 
 MD2::~MD2()
 {
-	FreeModel();
+	freeModel();
 	int i;
 	for (i = 0; i<mdl.header.num_frames; ++i) {
 		delete[] vertData[i];
@@ -33,7 +33,7 @@ MD2::~MD2()
 	delete[] animVerts;
 }
 
-GLuint MD2::ReadMD2Model(const std::string& filename)
+GLuint MD2::readMD2Model(const std::string& filename)
 {
 	FILE *fp;
 	int i;
@@ -58,15 +58,11 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 	}
 
 	/* Memory allocations */
-	mdl.skins = (struct md2_skin_t *)
-		malloc(sizeof(struct md2_skin_t) * mdl.header.num_skins);
-	mdl.texcoords = (struct md2_texCoord_t *)
-		malloc(sizeof(struct md2_texCoord_t) * mdl.header.num_st);
-	mdl.triangles = (struct md2_triangle_t *)
-		malloc(sizeof(struct md2_triangle_t) * mdl.header.num_tris);
-	mdl.frames = (struct md2_frame_t *)
-		malloc(sizeof(struct md2_frame_t) * mdl.header.num_frames);
-	mdl.glcmds = (int *)malloc(sizeof(int) * mdl.header.num_glcmds);
+	mdl.skins = static_cast<struct md2_skin_t *>(malloc(sizeof(struct md2_skin_t) * mdl.header.num_skins));
+	mdl.texcoords = static_cast<struct md2_texCoord_t *>(malloc(sizeof(struct md2_texCoord_t) * mdl.header.num_st));
+	mdl.triangles = static_cast<struct md2_triangle_t *>(malloc(sizeof(struct md2_triangle_t) * mdl.header.num_tris));
+	mdl.frames = static_cast<struct md2_frame_t *>(malloc(sizeof(struct md2_frame_t) * mdl.header.num_frames));
+	mdl.glcmds = static_cast<int *>(malloc(sizeof(int) * mdl.header.num_glcmds));
 
 	/* Read m_MD2 data */
 	fseek(fp, mdl.header.offset_skins, SEEK_SET);
@@ -89,8 +85,7 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 	for (i = 0; i < mdl.header.num_frames; ++i)
 	{
 		/* Memory allocation for vertices of this frame */
-		mdl.frames[i].verts = (struct md2_vertex_t *)
-			malloc(sizeof(struct md2_vertex_t) * mdl.header.num_vertices);
+		mdl.frames[i].verts = static_cast<struct md2_vertex_t *>(malloc(sizeof(struct md2_vertex_t) * mdl.header.num_vertices));
 
 		/* Read frame data */
 		fread(mdl.frames[i].scale, sizeof(md2vec3), 1, fp);
@@ -107,8 +102,6 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 	// this is required to allow the correct generation of normals etc
 
 	int j;
-	GLfloat s, t;
-	md2vec3 v, *norm;
 	struct md2_frame_t *pframe;
 	struct md2_vertex_t *pvert;
 
@@ -133,8 +126,8 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 		for (j = 0; j < 3; ++j)
 		{
 			// Get texture coordinates 
-			tex_coords.push_back((GLfloat)mdl.texcoords[mdl.triangles[i].st[j]].s / mdl.header.skinwidth);
-			tex_coords.push_back((GLfloat)mdl.texcoords[mdl.triangles[i].st[j]].t / mdl.header.skinheight);
+			tex_coords.push_back(static_cast<GLfloat>(mdl.texcoords[mdl.triangles[i].st[j]].s) / mdl.header.skinwidth);
+			tex_coords.push_back(static_cast<GLfloat>(mdl.texcoords[mdl.triangles[i].st[j]].t) / mdl.header.skinheight);
 
 			// get current vertex
 			pvert = &pframe->verts[mdl.triangles[i].vertex[j]];
@@ -151,7 +144,7 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 		}
 	}
 	// now repeat for each frame...
-	int k = 0;
+	int k;
 	GLfloat *verts;
 	vertDataSize = mdl.header.num_tris * 9;
 	for (k = 0; k<mdl.header.num_frames; ++k) {
@@ -181,12 +174,12 @@ GLuint MD2::ReadMD2Model(const std::string& filename)
 	VAO = rt3d::createInterpolatedMesh(mdl.header.num_tris * 3, vertData[0], vertData[0], nullptr, norms.data(), tex_coords.data(), 0, nullptr);
 
 	// actually have all the data we need, so call FreeModel
-	this->FreeModel();
+	this->freeModel();
 
 	return VAO;
 }
 
-void MD2::FreeModel()
+void MD2::freeModel()
 {
 	int i;
 
@@ -227,7 +220,7 @@ void MD2::FreeModel()
 	}
 }
 
-void MD2::Animate(const int& animation, const float& dt)
+void MD2::animate(const int& animation, const float& dt)
 {
 	auto start = animFrameList[animation * 2];
 	auto end = animFrameList[animation * 2 + 1];
@@ -247,15 +240,4 @@ void MD2::Animate(const int& animation, const float& dt)
 		if (nextFrame >= end + 1)
 			nextFrame = start;
 	}
-
-	/*if (interp == 0.0f)
-		memcpy(animVerts, vertData[currentFrame], vertDataSize * sizeof(float));
-	else {
-		GLfloat current;
-		for (auto i = 0; i < vertDataSize; i++)
-		{
-			current = vertData[currentFrame][i];
-			animVerts[i] = current + interp*(vertData[nextFrame][i] - current);
-		}
-	}*/
 }

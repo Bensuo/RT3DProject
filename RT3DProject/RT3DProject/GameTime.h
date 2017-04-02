@@ -6,7 +6,6 @@
 
 class GameTime
 {
-private:
 	std::chrono::time_point<std::chrono::steady_clock> startTime;
 	std::chrono::time_point<std::chrono::steady_clock> lastTime;
 
@@ -18,20 +17,20 @@ private:
 	std::chrono::duration<double> deltaTime;
 	std::chrono::duration<double> unprocessedTime;
 
-	bool frameComplete;
+	bool isFrameComplete;
 public:
 	GameTime();
-	double GetTime() const;
-	static std::chrono::steady_clock::time_point GetTimePoint();
-	const double& GetDeltaTime() const;
+	double getTime() const;
+	static std::chrono::steady_clock::time_point getTimePoint();
+	const double& getDeltaTime() const;
 
-	void SetFrameCap(const unsigned& frameCap);
-	void Initialize();
-	void Reset();
-	bool ProcessFrame() const;
-	bool FrameComplete() const;
-	void Update();
-	void IncrementFrames();
-	static void Sleep();
+	void setFrameCap(const unsigned& frameCap);
+	void initialize();
+	void reset();
+	bool processFrame() const;
+	bool frameComplete() const;
+	void update();
+	void incrementFrames();
+	static void sleep();
 };
 #endif

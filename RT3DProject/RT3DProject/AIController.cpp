@@ -2,7 +2,7 @@
 #define uniform() (rand()/(RAND_MAX + 1.0f))
 
 
-AIController::AIController()
+AIController::AIController(): target(nullptr)
 {
 	actionCounter = 180;
 }
@@ -22,19 +22,19 @@ void AIController::update()
 		{
 			if (glm::length(toTarget) < 300)
 			{
-				self->UpdateVectors(toTarget);
-				self->MoveForward();
+				self->updateVectors(toTarget);
+				self->moveForward();
 			}
 			else
 			{
 				if (actionCounter > 180)
 				{
 					actionCounter = 0;
-					self->UpdateVectors(glm::vec3(-uniform() + uniform(), 0, -uniform() + uniform()));
+					self->updateVectors(glm::vec3(-uniform() + uniform(), 0, -uniform() + uniform()));
 				}
 				if (actionCounter < 60)
 				{
-					self->MoveForward();
+					self->moveForward();
 				}
 
 			}

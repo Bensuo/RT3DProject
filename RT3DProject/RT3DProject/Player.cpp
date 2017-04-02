@@ -1,6 +1,7 @@
 #include "Player.h"
+#include "AudioManager.h"
 
-Player::Player(): playerState(), weaponState(), fps(false), sprint(false)
+Player::Player(): playerState(), weaponState(), fps(false), isSprinting(false)
 {
 	model.setAnimation(playerState);
 	weapon.setAnimation(playerState);
@@ -11,16 +12,16 @@ Player::~Player()
 {
 }
 
-void Player::loadContent(Utilities::ResourceManager content, const std::string& skin)
+void Player::loadContent(Utilities::ResourceManager& content, const std::string& skin)
 {
 	model.loadContent(content, "res/md2/player", "res/md2/" + skin);
 	weapon.loadContent(content, "res/md2/weapon", "res/md2/weapon");
 	vpWeapon.loadContent(content, "res/md2/v_machn", "res/md2/v_machn");
 }
 
-void Player::update(float dt)
+void Player::update(const float& dt)
 {
-	if (fps || aiming)
+	if (fps || isAiming)
 		transform.rotation.z = atan2f(front.x, front.z) * 57.2958;
 	if (playerState != DEATH1)
 	{
@@ -46,21 +47,21 @@ void Player::update(float dt)
 		if (stepCount == 40)
 		{
 			stepCount = 0;
-			AudioManager::PlaySound("res/audio/sfx/PlayerMove1.wav", 0.4f);
+			AudioManager::playSound("res/audio/sfx/PlayerMove1.wav", 0.4f);
 		}
 		stepCount++;
 	}
 
 	if (playerState != JUMP && playerState != ATTACK && playerState != DEATH1)
 	{
-		sprint = false;
+		isSprinting = false;
 		playerState = STAND;
 	} 
 	else if (playerState == ATTACK)
 	{
 		if(model.getCurrentFrame() == wepFinalFrame)
 		{
-			sprint = false;
+			isSprinting = false;
 			playerState = STAND;
 		}
 	} 
@@ -83,7 +84,7 @@ void Player::update(float dt)
 	shootTimer -= dt;
 }
 
-void Player::setFPS(bool fps)
+void Player::setFPS(const bool& fps)
 {
 	this->fps = fps;
 }
@@ -103,14 +104,14 @@ const glm::vec3& Player::normalise(glm::vec3& vector) const
 	return vector;
 }
 
-void Player::updatePosition(float deltaTime)
+void Player::updatePosition(const float& deltaTime)
 {
 	normalise(movementNormal);
 	//Remove uneeded y component of movement normal
 	movementNormal.y = 0;
 	auto y = transform.position.y;
 	float maxSpeed;
-	if (!sprint) {
+	if (!isSprinting) {
 		this->movementNormal *= (SPEED * deltaTime);
 		maxSpeed = (SPEED * deltaTime);
 	}
@@ -149,7 +150,7 @@ const glm::vec3& Player::getPosition()
 	return transform.position;
 };
 
-void Player::setPosition(glm::vec3 pos)
+void Player::setPosition(const glm::vec3& pos)
 {
 	transform.position = pos;
 };
@@ -169,18 +170,18 @@ const float& Player::getAimDistance() const
 	return AIM_DISTANCE;
 }
 
-void Player::UpdateVectors(const glm::vec3& cameraFront)
+void Player::updateVectors(const glm::vec3& cameraFront)
 {
 	this->front = normalize(glm::vec3(cameraFront.x, 0.0f, cameraFront.z));
 	this->right = normalize(cross(this->front, this->worldUp));
 	this->up = normalize(cross(this->right, this->front));
 }
 
-void Player::MoveForward()
+void Player::moveForward()
 {
 	movementNormal += this->front;
 
-	if (!fps && !aiming)
+	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 	if (playerState != JUMP)
 	{
@@ -188,11 +189,11 @@ void Player::MoveForward()
 	}
 }
 
-void Player::MoveBackward()
+void Player::moveBackward()
 {
 	movementNormal -= this->front;
 
-	if (!fps && !aiming)
+	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	if (playerState != JUMP)
@@ -201,11 +202,11 @@ void Player::MoveBackward()
 	}
 }
 
-void Player::MoveLeft()
+void Player::moveLeft()
 {
 	movementNormal -= this->right;
 
-	if (!fps && !aiming)
+	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	if (playerState != JUMP)
@@ -214,11 +215,11 @@ void Player::MoveLeft()
 	}
 }
 
-void Player::MoveRight()
+void Player::moveRight()
 {
 	movementNormal += this->right;
 
-	if (!fps && !aiming)
+	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
 	if (playerState != JUMP)
@@ -227,7 +228,7 @@ void Player::MoveRight()
 	}
 }
 
-void Player::Jump()
+void Player::jump()
 {
 	if (playerState != JUMP)
 	{
@@ -235,41 +236,40 @@ void Player::Jump()
 		weapon.resetAnimation();
 		playerState = JUMP;
 		velocity.y = 4.0f;
-		AudioManager::PlaySound("res/audio/sfx/PlayerJump1.wav");
+		AudioManager::playSound("res/audio/sfx/PlayerJump1.wav");
 	}
 }
 
-void Player::Land()
+void Player::land()
 {
 	velocity.y = 0;
 	if (playerState == JUMP)
-	{
-		
+	{	
 		playerState = STAND;
 	}
 	
 }
 
-void Player::Sprint()
+void Player::sprint()
 {
-	sprint = true;
+	isSprinting = true;
 }
 
-void Player::Aim()
+void Player::aim()
 {
 	if(!fps)
-		aiming = true;
+		isAiming = true;
 }
 
-void Player::ClampPosition(const glm::vec3& min, const glm::vec3& max)
+void Player::clampPosition(const glm::vec3& min, const glm::vec3& max)
 {
 	transform.position = clamp(transform.position, min, max);
 }
 
-void Player::StopAim()
+void Player::stopAim()
 {
 	if(!fps)
-		aiming = false;
+		isAiming = false;
 }
 
 void Player::shoot()
@@ -278,14 +278,14 @@ void Player::shoot()
 	{
 		shootTimer = 0.2f;
 		canShoot = true;
-		AudioManager::PlaySound("res/audio/sfx/magnum.wav", 0.5f);
+		AudioManager::playSound("res/audio/sfx/magnum.wav", 0.5f);
 		weaponState = POW;
 		playerState = ATTACK;
 		ammo--;
 	}
 }
 
-bool Player::Aiming() const
+bool Player::aiming() const
 {
-	return fps || aiming;
+	return fps || isAiming;
 }

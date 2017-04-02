@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <iostream>
 #include "Collisions.h"
 #include "Ray.h"
 
@@ -28,14 +27,14 @@ void Game::init()
 	crosshair = new Rendering::UI("res/textures/Crosshair.png");
 	HUD = new Rendering::UI("res/textures/Interface.png");
 
-	AudioManager::Init(content);
-	AudioManager::PlayMusic("res/audio/music/02 - Rip & Tear.mp3", 0.5f);
+	AudioManager::init(content);
+	AudioManager::playMusic("res/audio/music/02 - Rip & Tear.mp3", 0.5f);
 
-	gameTime.Initialize();	//always init last for accurate game loop startup
+	gameTime.initialize();	//always init last for accurate game loop startup
 	countdown.startTimer();
 }
 
-void Game::DrawMinimap()
+void Game::drawMinimap()
 {
 	if (!scene->getPlayer()->getIsDead() && !countdown.finished())
 	{
@@ -82,7 +81,7 @@ void Game::DrawMinimap()
 	}
 }
 
-void Game::DrawScene()
+void Game::drawScene()
 {
 	//Populate render list
 	auto& npcs = scene->getNPCs();
@@ -117,7 +116,7 @@ void Game::DrawScene()
 	}
 
 	renderer.begin();
-	renderer.setView(camera.GetViewMatrix());
+	renderer.setView(camera.getViewMatrix());
 	renderer.setProjection(glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 5000.0f));
 
 	glViewport(0, 0, 1280, 720);
@@ -135,7 +134,7 @@ void Game::DrawScene()
 	renderList.clear();
 }
 
-void Game::DrawHud()
+void Game::drawHud()
 {
 	glViewport(0, 0, 1280, 720);
 	renderer.setShader("UI");
@@ -147,7 +146,7 @@ void Game::DrawHud()
 		renderer.renderUI(ammoLabel, glm::vec3(-0.825f, -0.84f, 0.0f));
 		renderer.renderUI(timeLabel, glm::vec3(-0.825f, -0.76f, 0.0f));
 
-		if (scene->getPlayer()->Aiming())
+		if (scene->getPlayer()->aiming())
 			renderer.renderUI(crosshair, glm::vec3(0), glm::vec3(50, 50, 1));
 
 		renderer.renderUI(HUD, glm::vec3(0), glm::vec3(1280, 720, 1));
@@ -164,24 +163,23 @@ void Game::DrawHud()
 
 void Game::draw()
 {
-	DrawScene();
+	drawScene();
 
-	DrawMinimap();
+	drawMinimap();
 
-	DrawHud();
+	drawHud();
 
 	renderer.swapBuffers();
-	auto test = 0;
 }
 
-bool Game::Quit() const
+bool Game::quit() const
 {
-	return input.Quit();
+	return input.quit();
 }
 
 void Game::update()
 {
-	running = !Quit();
+	running = !quit();
 
 	countdown.update();
 	timeLabel->setString(countdown.toString());
@@ -189,11 +187,11 @@ void Game::update()
 	healthLabel->setString("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()));
 	ammoLabel->setString("AMMO: " + std::to_string(scene->getPlayer()->getAmmo()));
 
-	scene->getPlayer()->UpdateVectors(camera.GetFront());
+	scene->getPlayer()->updateVectors(camera.getFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
 
 	auto freezeControls = countdown.finished() || scene->getPlayer()->getIsDead();
-	input.Update(scene->getPlayer(), camera, freezeControls);
+	input.update(scene->getPlayer(), camera, freezeControls);
 
 	//Update AI controllers
 	for (auto i = 0; i < npcControllers.size(); i++)
@@ -204,7 +202,7 @@ void Game::update()
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
 	{
-		pickups[i]->update(gameTime.GetDeltaTime());
+		pickups[i]->update(gameTime.getDeltaTime());
 	}
 
 	auto& npcs = scene->getNPCs();
@@ -218,27 +216,27 @@ void Game::update()
 		}
 		else
 		{
-			npcs[i]->update(gameTime.GetDeltaTime());
-			npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
+			npcs[i]->update(gameTime.getDeltaTime());
+			npcs[i]->clampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 		}
 
 	}
 
-	scene->getPlayer()->update(gameTime.GetDeltaTime());
-	scene->getPlayer()->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
+	scene->getPlayer()->update(gameTime.getDeltaTime());
+	scene->getPlayer()->clampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
 	checkCollisions();
 
-	camera.Update(gameTime.GetDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0, -24, 0));
+	camera.update(gameTime.getDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0, -24, 0));
 	if (!endSoundPlayed)
 	{
 		if (scene->getPlayer()->getIsDead())
 		{
-			AudioManager::PlaySound("res/audio/sfx/YouDied.wav");
+			AudioManager::playSound("res/audio/sfx/YouDied.wav");
 			endSoundPlayed = true;
 		}
 		else if (countdown.finished())
 		{
-			AudioManager::PlaySound("res/audio/sfx/YouWin.wav");
+			AudioManager::playSound("res/audio/sfx/YouWin.wav");
 			endSoundPlayed = true;
 		}
 	}
@@ -249,24 +247,24 @@ Game::Game() : countdown(2 * 60)
 	init();
 	while (running)
 	{
-		gameTime.Reset();
+		gameTime.reset();
 
 		//process individual frame's worth of updates
-		while (gameTime.ProcessFrame())
+		while (gameTime.processFrame())
 		{
-			gameTime.Update();
+			gameTime.update();
 			update();
 		}
 
 		//render processed frame
-		if (gameTime.FrameComplete())
+		if (gameTime.frameComplete())
 		{
-			gameTime.IncrementFrames();
+			gameTime.incrementFrames();
 			draw();
 		}
 		else
 		{
-			gameTime.Sleep();
+			gameTime.sleep();
 		}
 	}
 	renderer.quit();
@@ -317,23 +315,23 @@ void Game::checkCollisions()
 		if (playerCollision(scene->getPlayer(), pickups[i]))
 		{
 			scene->getPlayer()->giveAmmo(20);
-			audioManager.PlaySound("res/audio/sfx/GunPickup.wav");
+			audioManager.playSound("res/audio/sfx/GunPickup.wav");
 			scene->removePickup(i);
 		}
 	}
 
 	//Construct a ray
 	Collisions::Ray ray;
-	glm::vec4 screenPos = glm::vec4(0, 0, 1.0f, 1.0f);
-	glm::mat4 proj = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 5000.0f);
-	glm::mat4 view = lookAt(glm::vec3(camera.getPosition()),
+	auto screenPos = glm::vec4(0, 0, 1.0f, 1.0f);
+	auto proj = glm::perspective(1.0f, static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT, 0.1f, 5000.0f);
+	auto view = lookAt(glm::vec3(camera.getPosition()),
 		glm::vec3(0.0, 0.0, 0.0),
 		glm::vec3(0.0, 1.0, 0.0));
-	glm::mat4 invVP = glm::inverse(proj * view);
-	glm::vec4 worldPos = invVP * screenPos;
-	//origin = glm::normalize(origin);
+	auto invVP = inverse(proj * view);
+	auto worldPos = invVP * screenPos;
+
 	ray.origin = scene->getPlayer()->getPosition() + glm::vec3(0, 24, 0);
-	ray.dir = glm::normalize(glm::vec3(worldPos));
+	ray.dir = normalize(glm::vec3(worldPos));
 
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
@@ -345,7 +343,7 @@ void Game::checkCollisions()
 		{
 			playerCollision(npcs[j].get(), npcs[i].get());
 		}
-		for (int k = 0; k < staticObjects.size(); k++)
+		for (auto k = 0; k < staticObjects.size(); k++)
 		{
 			auto info = Collisions::TestAABBAABB(staticObjects[k]->getAABB(), npcs[i]->getAABB());
 			if (info.collision)
@@ -355,15 +353,15 @@ void Game::checkCollisions()
 			}
 			
 		}
-		npcs[i]->ClampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 200, scene->getTerrain()->getScale().z / 2 - 1));
+		npcs[i]->clampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 200, scene->getTerrain()->getScale().z / 2 - 1));
 		Collisions::terrainCollision(npcs[i].get(), scene->getTerrain());		
 	}
-	if (scene->getPlayer()->getCanShoot() && (camera.isFPS() || scene->getPlayer()->Aiming()))
+	if (scene->getPlayer()->getCanShoot() && (camera.isFPS() || scene->getPlayer()->aiming()))
 	{
 		Player* npc = nullptr;
-		for (int i = 0; i < npcs.size(); i++)
+		for (auto i = 0; i < npcs.size(); i++)
 		{
-			if (Collisions::TestRayAABB(ray, npcs[i].get()->getAABB()))
+			if (TestRayAABB(ray, npcs[i].get()->getAABB()))
 			{
 				if (npc == nullptr)
 				{
@@ -371,8 +369,8 @@ void Game::checkCollisions()
 				}
 				else
 				{
-					float d1 = glm::length(ray.origin - npc->getPosition());
-					float d2 = glm::length(ray.origin - npcs[i]->getPosition());
+					auto d1 = length(ray.origin - npc->getPosition());
+					auto d2 = length(ray.origin - npcs[i]->getPosition());
 					if (d2 < d1)
 					{
 						npc = npcs[i].get();
@@ -387,10 +385,7 @@ void Game::checkCollisions()
 			{
 				score += 5000;
 			}
-		}
-		
-		scene->getPlayer()->hasShot();
-		
-	}
-	
+		}	
+		scene->getPlayer()->hasShot();	
+	}	
 }

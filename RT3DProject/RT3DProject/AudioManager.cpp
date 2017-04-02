@@ -11,7 +11,7 @@ AudioManager::AudioManager()
 
 }
 
-void AudioManager::Init(Utilities::ResourceManager& contentManager)
+void AudioManager::init(Utilities::ResourceManager& contentManager)
 {
 	// start SDL with audio support
 	if (SDL_Init(SDL_INIT_AUDIO) == -1) {
@@ -28,11 +28,11 @@ void AudioManager::Init(Utilities::ResourceManager& contentManager)
 	content = &contentManager;
 }
 
-void AudioManager::PlaySound(const std::string& path, const float& volume)
+void AudioManager::playSound(const std::string& path, const float& volume)
 {
 	glm::clamp(volume, 0.0f, 1.0f);
 	Mix_Volume(FREE_CHANNEL, volume * MIX_MAX_VOLUME);
-	Mix_Chunk* chunk = content->loadSound(path);
+	auto chunk = content->loadSound(path);
 	if (chunk != nullptr)
 	{
 		Mix_PlayChannel(FREE_CHANNEL, chunk, 0);
@@ -41,9 +41,9 @@ void AudioManager::PlaySound(const std::string& path, const float& volume)
 	
 }
 
-void AudioManager::PlayMusic(const std::string& path, const float& volume, bool loop)
+void AudioManager::playMusic(const std::string& path, const float& volume, bool loop)
 {
-	Mix_Music* music = content->loadMusic(path);
+	auto music = content->loadMusic(path);
 	if (music != nullptr)
 	{
 		auto newVolume = glm::clamp(volume, 0.0f, 1.0f);
@@ -68,18 +68,18 @@ void AudioManager::PlayMusic(const std::string& path, const float& volume, bool 
 		//if music is being played
 		else
 		{
-			PauseMusic();
+			pauseMusic();
 		}
 	}
 
 }
 
-void AudioManager::StopMusic()
+void AudioManager::stopMusic()
 {	
 	Mix_HaltMusic();
 }
 
-void AudioManager::PauseMusic()
+void AudioManager::pauseMusic()
 {
 	//if the music is paused
 	if (Mix_PausedMusic() == 1)
@@ -95,7 +95,7 @@ void AudioManager::PauseMusic()
 	}
 }
 
-void AudioManager::Close()
+void AudioManager::close()
 {
 	
 }

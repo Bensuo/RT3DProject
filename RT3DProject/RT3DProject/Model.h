@@ -16,9 +16,9 @@ namespace Rendering
 		virtual ~Model();
 		void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
 		void update(const float& dt);	
-		int getCurrentFrame() const { return m_MD2.getCurrentFrame(); }
+		int getCurrentFrame() const { return model.getCurrentFrame(); }
 		virtual void setAnimation(const int& state) {}
-		virtual void SetUpAnimationData() {}
+		virtual void setUpAnimationData() {}
 		virtual void setTransform(const Transform& transform);
 		GLuint& getMesh() override;
 		GLuint& getTexture() override;
@@ -26,7 +26,7 @@ namespace Rendering
 		rt3d::materialStruct& getMaterial() override;
 		Transform& getTransform() override;
 		bool isIndexed() override;
-		float getInterp() override { return m_MD2.getInterp(); }
+		float getInterp() override { return model.getInterp(); }
 	protected:
 		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;
@@ -37,7 +37,7 @@ namespace Rendering
 			1.0f  // shininess
 		};
 		GLuint vertexCount;
-		MD2 m_MD2;
+		MD2 model;
 		GLuint mesh;
 		Transform transform{ glm::vec3(0), glm::vec3(-90.0f, 0, 0) };
 	};

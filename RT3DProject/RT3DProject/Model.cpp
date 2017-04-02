@@ -1,6 +1,5 @@
 #include "Model.h"
 #include <glm/gtc/matrix_transform.inl>
-#include <glm/gtc/type_ptr.hpp>
 
 namespace Rendering
 {
@@ -10,16 +9,16 @@ namespace Rendering
 	{
 		auto meshFile = meshPath + ".md2";
 		auto textureFile = texturePath + ".bmp";
-		mesh = m_MD2.ReadMD2Model(meshFile.c_str());
+		mesh = model.readMD2Model(meshFile.c_str());
 		texture = content.loadTexture(textureFile.c_str());
-		vertexCount = m_MD2.getVertDataCount();	
+		vertexCount = model.getVertDataCount();	
 	}
 
 	void Model::update(const float& dt)
 	{
-		m_MD2.Animate(dt * ANIMATION_SPEED);
-		rt3d::updateMesh(mesh, RT3D_VERTEX, m_MD2.getCurrentVerts(), m_MD2.getVertDataSize());
-		rt3d::updateMesh(mesh, RT3D_VERTEX_NEXT, m_MD2.getNextVerts(), m_MD2.getVertDataSize());
+		model.animate(dt * ANIMATION_SPEED);
+		rt3d::updateMesh(mesh, RT3D_VERTEX, model.getCurrentVerts(), model.getVertDataSize());
+		rt3d::updateMesh(mesh, RT3D_VERTEX_NEXT, model.getNextVerts(), model.getVertDataSize());
 	}
 
 	void Model::setTransform(const Transform & transform)

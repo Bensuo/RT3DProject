@@ -6,17 +6,17 @@ namespace Rendering {
 	{
 		weaponType = ASSAULT_RIFLE;
 
-		ViewportWeapon::SetUpAnimationData();
+		ViewportWeapon::setUpAnimationData();
 	}
 
 	ViewportWeapon::ViewportWeapon(const WeaponType& type, const glm::vec3& position)
 	{
 		weaponType = type;
 		this->transform.position = position;
-		ViewportWeapon::SetUpAnimationData();
+		ViewportWeapon::setUpAnimationData();
 	}
 
-	void ViewportWeapon::SetUpAnimationData()
+	void ViewportWeapon::setUpAnimationData()
 	{
 		std::vector<int>animFrameList;
 
@@ -39,7 +39,7 @@ namespace Rendering {
 			break;
 		}
 
-		m_MD2.SetUpAnimationData(animFrameList);
+		model.setUpAnimationData(animFrameList);
 	}
 
 	ViewportWeapon::~ViewportWeapon()

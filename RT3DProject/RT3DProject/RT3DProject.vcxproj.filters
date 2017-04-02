@@ -29,9 +29,6 @@
     <Filter Include="Utilities\Resource Management">
       <UniqueIdentifier>{a6ed9cc7-67b1-4ea7-acfc-a7169c26b5b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\Model Loading\Old MD2 lib">
-      <UniqueIdentifier>{3e9e6218-636c-40bb-a0a6-9ce122ccfa1f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering\Model Loading\M2D">
       <UniqueIdentifier>{ce45fe3e-e65f-4b04-b597-442a08fe17af}</UniqueIdentifier>
     </Filter>
@@ -58,9 +55,6 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Rendering\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="md2model.cpp">
-      <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
     </ClCompile>
     <ClCompile Include="MD2.cpp">
       <Filter>Rendering\Model Loading\M2D</Filter>
@@ -128,9 +122,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Rendering\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="md2model.h">
-      <Filter>Rendering\Model Loading\Old MD2 lib</Filter>
-    </ClInclude>
     <ClInclude Include="MD2.h">
       <Filter>Rendering\Model Loading\M2D</Filter>
     </ClInclude>
@@ -187,6 +178,7 @@
     <ClInclude Include="GameTime.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">

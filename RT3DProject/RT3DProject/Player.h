@@ -4,7 +4,6 @@
 #include "ResourceManager.h"
 #include "ViewportWeapon.h"
 #include "AABB.h"
-#include "AudioManager.h"
 
 class Player
 {
@@ -43,31 +42,31 @@ public:
 
 	Player();
 	virtual ~Player();
-	void loadContent(Utilities::ResourceManager content, const std::string& skin);
-	void update(float dt);
-	void setFPS(bool fps);
+	void loadContent(Utilities::ResourceManager& content, const std::string& skin);
+	void update(const float& dt);
+	void setFPS(const bool& fps);
 	const glm::vec3& normalise(glm::vec3& vector) const;
-	void updatePosition(float deltaTime);
+	void updatePosition(const float& deltaTime);
 	Rendering::PlayerModel& getPlayerModel();
 	Rendering::PlayerModel& getWeapon();
 	Rendering::ViewportWeapon& getVPWeapon();
 	const glm::vec3& getPosition();
-	void setPosition(glm::vec3 pos);
+	void setPosition(const glm::vec3& pos);
 	const glm::vec3& getPosition() const;
 	const AABB& getAABB() const;
 	const float& getAimDistance() const;
 	void setState(PlayerState state);
-	void UpdateVectors(const glm::vec3& cameraFront);
-	void MoveForward();
-	void MoveBackward();
-	void MoveLeft();
-	void MoveRight();
-	void Jump();
-	void Land();
-	void Sprint();
-	void Aim();
-	void ClampPosition(const glm::vec3& min, const glm::vec3& max);
-	void StopAim();
+	void updateVectors(const glm::vec3& cameraFront);
+	void moveForward();
+	void moveBackward();
+	void moveLeft();
+	void moveRight();
+	void jump();
+	void land();
+	void sprint();
+	void aim();
+	void clampPosition(const glm::vec3& min, const glm::vec3& max);
+	void stopAim();
 	void shoot();
 	bool getCanShoot() const { return canShoot; }
 	void giveAmmo(const int& ammo)
@@ -75,7 +74,7 @@ public:
 		this->ammo += ammo;
 	}
 	void hasShot() { canShoot = false; }
-	void takeDamage(int amount)
+	void takeDamage(const int& amount)
 	{
 		health -= amount; 
 		health = glm::clamp(health, 0, 100);
@@ -84,7 +83,7 @@ public:
 	const int& getHealth() const { return health; }
 	const int& getAmmo() const { return ammo; }
 	bool getIsDead() const { return isDead; }
-	bool Aiming() const;
+	bool aiming() const;
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
@@ -110,8 +109,8 @@ private:
 	const float SPEED = 150.0f;
 	const float AIM_DISTANCE = 75.0f;
 	bool fps = false;
-	bool sprint = false;
-	bool aiming = false;
+	bool isSprinting = false;
+	bool isAiming = false;
 	bool canShoot = false;
 	bool isDead = false;
 	float shootTimer = 0.0f;

@@ -5,7 +5,7 @@
 GameTime::GameTime()
 {
 	startTime = std::chrono::high_resolution_clock::now();
-
+	isFrameComplete = false;
 	frames = 0;
 	frameCap = MAX_FRAMERATE;
 	frameCounter = std::chrono::duration<float>(0);
@@ -13,7 +13,7 @@ GameTime::GameTime()
 	unprocessedTime = std::chrono::duration<float>(0);
 }
 
-double GameTime::GetTime() const
+double GameTime::getTime() const
 {
 	//find current time in miliseconds, return this data in terms of seconds
 	auto current_time = std::chrono::high_resolution_clock::now();
@@ -21,32 +21,32 @@ double GameTime::GetTime() const
 	return value / 1000.0;
 }
 
-std::chrono::steady_clock::time_point GameTime::GetTimePoint()
+std::chrono::steady_clock::time_point GameTime::getTimePoint()
 {
 	return std::chrono::steady_clock::now();
 }
 
-const double& GameTime::GetDeltaTime() const
+const double& GameTime::getDeltaTime() const
 {
 	return deltaTime.count();
 }
 
-void GameTime::SetFrameCap(const unsigned& frameCap)
+void GameTime::setFrameCap(const unsigned& frameCap)
 {
 	this->frameCap = frameCap;
 }
 
-void GameTime::Initialize()
+void GameTime::initialize()
 {
-	lastTime = GetTimePoint();
+	lastTime = getTimePoint();
 }
 
-void GameTime::Reset()
+void GameTime::reset()
 {
-	frameComplete = false;
+	isFrameComplete = false;
 
 	//calculate current frame duration
-	auto startTime = GetTimePoint();
+	auto startTime = getTimePoint();
 	auto passedTime = startTime - lastTime;
 	lastTime = startTime;
 	unprocessedTime += passedTime;
@@ -63,28 +63,28 @@ void GameTime::Reset()
 #endif
 }
 
-bool GameTime::ProcessFrame() const
+bool GameTime::processFrame() const
 {
 	return unprocessedTime > deltaTime;
 }
 
-bool GameTime::FrameComplete() const
+bool GameTime::frameComplete() const
 {
-	return frameComplete;
+	return isFrameComplete;
 }
 
-void GameTime::Update()
+void GameTime::update()
 {
-	frameComplete = true;
+	isFrameComplete = true;
 	unprocessedTime -= deltaTime;
 }
 
-void GameTime::IncrementFrames()
+void GameTime::incrementFrames()
 {
 	frames++;
 }
 
-void GameTime::Sleep()
+void GameTime::sleep()
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }

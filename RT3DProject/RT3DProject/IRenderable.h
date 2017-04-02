@@ -6,7 +6,7 @@
 class IRenderable
 {
 public:
-
+	virtual ~IRenderable() = default;
 	virtual GLuint& getMesh() = 0;
 	virtual GLuint& getTexture() = 0;
 	virtual GLuint& getCount() = 0;
