@@ -27,7 +27,7 @@ public:
 	const float& getHeightAtPosition(const float& x, const float& z) const;
 	Rendering::Shader shader;
 private:
-	float getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const;
+	const float& getBarycentricHeight(const glm::vec2& pos, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3) const;
 	int rows;
 	int cols;
 	int indexCount;

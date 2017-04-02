@@ -1,5 +1,9 @@
 #include "Terrain.h"
 #include <SDL.h>
+#include <glm/detail/type_mat.hpp>
+#include <glm/detail/type_mat.hpp>
+#include <glm/detail/type_mat.hpp>
+#include <glm/detail/type_mat.hpp>
 
 Terrain::Terrain(): rows(0), cols(0), indexCount(0), vertVBO(0), normVBO(0), texVBO(0), indexEBO(0), vao(0)
 {
@@ -141,17 +145,17 @@ const float& Terrain::getHeightAtPosition(const float& x, const float& z) const
 	if (xCoord <= zCoord)
 	{
 		return getBarycentricHeight(glm::vec2(xCoord, zCoord), glm::vec3(0, heights[gridX][gridZ], 0), glm::vec3(1, heights[gridX + 1][gridZ + 1], 1),
-			glm::vec3(0, heights[gridX][gridZ + 1], 1));
+		                            glm::vec3(0, heights[gridX][gridZ + 1], 1));
 	}
 	else
 	{
 		return getBarycentricHeight(glm::vec2(xCoord, zCoord), glm::vec3(0, heights[gridX][gridZ], 0), glm::vec3(1, heights[gridX + 1][gridZ + 1], 1),
-			glm::vec3(1, heights[gridX + 1][gridZ], 0));
+		                            glm::vec3(1, heights[gridX + 1][gridZ], 0));
 	}
 	
 }
 
-float Terrain::getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const
+const float& Terrain::getBarycentricHeight(const glm::vec2& pos, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3) const
 {
 	auto det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
 	auto l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;

@@ -13,7 +13,7 @@ GameTime::GameTime()
 	unprocessedTime = std::chrono::duration<float>(0);
 }
 
-double GameTime::getTime() const
+const double& GameTime::getTime() const
 {
 	//find current time in miliseconds, return this data in terms of seconds
 	auto current_time = std::chrono::high_resolution_clock::now();
@@ -63,12 +63,12 @@ void GameTime::reset()
 #endif
 }
 
-bool GameTime::processFrame() const
+const bool& GameTime::processFrame() const
 {
 	return unprocessedTime > deltaTime;
 }
 
-bool GameTime::frameComplete() const
+const bool& GameTime::frameComplete() const
 {
 	return isFrameComplete;
 }

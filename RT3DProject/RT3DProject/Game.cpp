@@ -172,7 +172,7 @@ void Game::draw()
 	renderer.swapBuffers();
 }
 
-bool Game::quit() const
+const bool& Game::quit() const
 {
 	return input.quit();
 }
@@ -211,7 +211,7 @@ void Game::update()
 
 		if (npcs[i]->getIsDead())
 		{
-			npcs.erase(npcs.begin() + i);
+			scene->removeNPC(i);
 			i--;
 		}
 		else

@@ -171,7 +171,6 @@
     </ClInclude>
     <ClInclude Include="AIController.h" />
     <ClInclude Include="StaticObject.h" />
-    <ClInclude Include="Pickup.h" />
     <ClInclude Include="Ray.h">
       <Filter>Utilities</Filter>
     </ClInclude>
@@ -179,6 +178,9 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Pickup.h">
+      <Filter>Rendering\Renderables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RT3DProject.rc">

@@ -20,17 +20,17 @@ class GameTime
 	bool isFrameComplete;
 public:
 	GameTime();
-	double getTime() const;
-	static std::chrono::steady_clock::time_point getTimePoint();
+	const double& getTime() const;
+	std::chrono::steady_clock::time_point getTimePoint();
 	const double& getDeltaTime() const;
 
 	void setFrameCap(const unsigned& frameCap);
 	void initialize();
 	void reset();
-	bool processFrame() const;
-	bool frameComplete() const;
+	const bool& processFrame() const;
+	const bool& frameComplete() const;
 	void update();
 	void incrementFrames();
-	static void sleep();
+	void sleep();
 };
 #endif

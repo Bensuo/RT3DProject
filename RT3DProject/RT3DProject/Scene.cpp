@@ -77,3 +77,9 @@ void Scene::removePickup(const int& index)
 	std::cout << "Pickup removed." << std::endl;
 	pickups.erase(pickups.begin() + index);
 }
+
+void Scene::removeNPC(const int& index)
+{
+	std::cout << "Enemy removed." << std::endl;
+	npcs.erase(npcs.begin() + index);
+}

@@ -62,7 +62,7 @@ public:
 	void drawScene();
 	void drawHud();
 	void draw();
-	bool quit() const;
+	const bool& quit() const;
 	void update();
 	Game();
 };

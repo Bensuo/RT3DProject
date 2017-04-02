@@ -160,7 +160,7 @@ void Renderer::draw(IRenderable* renderable)
 }
 
 
-void Renderer::drawSkybox(Rendering::Skybox* skybox) const
+void Renderer::drawSkybox(const Rendering::Skybox* skybox) const
 {
 	//glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);

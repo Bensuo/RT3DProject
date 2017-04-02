@@ -27,7 +27,7 @@ public:
 	void setProjection(const glm::mat4& projection);
 	void swapBuffers() const;
 	void draw(IRenderable* renderable);
-	void drawSkybox(Rendering::Skybox* skybox) const;
+	void drawSkybox(const Rendering::Skybox* skybox) const;
 	void drawTerrain(const Terrain* terrain) const;
 	void render(const std::vector<IRenderable*>& models);
 	void renderFirstPerson(IRenderable* renderable);
