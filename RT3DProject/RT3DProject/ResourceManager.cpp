@@ -122,7 +122,7 @@ namespace Utilities
 		}
 		soundsMap.clear();
 
-		for (auto it = textureMap.begin(); it != textureMap.end(); it++)
+		for (auto it = textureMap.begin(); it != textureMap.end(); ++it)
 		{
 			glDeleteTextures(1, it->second.get());
 		}

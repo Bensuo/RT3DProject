@@ -8,7 +8,7 @@ public:
 	StaticObject();
 	virtual ~StaticObject();
 	void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
-	Rendering::PlayerModel* getModel() const { return model; }
+	const IRenderable* getModel() const { return model; }
 	const AABB& getAABB() const { return boundingBox; }
 	void setTransform(const Transform& t) {
 		boundingBox.c = t.position; 
@@ -19,4 +19,3 @@ private:
 	Rendering::PlayerModel* model;
 	AABB boundingBox{ glm::vec3(0), glm::vec3(0) };
 };
-

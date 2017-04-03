@@ -17,10 +17,10 @@ void AIController::update()
 	if (!actor.expired())
 	{
 		auto self = actor.lock();
-		glm::vec3 toTarget = target->getPosition() - self->getPosition();
+		auto toTarget = target->getPosition() - self->getPosition();
 		if (self->playerState != Player::PlayerState::DEATH1)
 		{
-			if (glm::length(toTarget) < 300)
+			if (length(toTarget) < 300)
 			{
 				self->updateVectors(toTarget);
 				self->moveForward();

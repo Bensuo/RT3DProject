@@ -133,7 +133,7 @@ namespace rt3d {
         
 		GLint a,b,c;
 
-		auto i = 0, iCount = 0;
+		auto iCount = 0;
 		position tmp;
 		std::map<std::string,GLuint> indexMap;
 		auto fFormat = FORMAT_UNKNOWN;

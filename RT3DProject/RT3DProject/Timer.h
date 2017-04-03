@@ -26,7 +26,7 @@ public:
 		}
 	}
 
-	const bool& finished() const
+	bool finished() const
 	{
 		return elapsed.count() >= duration;
 	}

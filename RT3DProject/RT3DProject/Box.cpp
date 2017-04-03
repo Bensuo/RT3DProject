@@ -60,7 +60,7 @@ namespace Rendering
 		return transform;
 	}
 
-	const bool& Box::isIndexed() const
+	bool Box::isIndexed() const
 	{
 		return true;
 	}

@@ -86,7 +86,7 @@ public:
 	explicit MD2(const std::string& filename);
 	MD2();
 	virtual ~MD2();
-	const GLuint& readMD2Model(const std::string& filename);
+	GLuint readMD2Model(const std::string& filename);
 	void freeModel();
 	void animate(const int& animation, const float& dt);
 	void animate(const float& dt) { animate(currentAnim, dt); }
@@ -109,7 +109,7 @@ protected:
 public:
 	const GLfloat* getAnimVerts() const { return animVerts; }
 	const GLuint& getVertDataSize() const { return vertDataSize; }
-	const GLuint& getVertDataCount() const { return vertDataSize / 3; }
+	GLuint getVertDataCount() const { return vertDataSize / 3; }
 	const int& getCurrentAnim() const { return currentAnim; }
 	const int& getCurrentFrame() const { return currentFrame; }
 	const std::vector<int>& GetAnimFrames() const { return animFrameList; }

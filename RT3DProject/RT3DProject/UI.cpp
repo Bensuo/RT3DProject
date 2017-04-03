@@ -94,7 +94,7 @@ namespace Rendering
 		glBindTexture(GL_TEXTURE_2D, NULL);
 	}
 
-	void UI::clean(GLuint textID) const
+	void UI::clean(const GLuint& textID) const
 	{
 		if (textID != NULL) {
 			glDeleteTextures(1, &textID);
@@ -106,5 +106,5 @@ namespace Rendering
 	const GLuint& UI::getCount() const { return size; }
 	const rt3d::materialStruct& UI::getMaterial() const { return material; }
 	const Transform& UI::getTransform() const { return transform; }
-	const bool& UI::isIndexed() const { return true; }
+	bool UI::isIndexed() const { return true; }
 }

@@ -109,7 +109,7 @@ void Player::updatePosition(const float& deltaTime)
 	normalise(movementNormal);
 	//Remove uneeded y component of movement normal
 	movementNormal.y = 0;
-	auto y = transform.position.y;
+
 	float maxSpeed;
 	if (!isSprinting) {
 		this->movementNormal *= (SPEED * deltaTime);
@@ -285,7 +285,7 @@ void Player::shoot()
 	}
 }
 
-const bool& Player::aiming() const
+bool Player::aiming() const
 {
 	return fps || isAiming;
 }

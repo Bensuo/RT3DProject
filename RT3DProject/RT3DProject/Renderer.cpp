@@ -74,7 +74,7 @@ void Renderer::init()
 }
 
 //Set the shader to be used for rendering
-void Renderer::setShader(std::string name)
+void Renderer::setShader(const std::string& name)
 {
 	if (shaders.find(name) != shaders.end())
 	{
@@ -197,7 +197,7 @@ void Renderer::drawTerrain(const Terrain * terrain) const
 	//view = glm::translate(view, glm::vec3(0, -50, 0));
 	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));
 	terrain->shader.setUniformMatrix4fv("modelview", glm::value_ptr(view));
-	terrain->shader.setUniform1f("rows", (float)terrain->getRows()/32.0f);
+	terrain->shader.setUniform1f("rows", static_cast<float>(terrain->getRows())/32.0f);
 	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "modelview"), 1, GL_FALSE, glm::value_ptr(view));
 
@@ -222,7 +222,7 @@ void Renderer::drawTerrain(const Terrain * terrain) const
 	
 	//glPrimitiveRestartIndex(terrain->getRows() * terrain->getColumns());
 	//rt3d::drawIndexedMesh(terrain->getVAO(), terrain->getNumIndices(), GL_TRIANGLES);
-	glDrawElements(GL_TRIANGLES, terrain->getNumIndices(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, terrain->getNumIndices(), GL_UNSIGNED_INT, nullptr);
 	//glDisable(GL_PRIMITIVE_RESTART);
 	glBindVertexArray(0);
 	
@@ -251,7 +251,7 @@ void Renderer::render(const std::vector<const IRenderable*>& models)
 }
 
 //Renders "first person" renderables such as viewport weapon models
-void Renderer::renderFirstPerson(const IRenderable * renderable)
+void Renderer::renderFirstPerson(const IRenderable* renderable)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -268,7 +268,7 @@ void Renderer::renderFirstPerson(const IRenderable * renderable)
 	mvStack.pop();
 }
 
-void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3 size) 
+void Renderer::renderUI(const Rendering::UI* renderable, const glm::vec3& position, const glm::vec3& size) 
 {
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
@@ -288,7 +288,7 @@ void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position)
+void Renderer::renderUI(const Rendering::UI* renderable, const glm::vec3& position)
 {
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);

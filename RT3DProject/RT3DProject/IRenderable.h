@@ -12,7 +12,7 @@ public:
 	virtual const GLuint& getCount() const = 0;
 	virtual const rt3d::materialStruct& getMaterial() const = 0;
 	virtual const Transform& getTransform() const = 0;
-	virtual const bool& isIndexed() const = 0;
-	virtual const float& getInterp() const = 0;
+	virtual bool isIndexed() const = 0;
+	virtual float getInterp() const = 0;
 };
 

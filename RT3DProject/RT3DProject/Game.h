@@ -7,7 +7,6 @@
 #include "Player.h"
 #include "Input.h"
 #include "GameTime.h"
-#include "Terrain.h"
 #include "AudioManager.h"
 #include "Scene.h"
 #include "UI.h"
@@ -62,7 +61,7 @@ public:
 	void drawScene();
 	void drawHud();
 	void draw();
-	const bool& quit() const;
+	bool quit() const;
 	void update();
 	Game();
 };

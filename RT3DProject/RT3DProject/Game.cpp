@@ -68,7 +68,7 @@ void Game::drawMinimap()
 		auto pickups = scene->getPickups();
 		for (auto i = 0; i < pickups.size(); i++)
 		{
-			renderList.push_back(&pickups[i]->getPlayerModel());
+			renderList.push_back(pickups[i]->getModel());
 		}
 
 		renderer.drawTerrain(scene->getTerrain());
@@ -112,7 +112,7 @@ void Game::drawScene()
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
 	{
-		renderList.push_back(&pickups[i]->getPlayerModel());
+		renderList.push_back(pickups[i]->getModel());
 	}
 
 	renderer.begin();
@@ -172,7 +172,7 @@ void Game::draw()
 	renderer.swapBuffers();
 }
 
-const bool& Game::quit() const
+bool Game::quit() const
 {
 	return input.quit();
 }
@@ -208,7 +208,6 @@ void Game::update()
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
-
 		if (npcs[i]->getIsDead())
 		{
 			scene->removeNPC(i);
@@ -219,7 +218,6 @@ void Game::update()
 			npcs[i]->update(gameTime.getDeltaTime());
 			npcs[i]->clampPosition(glm::vec3(-scene->getTerrain()->getScale().x / 2 - 1, 0, -scene->getTerrain()->getScale().z / 2 - 1), glm::vec3(scene->getTerrain()->getScale().x / 2 - 1, scene->getTerrain()->getScale().y + 50, scene->getTerrain()->getScale().z / 2 - 1));
 		}
-
 	}
 
 	scene->getPlayer()->update(gameTime.getDeltaTime());
@@ -242,7 +240,7 @@ void Game::update()
 	}
 }
 
-Game::Game() : countdown(2 * 60)
+Game::Game() : countdown(60 * 60)
 {
 	init();
 	while (running)

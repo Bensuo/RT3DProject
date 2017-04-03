@@ -20,9 +20,9 @@ namespace Rendering
 		const GLuint& getCount() const override;
 		const rt3d::materialStruct& getMaterial() const override;
 		const Transform& getTransform() const override;
-		const bool& isIndexed() const override;
+		bool isIndexed() const override;
 		void setMaterial(const rt3d::materialStruct& mat) { material = mat; };
-		const float& getInterp() const override { return 0.0f; }
+		float getInterp() const override { return 0.0f; }
 	private:
 		GLfloat cubeVerts[24];
 		GLfloat cubeColours[24];

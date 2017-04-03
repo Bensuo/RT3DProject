@@ -83,7 +83,7 @@ public:
 	const int& getHealth() const { return health; }
 	const int& getAmmo() const { return ammo; }
 	const bool& getIsDead() const { return isDead; }
-	const bool& aiming() const;
+	bool aiming() const;
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;
@@ -122,4 +122,3 @@ private:
 	int wepFinalFrame = 53;
 	int deathFinalFrame = 183;
 };
-

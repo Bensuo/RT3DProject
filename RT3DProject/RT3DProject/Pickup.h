@@ -11,7 +11,7 @@ public:
 	virtual ~Pickup();
 	void loadContent(Utilities::ResourceManager content, const std::string& skin);
 	void update(const float& dt);
-	Rendering::Model& getPlayerModel();
+	const IRenderable* getModel() const;
 	void setPosition(const glm::vec3& pos);
 	const glm::vec3& getPosition() const;
 	const AABB& getAABB() const;

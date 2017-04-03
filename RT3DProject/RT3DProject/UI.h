@@ -23,9 +23,9 @@ namespace Rendering
 		const GLuint& getCount() const override;
 		const rt3d::materialStruct& getMaterial() const override;
 		const Transform& getTransform() const override;
-		const bool& isIndexed() const override;
+		bool isIndexed() const override;
 		void setText(const std::string& txt) { uiString = txt; }
-		const float& getInterp() const override { return 0.0f; }
+		float getInterp() const override { return 0.0f; }
 	private:
 		Shader shader;
 		std::vector<GLfloat> verts;
@@ -45,7 +45,7 @@ namespace Rendering
 		};
 		glm::vec4 color;
 		void genTexture();
-		void clean(GLuint textID) const;
+		void clean(const GLuint& textID) const;
 		Transform transform{ glm::vec3(0), glm::vec3(0) };
 		std::string objPath = "res/obj/cube.obj";
 	};

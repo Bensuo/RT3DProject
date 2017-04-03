@@ -1,5 +1,4 @@
 #include "Pickup.h"
-#include <glm/detail/type_mat.hpp>
 
 Pickup::Pickup()
 {
@@ -23,9 +22,9 @@ void Pickup::update(const float& dt)
 	collider.c = transform.position;
 }
 
-Rendering::Model& Pickup::getPlayerModel()
+const IRenderable* Pickup::getModel() const
 {
-	return model;
+	return &model;
 };
 
 const glm::vec3& Pickup::getPosition() const

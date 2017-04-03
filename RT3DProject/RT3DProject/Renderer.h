@@ -9,6 +9,7 @@
 #include <map>
 #include "IRenderable.h"
 #include "Terrain.h"
+#include <glm/detail/type_mat.hpp>
 
 namespace Rendering {
 	class UI;
@@ -31,9 +32,9 @@ public:
 	void drawTerrain(const Terrain* terrain) const;
 	void render(const std::vector<const IRenderable*>& models);
 	void renderFirstPerson(const IRenderable* renderable);
-	void setShader(std::string name);
-	void renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size);
-	void renderUI(Rendering::UI * renderable, glm::vec3 position);
+	void setShader(const std::string& name);
+	void renderUI(const Rendering::UI* renderable, const glm::vec3& position, const glm::vec3& size);
+	void renderUI(const Rendering::UI* renderable, const glm::vec3& position);
 private:
 	void init();
 	std::stack<glm::mat4> mvStack;

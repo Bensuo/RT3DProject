@@ -1,9 +1,5 @@
 #include "Terrain.h"
 #include <SDL.h>
-#include <glm/detail/type_mat.hpp>
-#include <glm/detail/type_mat.hpp>
-#include <glm/detail/type_mat.hpp>
-#include <glm/detail/type_mat.hpp>
 
 Terrain::Terrain(): rows(0), cols(0), indexCount(0), vertVBO(0), normVBO(0), texVBO(0), indexEBO(0), vao(0)
 {
@@ -95,21 +91,21 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	glBindBuffer(GL_ARRAY_BUFFER, vertVBO);
 	glBufferData(GL_ARRAY_BUFFER, 3 * rows*cols * sizeof(GLfloat), vertData.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	
 	//Normals
 	glGenBuffers(1, &normVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, normVBO);
 	glBufferData(GL_ARRAY_BUFFER, 3 * rows*cols * sizeof(GLfloat), normalData.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	//Texture coords
 	glGenBuffers(1, &texVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, texVBO);
 	glBufferData(GL_ARRAY_BUFFER, 2 * rows*cols * sizeof(GLfloat), coordData.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, 0);	
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, nullptr);	
 
 	//Indices
 	glGenBuffers(1, &indexEBO);

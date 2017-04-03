@@ -25,8 +25,8 @@ namespace Rendering
 		const GLuint& getCount() const override;
 		const rt3d::materialStruct& getMaterial() const override;
 		const Transform& getTransform() const override;
-		const bool& isIndexed() const override;
-		const float& getInterp() const override { return model.getInterp(); }
+		bool isIndexed() const override;
+		float getInterp() const override { return model.getInterp(); }
 	protected:
 		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;

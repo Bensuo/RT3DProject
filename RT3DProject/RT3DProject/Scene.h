@@ -29,4 +29,3 @@ private:
 	std::vector<rt3d::lightStruct> lights;
 	std::vector<StaticObject*> staticObjects;
 };
-

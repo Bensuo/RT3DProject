@@ -51,7 +51,7 @@ namespace Rendering
 		return transform;
 	}
 
-	const bool& Model::isIndexed() const
+	bool Model::isIndexed() const
 	{
 		return false;
 	}
