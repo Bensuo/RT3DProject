@@ -44,6 +44,7 @@ namespace Rendering
 			std::cout << "Failed to open font." << std::endl;
 		SDL_Color sdl_Color = { color.b, color.g, color.r, color.a };
 		texture = TTF_RenderText_Blended(textFont, string.c_str(), sdl_Color);
+		TTF_CloseFont(textFont);
 		genTexture();
 	}
 
@@ -69,7 +70,9 @@ namespace Rendering
 		if (textFont == nullptr)
 			std::cout << "Failed to open font." << std::endl;
 		SDL_Color sdl_Color = { color.b, color.g, color.r, color.a };
+		SDL_FreeSurface(texture);
 		texture = TTF_RenderText_Blended(textFont, string.c_str(), sdl_Color);
+		TTF_CloseFont(textFont);
 		genTexture();
 	}
 
