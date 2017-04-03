@@ -57,7 +57,7 @@ namespace Collisions
 
 	}
 
-	inline CollisionInfo TestAABBAABB(const AABB& A, const AABB& B)
+	inline CollisionInfo testAABBAABB(const AABB& A, const AABB& B)
 	{
 		CollisionInfo info;
 		if (abs(A.c[0] - B.c[0]) > (A.r[0] + B.r[0]))
@@ -80,7 +80,7 @@ namespace Collisions
 		return info;
 	}
 
-	inline bool TestRayAABB(const Ray& ray, const AABB& aabb)
+	inline bool testRayAABB(const Ray& ray, const AABB& aabb)
 	{
 		glm::vec3 AABBmin(aabb.c.x - aabb.r.x, aabb.c.y - aabb.r.y, aabb.c.z - aabb.r.z);
 		glm::vec3 AABBmax(aabb.c.x + aabb.r.x, aabb.c.y + aabb.r.y, aabb.c.z + aabb.r.z);

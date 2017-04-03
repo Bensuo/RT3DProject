@@ -29,7 +29,7 @@ void StaticObject::loadContent(Utilities::ResourceManager& content, const std::s
 		{
 			maxX = x;
 		}
-		float y = verts[i * 3 + 1];
+		auto y = verts[i * 3 + 1];
 		if (y < minY)
 		{
 			minY = y;
@@ -38,7 +38,7 @@ void StaticObject::loadContent(Utilities::ResourceManager& content, const std::s
 		{
 			maxY = y;
 		}
-		float z = verts[i * 3 + 2];
+		auto z = verts[i * 3 + 2];
 		if (z < minZ)
 		{
 			minZ = z;

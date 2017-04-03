@@ -271,7 +271,7 @@ Game::Game() : countdown(60 * 60)
 
 bool playerCollision(Player* p1, Player* p2)
 {
-	auto info = Collisions::TestAABBAABB(p1->getAABB(), p2->getAABB());
+	auto info = Collisions::testAABBAABB(p1->getAABB(), p2->getAABB());
 	if (info.collision)
 	{
 		auto pos = p2->getPosition();
@@ -282,7 +282,7 @@ bool playerCollision(Player* p1, Player* p2)
 
 bool playerCollision(Player* p1, Pickup* p2)
 {
-	auto info = Collisions::TestAABBAABB(p1->getAABB(), p2->getAABB());
+	auto info = Collisions::testAABBAABB(p1->getAABB(), p2->getAABB());
 	if (info.collision)
 	{
 		return true;
@@ -297,7 +297,7 @@ void Game::checkCollisions()
 	Collisions::terrainCollision(scene->getPlayer(), scene->getTerrain());
 	for (int i = 0; i < staticObjects.size(); i++)
 	{
-		auto info = Collisions::TestAABBAABB(staticObjects[i]->getAABB(), scene->getPlayer()->getAABB());
+		auto info = Collisions::testAABBAABB(staticObjects[i]->getAABB(), scene->getPlayer()->getAABB());
 		if (info.collision)
 		{
 			auto pos = scene->getPlayer()->getPosition();
@@ -343,7 +343,7 @@ void Game::checkCollisions()
 		}
 		for (auto k = 0; k < staticObjects.size(); k++)
 		{
-			auto info = Collisions::TestAABBAABB(staticObjects[k]->getAABB(), npcs[i]->getAABB());
+			auto info = Collisions::testAABBAABB(staticObjects[k]->getAABB(), npcs[i]->getAABB());
 			if (info.collision)
 			{
 				auto pos = npcs[i]->getPosition();
@@ -359,7 +359,7 @@ void Game::checkCollisions()
 		Player* npc = nullptr;
 		for (auto i = 0; i < npcs.size(); i++)
 		{
-			if (TestRayAABB(ray, npcs[i].get()->getAABB()))
+			if (testRayAABB(ray, npcs[i].get()->getAABB()))
 			{
 				if (npc == nullptr)
 				{
