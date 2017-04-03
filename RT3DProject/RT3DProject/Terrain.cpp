@@ -81,7 +81,7 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	}
 	indexCount = triIndexData.size();
 	
-	//vao = rt3d::createMesh(vertData.size(), vertData.data(), nullptr, normalData.data(), coordData.data(), indexCount, triIndexData.data());
+
 	//Setup OpenGL Buffers
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -127,6 +127,7 @@ void Terrain::loadContent(const char * fname, const char * normname, Utilities::
 	SDL_FreeSurface(normSurface);
 }
 
+//Returns the height at a given world x, z using barycentric coordinates to get the interpolated height on a triangle surface
 const float& Terrain::getHeightAtPosition(const float& x, const float& z) const
 {
 	auto tX = x - transform.position.x + (scale.x/2);
@@ -138,6 +139,7 @@ const float& Terrain::getHeightAtPosition(const float& x, const float& z) const
 	auto xCoord = fmod(tX, gridSquareSize) / gridSquareSize;
 	auto zCoord = fmod(tZ ,gridSquareSize) / gridSquareSize;
 
+	//Determine which side of the quad (aka which triangle) we're on and call the method with the appropriate heights/coordinates
 	if (xCoord <= zCoord)
 	{
 		return getBarycentricHeight(glm::vec2(xCoord, zCoord), glm::vec3(0, heights[gridX][gridZ], 0), glm::vec3(1, heights[gridX + 1][gridZ + 1], 1),
