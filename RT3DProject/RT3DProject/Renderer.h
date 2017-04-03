@@ -26,11 +26,11 @@ public:
 	void setView(const glm::mat4& view);
 	void setProjection(const glm::mat4& projection);
 	void swapBuffers() const;
-	void draw(IRenderable* renderable);
+	void draw(const IRenderable* renderable);
 	void drawSkybox(const Rendering::Skybox* skybox) const;
 	void drawTerrain(const Terrain* terrain) const;
-	void render(const std::vector<IRenderable*>& models);
-	void renderFirstPerson(IRenderable* renderable);
+	void render(const std::vector<const IRenderable*>& models);
+	void renderFirstPerson(const IRenderable* renderable);
 	void setShader(std::string name);
 	void renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size);
 	void renderUI(Rendering::UI * renderable, glm::vec3 position);

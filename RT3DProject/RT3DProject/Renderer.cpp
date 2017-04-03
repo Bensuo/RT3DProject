@@ -116,7 +116,7 @@ void Renderer::swapBuffers() const
 }
 
 //Draws an object implementing the IRenderable interface
-void Renderer::draw(IRenderable* renderable)
+void Renderer::draw(const IRenderable* renderable)
 {
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE0);
@@ -233,7 +233,7 @@ void Renderer::drawTerrain(const Terrain * terrain) const
 
 //Renders all objects in the provided list based on the camera provided in begin() and the currently
 //active shader
-void Renderer::render(const std::vector<IRenderable*>& models)
+void Renderer::render(const std::vector<const IRenderable*>& models)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -251,7 +251,7 @@ void Renderer::render(const std::vector<IRenderable*>& models)
 }
 
 //Renders "first person" renderables such as viewport weapon models
-void Renderer::renderFirstPerson(IRenderable * renderable)
+void Renderer::renderFirstPerson(const IRenderable * renderable)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);

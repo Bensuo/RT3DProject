@@ -35,8 +35,8 @@ class Game
 	
 	bool running = true;
 	bool endSoundPlayed = false;
-	std::vector<IRenderable*> renderList;
-	std::vector<IRenderable*> fpRenderList;
+	std::vector<const IRenderable*> renderList;
+	std::vector<const IRenderable*> fpRenderList;
 	Rendering::UI* failure;
 	Rendering::UI* victory;
 

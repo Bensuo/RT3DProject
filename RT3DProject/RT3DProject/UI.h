@@ -17,7 +17,7 @@ namespace Rendering
 		const int& getWidth() const;
 		const int& getHeight() const;
 		void setString(const std::string& string);
-		const Shader& getShader();
+		const Shader& getShader() const;
 		const GLuint& getMesh() const override;
 		const GLuint& getTexture() const override;
 		const GLuint& getCount() const override;

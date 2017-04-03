@@ -73,7 +73,7 @@ namespace Rendering
 		genTexture();
 	}
 
-	const Shader& UI::getShader()
+	const Shader& UI::getShader() const
 	{
 		return shader;
 	}
@@ -108,4 +108,3 @@ namespace Rendering
 	const Transform& UI::getTransform() const { return transform; }
 	const bool& UI::isIndexed() const { return true; }
 }
-
