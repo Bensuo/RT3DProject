@@ -6,13 +6,13 @@
 class IRenderable
 {
 public:
-
-	virtual GLuint& getMesh() = 0;
-	virtual GLuint& getTexture() = 0;
-	virtual GLuint& getCount() = 0;
-	virtual rt3d::materialStruct& getMaterial() = 0;
-	virtual Transform& getTransform() = 0;
-	virtual bool isIndexed() = 0;
-	virtual float getInterp() = 0;
+	virtual ~IRenderable() = default;
+	virtual const GLuint& getMesh() const = 0;
+	virtual const GLuint& getTexture() const = 0;
+	virtual const GLuint& getCount() const = 0;
+	virtual const rt3d::materialStruct& getMaterial() const = 0;
+	virtual const Transform& getTransform() const = 0;
+	virtual bool isIndexed() const = 0;
+	virtual float getInterp() const = 0;
 };
 

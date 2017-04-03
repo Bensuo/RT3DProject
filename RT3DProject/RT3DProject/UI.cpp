@@ -49,12 +49,12 @@ namespace Rendering
 
 	UI::~UI(){}
 
-	int UI::getWidth() const
+	const int& UI::getWidth() const
 	{
 		return texture->w;
 	}
 
-	int UI::getHeight() const
+	const int& UI::getHeight() const
 	{
 		return texture->h;
 	}
@@ -73,12 +73,12 @@ namespace Rendering
 		genTexture();
 	}
 
-	Shader& UI::getShader()
+	const Shader& UI::getShader() const
 	{
 		return shader;
 	}
 
-	GLuint & UI::getTexture() {
+	const GLuint& UI::getTexture() const {
 		return label;
 	}
 
@@ -94,7 +94,7 @@ namespace Rendering
 		glBindTexture(GL_TEXTURE_2D, NULL);
 	}
 
-	void UI::clean(GLuint textID) const
+	void UI::clean(const GLuint& textID) const
 	{
 		if (textID != NULL) {
 			glDeleteTextures(1, &textID);
@@ -102,10 +102,9 @@ namespace Rendering
 		}
 	}
 
-	GLuint & UI::getMesh() { return mesh; }
-	GLuint & UI::getCount() { return size; }
-	rt3d::materialStruct & UI::getMaterial() { return material; }
-	Transform & UI::getTransform() { return transform; }
-	bool UI::isIndexed() { return true; }
+	const GLuint& UI::getMesh() const { return mesh; }
+	const GLuint& UI::getCount() const { return size; }
+	const rt3d::materialStruct& UI::getMaterial() const { return material; }
+	const Transform& UI::getTransform() const { return transform; }
+	bool UI::isIndexed() const { return true; }
 }
-

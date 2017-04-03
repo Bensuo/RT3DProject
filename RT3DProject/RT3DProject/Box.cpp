@@ -4,14 +4,15 @@
 
 namespace Rendering
 {
-	Box::Box(const glm::vec3& bounds, const glm::vec3& position) : cubeVerts{ -0.5, -0.5f, -0.5f,
-																			  -0.5,  0.5f, -0.5f,
-																			   0.5,  0.5f, -0.5f,
-																			   0.5, -0.5f, -0.5f,
-																			  -0.5, -0.5f,  0.5f,
-																			  -0.5,  0.5f,  0.5f,
-																			   0.5,  0.5f,  0.5f,
-																			   0.5, -0.5f,  0.5f },
+	Box::Box(const glm::vec3& bounds, const glm::vec3& position) : 
+		cubeVerts{ -0.5, -0.5f, -0.5f,
+				   -0.5,  0.5f, -0.5f,
+				    0.5,  0.5f, -0.5f,
+				    0.5, -0.5f, -0.5f,
+				   -0.5, -0.5f,  0.5f,
+				   -0.5,  0.5f,  0.5f,
+					0.5,  0.5f,  0.5f,
+				    0.5, -0.5f,  0.5f },
 		cubeIndices{ 0,1,2, 0,2,3, // back  
 					 1,0,5, 0,4,5, // left					
 					 6,3,2, 3,6,7, // right
@@ -20,7 +21,7 @@ namespace Rendering
 					 6,5,4, 7,6,4 },
 		width(bounds.x), height(bounds.y), depth(bounds.z)
 	{
-		for (int i = 0; i < cubeVertCount * 3; i += 3)
+		for (auto i = 0; i < cubeVertCount * 3; i += 3)
 		{
 			cubeVerts[i + 0] *= bounds.x;
 			cubeVerts[i + 1] *= bounds.y;
@@ -34,37 +35,32 @@ namespace Rendering
 	{
 	}
 
-	void Box::update()
-	{
-		//position.y -= 0.005f;
-	}
-
-	GLuint & Box::getMesh()
+	const GLuint& Box::getMesh() const
 	{
 		return mesh;
 	}
 
-	GLuint & Box::getTexture()
+	const GLuint& Box::getTexture() const
 	{
 		return *texture.get();
 	}
 
-	GLuint & Box::getCount()
+	const GLuint& Box::getCount() const
 	{
 		return cubeIndexCount;
 	}
 
-	rt3d::materialStruct & Box::getMaterial()
+	const rt3d::materialStruct& Box::getMaterial() const
 	{
 		return material;
 	}
 
-	Transform & Box::getTransform()
+	const Transform& Box::getTransform() const
 	{
 		return transform;
 	}
 
-	bool Box::isIndexed()
+	bool Box::isIndexed() const
 	{
 		return true;
 	}

@@ -15,18 +15,18 @@ namespace Rendering
 	public:
 		virtual ~Model();
 		void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
-		void update(const float& dt);	
-		int getCurrentFrame() const { return m_MD2.getCurrentFrame(); }
+		void update(const float& dt);
+		const int& getCurrentFrame() const { return model.getCurrentFrame(); }
 		virtual void setAnimation(const int& state) {}
-		virtual void SetUpAnimationData() {}
+		virtual void setUpAnimationData() {}
 		virtual void setTransform(const Transform& transform);
-		GLuint& getMesh() override;
-		GLuint& getTexture() override;
-		GLuint& getCount() override;
-		rt3d::materialStruct& getMaterial() override;
-		Transform& getTransform() override;
-		bool isIndexed() override;
-		float getInterp() override { return m_MD2.getInterp(); }
+		const GLuint& getMesh() const override;
+		const GLuint& getTexture() const override;
+		const GLuint& getCount() const override;
+		const rt3d::materialStruct& getMaterial() const override;
+		const Transform& getTransform() const override;
+		bool isIndexed() const override;
+		float getInterp() const override { return model.getInterp(); }
 	protected:
 		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;
@@ -37,7 +37,7 @@ namespace Rendering
 			1.0f  // shininess
 		};
 		GLuint vertexCount;
-		MD2 m_MD2;
+		MD2 model;
 		GLuint mesh;
 		Transform transform{ glm::vec3(0), glm::vec3(-90.0f, 0, 0) };
 	};

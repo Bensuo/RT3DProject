@@ -5,33 +5,34 @@
 #include "ResourceManager.h"
 #include <vector>
 #include "Transform.h"
+
 class Terrain
 {
 public:
 	Terrain();
 	virtual ~Terrain();
-	void loadContent(const char* fname, const char * normname, Utilities::ResourceManager& content);
-	int getNumIndices() { return indexCount; }
-	GLuint getVAO() { return vao; }
-	Rendering::Shader& getShader() { return shader; }
-	glm::vec3 getScale() { return scale; }
-	void setScale(glm::vec3 s) { scale = s; }
-	int getRows() { return rows; }
-	int getColumns() { return cols; }
-	GLuint getTexture(int index) { 
+	void loadContent(const char* fname, const char* normname, Utilities::ResourceManager& content);
+	const int& getNumIndices() const { return indexCount; }
+	const GLuint& getVAO() const { return vao; }
+	const Rendering::Shader& getShader() const { return shader; }
+	const glm::vec3& getScale() const { return scale; }
+	void setScale(const glm::vec3& scale) { this->scale = scale; }
+	const int& getRows() const { return rows; }
+	const int& getColumns() const { return cols; }
+	const GLuint& getTexture(const int& index) const
+	{ 
 		return texture[index];
 	}
-	float getHeightAtPosition(float x, float z);
+
+	const float& getHeightAtPosition(const float& x, const float& z) const;
 	Rendering::Shader shader;
 private:
-	float getBarycentricHeight(glm::vec2 pos, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+	const float& getBarycentricHeight(const glm::vec2& pos, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3) const;
 	int rows;
 	int cols;
 	int indexCount;
 	glm::vec3 scale;
 	GLuint vertVBO, normVBO, texVBO, indexEBO;
-	//OpenGL buffers
-	//GLuint vertVBO, texCoordVBO, indicesVBO, normalsVBO;
 	GLuint vao;
 	std::vector<std::vector<float>> heights;
 	GLuint texture[5];

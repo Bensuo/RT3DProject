@@ -1,6 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 class Camera
@@ -31,16 +30,16 @@ class Camera
 	const float MAX_DISTANCE = 150.0f;
 public:
 	const float& getYaw() const;
-	const glm::vec3& GetFront() const;
-	void Update(const float& deltaTime, const glm::vec3& targetPos);
-	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 GetViewMatrix() const;
-	void ProcessMouseMovement(const glm::vec2& offset);
-	void ProcessMouseScroll(float yoffset);
-	void SnapDistance(const float& distance);
+	const glm::vec3& getFront() const;
+	void update(const float& deltaTime, const glm::vec3& targetPos);
+	explicit Camera(const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f));
+	const glm::mat4& getViewMatrix() const;
+	void processMouseMovement(const glm::vec2& offset);
+	void processMouseScroll(const float& yoffset);
+	void snapDistance(const float& distance);
 	bool isFPS() const;
-	void SnapToMaxDistance();
-	glm::vec3 getPosition() const { return position; }
+	void snapToMaxDistance();
+	const glm::vec3& getPosition() const { return position; }
 private:
 	void updateCameraVectors(const glm::vec3& targetPos);
 };

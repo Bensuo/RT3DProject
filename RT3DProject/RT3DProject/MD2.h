@@ -86,16 +86,16 @@ public:
 	explicit MD2(const std::string& filename);
 	MD2();
 	virtual ~MD2();
-	GLuint ReadMD2Model(const std::string& filename);
-	void FreeModel();
-	void Animate(const int& animation, const float& dt);
-	void Animate(const float& dt) { Animate(currentAnim, dt); }
+	GLuint readMD2Model(const std::string& filename);
+	void freeModel();
+	void animate(const int& animation, const float& dt);
+	void animate(const float& dt) { animate(currentAnim, dt); }
 	void setCurrentAnim(const int& n) { currentAnim = n; }
-	void SetUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
-	void ResetAnimation() {
+	void setUpAnimationData(const std::vector<int>& frameList) { animFrameList = frameList; }
+	void resetAnimation() {
 		currentFrame = 0;
 	}
-	float getInterp() { return interp; }
+	float getInterp() const { return interp; }
 protected:
 	md2_model_t mdl;
 	int currentAnim = 0;
@@ -107,12 +107,12 @@ protected:
 	GLfloat *animVerts;
 	std::vector<int>animFrameList;
 public:
-	GLfloat* getAnimVerts() const { return animVerts; }
-	GLuint getVertDataSize() const { return vertDataSize; }
+	const GLfloat* getAnimVerts() const { return animVerts; }
+	const GLuint& getVertDataSize() const { return vertDataSize; }
 	GLuint getVertDataCount() const { return vertDataSize / 3; }
-	int getCurrentAnim() const { return currentAnim; }
-	int getCurrentFrame() const { return currentFrame; }
+	const int& getCurrentAnim() const { return currentAnim; }
+	const int& getCurrentFrame() const { return currentFrame; }
 	const std::vector<int>& GetAnimFrames() const { return animFrameList; }
-	GLfloat* getCurrentVerts() const { return vertData[currentFrame]; }
-	GLfloat* getNextVerts() const { return vertData[nextFrame]; }
+	const GLfloat* getCurrentVerts() const { return vertData[currentFrame]; }
+	const GLfloat* getNextVerts() const { return vertData[nextFrame]; }
 };

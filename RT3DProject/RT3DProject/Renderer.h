@@ -3,18 +3,13 @@
 #include <glm/glm.hpp>
 #include <glm/mat4x4.hpp>
 #include <SDL.h>
-#include <GL/glew.h>
-#include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
-#include "camera.h"
 #include "rt3d.h"
 #include "shader.h"
-#include "Model.h"
 #include "skybox.h"
-#include "ViewportWeapon.h"
 #include <map>
 #include "IRenderable.h"
 #include "Terrain.h"
+#include <glm/detail/type_mat.hpp>
 
 namespace Rendering {
 	class UI;
@@ -32,14 +27,14 @@ public:
 	void setView(const glm::mat4& view);
 	void setProjection(const glm::mat4& projection);
 	void swapBuffers() const;
-	void draw(IRenderable* renderable);
-	void drawSkybox(Rendering::Skybox* skybox) const;
-	void drawTerrain(Terrain* terrain) const;
-	void render(std::vector<IRenderable*>& models);
-	void renderFirstPerson(IRenderable* renderable);
-	void setShader(std::string name);
-	void renderUI(Rendering::UI * renderable, glm::vec3 position, glm::vec3 size);
-	void renderUI(Rendering::UI * renderable, glm::vec3 position);
+	void draw(const IRenderable* renderable);
+	void drawSkybox(const Rendering::Skybox* skybox) const;
+	void drawTerrain(const Terrain* terrain) const;
+	void render(const std::vector<const IRenderable*>& models);
+	void renderFirstPerson(const IRenderable* renderable);
+	void setShader(const std::string& name);
+	void renderUI(const Rendering::UI* renderable, const glm::vec3& position, const glm::vec3& size);
+	void renderUI(const Rendering::UI* renderable, const glm::vec3& position);
 private:
 	void init();
 	std::stack<glm::mat4> mvStack;

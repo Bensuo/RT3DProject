@@ -9,7 +9,7 @@ namespace Rendering
 	{
 		const float SIZE = 1;
 		GLuint vbo;
-		bool loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name);
+		bool loadCubeMapSide(GLuint& texture, GLenum side_target, const char* file_name) const;
 	public:
 		Skybox(const char* front,
 			const char* back,
@@ -20,7 +20,7 @@ namespace Rendering
 			const char* vertexPath,
 			const char* fragmentPath);
 		~Skybox();
-		void render(Camera& camera) const;
+		void render(const Camera& camera) const;
 		GLuint vao;
 		GLuint texture;
 		Shader shader;

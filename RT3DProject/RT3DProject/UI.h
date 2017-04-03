@@ -14,18 +14,18 @@ namespace Rendering
 		UI(const std::string& path);
 		UI(const std::string& string, int size, const glm::vec4& color = glm::vec4(1.0f));
 		virtual ~UI();
-		int getWidth() const;
-		int getHeight() const;
+		const int& getWidth() const;
+		const int& getHeight() const;
 		void setString(const std::string& string);
-		Shader& getShader();
-		GLuint& getMesh() override;
-		GLuint& getTexture() override;
-		GLuint& getCount() override;
-		rt3d::materialStruct& getMaterial() override;
-		Transform& getTransform() override;
-		bool isIndexed() override;
+		const Shader& getShader() const;
+		const GLuint& getMesh() const override;
+		const GLuint& getTexture() const override;
+		const GLuint& getCount() const override;
+		const rt3d::materialStruct& getMaterial() const override;
+		const Transform& getTransform() const override;
+		bool isIndexed() const override;
 		void setText(const std::string& txt) { uiString = txt; }
-		float getInterp() override { return 0.0f; }
+		float getInterp() const override { return 0.0f; }
 	private:
 		Shader shader;
 		std::vector<GLfloat> verts;
@@ -45,7 +45,7 @@ namespace Rendering
 		};
 		glm::vec4 color;
 		void genTexture();
-		void clean(GLuint textID) const;
+		void clean(const GLuint& textID) const;
 		Transform transform{ glm::vec3(0), glm::vec3(0) };
 		std::string objPath = "res/obj/cube.obj";
 	};

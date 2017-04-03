@@ -5,7 +5,7 @@ class AIController
 public:
 	AIController();
 	virtual ~AIController();
-	void setActor(std::shared_ptr<Player>& actor) { this->actor = actor; }
+	void setActor(const std::shared_ptr<Player>& actor) { this->actor = actor; }
 	void setTarget(Player* target) {
 		this->target = target;
 	}
@@ -15,4 +15,3 @@ private:
 	Player* target;
 	int actionCounter;
 };
-

@@ -39,8 +39,8 @@ char* loadFile(const char *fname, GLint &fSize) {
 	// ios::ate opens file at the end
 	ifstream file (fname, ios::in|ios::binary|ios::ate);
 	if (file.is_open()) {
-		size = (int) file.tellg(); // get location of file pointer i.e. file size
-		fSize = (GLint) size;
+		size = static_cast<int>(file.tellg()); // get location of file pointer i.e. file size
+		fSize = static_cast<GLint>(size);
 		memblock = new char [size];
 		file.seekg (0, ios::beg);
 		file.read (memblock, size);
@@ -60,8 +60,8 @@ char* loadFile(const char *fname, GLint &fSize) {
 // printShaderError
 // Display (hopefully) useful error messages if Shader fails to compile or link
 void printShaderError(const GLint shader) {
-	int maxLength = 0;
-	int logLength = 0;
+	auto maxLength = 0;
+	auto logLength = 0;
 	GLchar *logMessage;
 
 	// Find out how long the error message is
@@ -109,14 +109,14 @@ GLuint initShaders(const char *vertFile, const char *fragFile) {
 	glGetShaderiv(v, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		cout << "Vertex Shader not compiled." << endl;
-		rt3d::printShaderError(v);
+		printShaderError(v);
 	} 
 
 	glCompileShader(f);
 	glGetShaderiv(f, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		cout << "Fragment Shader not compiled." << endl;
-		rt3d::printShaderError(f);
+		printShaderError(f);
 	} 
 	
 	p = glCreateProgram();
@@ -145,8 +145,7 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	GLuint *pMeshBuffers = new GLuint[5];
-
+	auto pMeshBuffers = new GLuint[5];
 
 	if (vertices == nullptr) {
 		// cant create a mesh without vertices... oops
@@ -160,7 +159,7 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 	// VBO for vertex data
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, 3*numVerts*sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)RT3D_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, 0); 
+	glVertexAttribPointer(static_cast<GLuint>(RT3D_VERTEX), 3, GL_FLOAT, GL_FALSE, 0, nullptr); 
 	glEnableVertexAttribArray(RT3D_VERTEX);
 	pMeshBuffers[RT3D_VERTEX] = VBO;
 
@@ -169,7 +168,7 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, 3*numVerts*sizeof(GLfloat), colours, GL_STATIC_DRAW);
-		glVertexAttribPointer((GLuint)RT3D_COLOUR, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(static_cast<GLuint>(RT3D_COLOUR), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(RT3D_COLOUR);
 		pMeshBuffers[RT3D_COLOUR] = VBO;
 	}
@@ -179,7 +178,7 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, 3*numVerts*sizeof(GLfloat), normals, GL_STATIC_DRAW);
-		glVertexAttribPointer((GLuint)RT3D_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(static_cast<GLuint>(RT3D_NORMAL), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(RT3D_NORMAL);
 		pMeshBuffers[RT3D_NORMAL] = VBO;
 	}
@@ -189,7 +188,7 @@ GLuint createMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat*
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, 2*numVerts*sizeof(GLfloat), texcoords, GL_STATIC_DRAW);
-		glVertexAttribPointer((GLuint)RT3D_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(static_cast<GLuint>(RT3D_TEXCOORD), 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(RT3D_TEXCOORD);
 		pMeshBuffers[RT3D_TEXCOORD] = VBO;
 	}
@@ -232,7 +231,7 @@ GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat * vertices, c
 	// VBO for vertex data
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)RT3D_VERTEX, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(static_cast<GLuint>(RT3D_VERTEX), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(RT3D_VERTEX);
 	pMeshBuffers[RT3D_VERTEX] = VBO;
 
@@ -242,7 +241,7 @@ GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat * vertices, c
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), colours, GL_STATIC_DRAW);
-		glVertexAttribPointer((GLuint)RT3D_COLOUR, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(static_cast<GLuint>(RT3D_COLOUR), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(RT3D_COLOUR);
 		pMeshBuffers[RT3D_COLOUR] = VBO;
 	}
@@ -252,7 +251,7 @@ GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat * vertices, c
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), normals, GL_STATIC_DRAW);
-		glVertexAttribPointer((GLuint)RT3D_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(static_cast<GLuint>(RT3D_NORMAL), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(RT3D_NORMAL);
 		pMeshBuffers[RT3D_NORMAL] = VBO;
 	}
@@ -262,7 +261,7 @@ GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat * vertices, c
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, 2 * numVerts * sizeof(GLfloat), texcoords, GL_STATIC_DRAW);
-		glVertexAttribPointer((GLuint)RT3D_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(static_cast<GLuint>(RT3D_TEXCOORD), 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(RT3D_TEXCOORD);
 		pMeshBuffers[RT3D_TEXCOORD] = VBO;
 	}
@@ -270,7 +269,7 @@ GLuint createInterpolatedMesh(const GLuint numVerts, const GLfloat * vertices, c
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, 3 * numVerts * sizeof(GLfloat), vertices_next, GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)RT3D_VERTEX_NEXT, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(static_cast<GLuint>(RT3D_VERTEX_NEXT), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(RT3D_VERTEX_NEXT);
 	pMeshBuffers[RT3D_VERTEX_NEXT] = VBO;
 	if (indices != nullptr && indexCount > 0) {
@@ -363,7 +362,7 @@ void drawMesh(const GLuint mesh, const GLuint numVerts, const GLuint primitive) 
 
 void drawIndexedMesh(const GLuint mesh, const GLuint indexCount, const GLuint primitive) {
 	glBindVertexArray(mesh);	// Bind mesh VAO
-	glDrawElements(primitive, indexCount,  GL_UNSIGNED_INT, 0);	// draw VAO 
+	glDrawElements(primitive, indexCount,  GL_UNSIGNED_INT, nullptr);	// draw VAO 
 	glBindVertexArray(0);
 }
 
@@ -381,7 +380,7 @@ void updateMesh(const GLuint mesh, const unsigned int bufferType, const GLfloat 
 		// VBO for the data
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, size*sizeof(GLfloat), data, GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)bufferType, 3, GL_FLOAT, GL_FALSE, 0, 0); 
+	glVertexAttribPointer(static_cast<GLuint>(bufferType), 3, GL_FLOAT, GL_FALSE, 0, nullptr); 
 	glEnableVertexAttribArray(bufferType);
 	pMeshBuffers[bufferType] = VBO;
 

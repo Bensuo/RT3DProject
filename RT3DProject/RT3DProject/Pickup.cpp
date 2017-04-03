@@ -13,7 +13,7 @@ void Pickup::loadContent(Utilities::ResourceManager content, const std::string& 
 	model.loadContent(content, "res/md2/pickups/" + skin, "res/md2/pickups/" + skin);
 }
 
-void Pickup::update(float dt)
+void Pickup::update(const float& dt)
 {
 	transform.rotation.z += dt * rotationSpeed;
 
@@ -22,9 +22,9 @@ void Pickup::update(float dt)
 	collider.c = transform.position;
 }
 
-Rendering::Model& Pickup::getPlayerModel()
+const IRenderable* Pickup::getModel() const
 {
-	return model;
+	return &model;
 };
 
 const glm::vec3& Pickup::getPosition() const
@@ -32,7 +32,7 @@ const glm::vec3& Pickup::getPosition() const
 	return transform.position;
 };
 
-void Pickup::setPosition(glm::vec3 pos)
+void Pickup::setPosition(const glm::vec3& pos)
 {
 	transform.position = pos;
 };

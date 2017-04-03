@@ -1,31 +1,28 @@
 #pragma once
 #include "rt3d.h"
 #include <glm/glm.hpp>
-#include <stack>
 #include <memory>
 #include "ResourceManager.h"
 #include "IRenderable.h"
+
 namespace Rendering
 {
 	class Box : public IRenderable
 	{
 	public:
-		Box() {};
+		Box(): width(0), height(0), depth(0), mesh(0) {}
 		Box(const glm::vec3& bounds, const glm::vec3& position);
 		void loadContent(Utilities::ResourceManager& content);
 		virtual ~Box();
-
-		void update();
-
 		// Inherited via IRenderable
-		virtual GLuint & getMesh() override;
-		virtual GLuint & getTexture() override;
-		virtual GLuint & getCount() override;
-		virtual rt3d::materialStruct & getMaterial() override;
-		virtual Transform & getTransform() override;
-		virtual bool isIndexed() override;
-		void setMaterial(rt3d::materialStruct mat) { material = mat; };
-		float getInterp() override { return 0.0f; }
+		const GLuint& getMesh() const override;
+		const GLuint& getTexture() const override;
+		const GLuint& getCount() const override;
+		const rt3d::materialStruct& getMaterial() const override;
+		const Transform& getTransform() const override;
+		bool isIndexed() const override;
+		void setMaterial(const rt3d::materialStruct& mat) { material = mat; };
+		float getInterp() const override { return 0.0f; }
 	private:
 		GLfloat cubeVerts[24];
 		GLfloat cubeColours[24];
@@ -43,8 +40,6 @@ namespace Rendering
 			1.0f  // shininess
 		};
 		Transform transform{ glm::vec3(0), glm::vec3(0) };
-
-
 	};
 }
 

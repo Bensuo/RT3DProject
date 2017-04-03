@@ -2,73 +2,19 @@
 
 #include "md2model.h"
 #include "Box.h"
-#include "Skybox.h"
-#include "Camera.h"
+#include "camera.h"
 #include "Renderer.h"
 #include "Player.h"
-#include "AABB.h"
 #include "Input.h"
 #include "GameTime.h"
-#include "Terrain.h"
 #include "AudioManager.h"
 #include "Scene.h"
 #include "UI.h"
 #include "AIController.h"
+#include "Timer.h"
 
 
 #define DEG_TO_RADIAN 0.017453293
-
-class Timer
-{
-	std::chrono::time_point<std::chrono::system_clock> start, end;
-	std::chrono::duration<double> elapsed;
-	int duration;
-
-public:
-
-	explicit Timer(int duration) : duration(duration) {}
-
-	void startTimer()
-	{
-		start = std::chrono::system_clock::now();
-	}
-
-	void update()
-	{
-		if(elapsed.count() < duration) 
-		{
-			end = std::chrono::system_clock::now();
-			elapsed = end - start;
-		}
-	}
-
-	bool finished() const
-	{
-		return elapsed.count() >= duration;
-	}
-
-	std::string toString() const
-	{
-		std::string result;
-
-		int minutes = (duration - elapsed.count()) / 60.0f;
-		int seconds = (duration - elapsed.count()) - 60 * minutes;
-
-		if (minutes < 10) {
-			result += "0" + std::to_string(minutes) + ":";
-		} else {
-			result += std::to_string(minutes) + ":";
-		}
-
-		if (seconds < 10) {
-			result += "0" + std::to_string(seconds);
-		} else {
-			result += std::to_string(seconds);
-		}
-
-		return result;
-	}
-};
 
 class Game
 {
@@ -88,8 +34,8 @@ class Game
 	
 	bool running = true;
 	bool endSoundPlayed = false;
-	std::vector<IRenderable*> renderList;
-	std::vector<IRenderable*> fpRenderList;
+	std::vector<const IRenderable*> renderList;
+	std::vector<const IRenderable*> fpRenderList;
 	Rendering::UI* failure;
 	Rendering::UI* victory;
 
@@ -110,12 +56,12 @@ class Game
 	void checkCollisions();
 	std::vector<AIController> npcControllers;
 public:
-	void init(void);
-	void DrawMinimap();
-	void DrawScene();
-	void DrawHud();
+	void init();
+	void drawMinimap();
+	void drawScene();
+	void drawHud();
 	void draw();
-	bool Quit() const;
+	bool quit() const;
 	void update();
 	Game();
 };

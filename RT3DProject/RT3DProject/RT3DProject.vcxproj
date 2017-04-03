@@ -163,7 +163,6 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MD2.cpp" />
-    <ClCompile Include="md2model.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerModel.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="MD2.h" />
-    <ClInclude Include="md2model.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerModel.h" />
@@ -209,6 +207,7 @@
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="ViewportWeapon.h" />

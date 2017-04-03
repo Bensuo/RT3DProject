@@ -9,10 +9,10 @@ class Input
 	const uint8_t* currentKeyState;
 	const uint8_t* previousKeyState;
 	SDL_Event event;
-	bool quit = false;
+	bool isQuitting = false;
 public:
 	Input();
-	void Update(Player* player, Camera& camera, bool freezeControls);
-	bool Quit() const;
+	void update(Player* player, Camera& camera, const bool& freezeControls);
+	bool quit() const;
 	~Input();
 };

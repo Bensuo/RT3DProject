@@ -84,7 +84,7 @@ namespace rt3d {
         
 		auto itr = indexMap.find(fString1);
 		if (itr == indexMap.end()) {
-			faceIndex f = getFace(fString1, fFormat);
+			auto f = getFace(fString1, fFormat);
 			verts.push_back(inVerts[f.v].x);
 			verts.push_back(inVerts[f.v].y);
 			verts.push_back(inVerts[f.v].z);
@@ -111,7 +111,7 @@ namespace rt3d {
                  std::vector<GLfloat> &texcoords, std::vector<GLuint> &indices) {
         
 		GLint fileLength;
-		char *fileSource = loadFile(filename, fileLength);
+		auto fileSource = loadFile(filename, fileLength);
         
 		if (fileLength == 0)
 			// should report error here too
@@ -131,13 +131,12 @@ namespace rt3d {
 		std::vector<position> inCoords;
 		//std::vector<GLint> indexVector;
         
-		GLfloat x,y,z;
 		GLint a,b,c;
-        
-		int i=0, iCount = 0;
+
+		auto iCount = 0;
 		position tmp;
 		std::map<std::string,GLuint> indexMap;
-		int fFormat = FORMAT_UNKNOWN;
+		auto fFormat = FORMAT_UNKNOWN;
         
 		std::cout << "started parsing obj image..." << std::endl;
         
@@ -200,10 +199,6 @@ namespace rt3d {
 			}
 		}
         
-		std::cout << "finished parsing obj image..." << std::endl;
-        
-        
-	}
-    
-    
+		std::cout << "finished parsing obj image..." << std::endl;      
+	}  
 }

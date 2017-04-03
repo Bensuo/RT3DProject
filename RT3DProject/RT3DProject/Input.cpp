@@ -1,12 +1,11 @@
 #include "Input.h"
 
-Input::Input()
+Input::Input(): previousKeyState(nullptr)
 {
 	currentKeyState = SDL_GetKeyboardState(nullptr);
-
 }
 
-void Input::Update(Player* player, Camera& camera, bool freezeControls)
+void Input::update(Player* player, Camera& camera, const bool& freezeControls)
 {
 	if (!freezeControls)
 	{
@@ -17,22 +16,22 @@ void Input::Update(Player* player, Camera& camera, bool freezeControls)
 			{
 			case SDL_MOUSEMOTION:
 				motion = glm::vec2(event.motion.xrel, -event.motion.yrel);
-				camera.ProcessMouseMovement(motion);
+				camera.processMouseMovement(motion);
 				break;
 			case SDL_MOUSEWHEEL:
-				camera.ProcessMouseScroll(-event.wheel.y);
+				camera.processMouseScroll(-event.wheel.y);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_RIGHT)
 				{
-					camera.SnapDistance(player->getAimDistance());
-					player->Aim();
+					camera.snapDistance(player->getAimDistance());
+					player->aim();
 				}
 				if (event.button.button == SDL_BUTTON_MIDDLE)
 				{
-					camera.SnapToMaxDistance();
+					camera.snapToMaxDistance();
 				}
-				if (event.button.button == SDL_BUTTON_LEFT && (player->Aiming() || camera.isFPS()))
+				if (event.button.button == SDL_BUTTON_LEFT && (player->aiming() || camera.isFPS()))
 				{
 					player->shoot();
 				}
@@ -40,11 +39,11 @@ void Input::Update(Player* player, Camera& camera, bool freezeControls)
 			case SDL_MOUSEBUTTONUP:
 				if (event.button.button == SDL_BUTTON_RIGHT)
 				{
-					player->StopAim();
+					player->stopAim();
 				}
 				break;
 			case SDL_QUIT:
-				quit = true;
+				isQuitting = true;
 				break;
 			default:
 				break;
@@ -54,39 +53,31 @@ void Input::Update(Player* player, Camera& camera, bool freezeControls)
 		currentKeyState = SDL_GetKeyboardState(nullptr);
 		if (currentKeyState[SDL_SCANCODE_W])
 		{
-			player->MoveForward();
+			player->moveForward();
 		}
 		if (currentKeyState[SDL_SCANCODE_S])
 		{
-			player->MoveBackward();
+			player->moveBackward();
 		}
 		if (currentKeyState[SDL_SCANCODE_A])
 		{
-			player->MoveLeft();
+			player->moveLeft();
 		}
 		if (currentKeyState[SDL_SCANCODE_D])
 		{
-			player->MoveRight();
+			player->moveRight();
 		}
 		if (currentKeyState[SDL_SCANCODE_SPACE])
 		{
-			player->Jump();
+			player->jump();
 		}
 		if (currentKeyState[SDL_SCANCODE_LSHIFT])
 		{
-			player->Sprint();
+			player->sprint();
 		}
-		if (!currentKeyState[SDL_SCANCODE_W] &&
-			!currentKeyState[SDL_SCANCODE_S] &&
-			!currentKeyState[SDL_SCANCODE_A] &&
-			!currentKeyState[SDL_SCANCODE_D])
-		{
-			//player->Idle();
-		}
-
 		if (currentKeyState[SDL_SCANCODE_ESCAPE])
 		{
-			quit = true;
+			isQuitting = true;
 		}
 	}
 	else
@@ -96,7 +87,7 @@ void Input::Update(Player* player, Camera& camera, bool freezeControls)
 			switch (event.type)
 			{
 			case SDL_QUIT:
-				quit = true;
+				isQuitting = true;
 				break;
 			default:
 				break;
@@ -105,14 +96,14 @@ void Input::Update(Player* player, Camera& camera, bool freezeControls)
 
 		if (currentKeyState[SDL_SCANCODE_ESCAPE])
 		{
-			quit = true;
+			isQuitting = true;
 		}
 	}
 }
 
-bool Input::Quit() const
+bool Input::quit() const
 {
-	return quit;
+	return isQuitting;
 }
 
 

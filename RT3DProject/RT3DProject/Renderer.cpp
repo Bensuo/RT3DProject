@@ -1,6 +1,10 @@
 #include "Renderer.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "UI.h"
+#include <GL/glew.h>
+#include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include "Model.h"
 
 Renderer::Renderer()
 {
@@ -70,7 +74,7 @@ void Renderer::init()
 }
 
 //Set the shader to be used for rendering
-void Renderer::setShader(std::string name)
+void Renderer::setShader(const std::string& name)
 {
 	if (shaders.find(name) != shaders.end())
 	{
@@ -112,7 +116,7 @@ void Renderer::swapBuffers() const
 }
 
 //Draws an object implementing the IRenderable interface
-void Renderer::draw(IRenderable* renderable)
+void Renderer::draw(const IRenderable* renderable)
 {
 	glCullFace(GL_FRONT);
 	glActiveTexture(GL_TEXTURE0);
@@ -135,7 +139,7 @@ void Renderer::draw(IRenderable* renderable)
 
 	currentShader->setUniformMatrix4fv("modelview", glm::value_ptr(mvStack.top()));
 	currentShader->setMaterial(renderable->getMaterial()) ;
-	//float interp = renderable->getInterp();
+
 	currentShader->setUniform1f("interp", renderable->getInterp());
 	if (renderable->isIndexed())
 	{
@@ -156,7 +160,7 @@ void Renderer::draw(IRenderable* renderable)
 }
 
 
-void Renderer::drawSkybox(Rendering::Skybox* skybox) const
+void Renderer::drawSkybox(const Rendering::Skybox* skybox) const
 {
 	//glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
@@ -181,7 +185,7 @@ void Renderer::drawSkybox(Rendering::Skybox* skybox) const
 	skybox->shader.disable();
 }
 
-void Renderer::drawTerrain(Terrain * terrain) const
+void Renderer::drawTerrain(const Terrain * terrain) const
 {
 	glCullFace(GL_BACK);
 	//glEnable(GL_DEPTH_TEST);
@@ -193,7 +197,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	//view = glm::translate(view, glm::vec3(0, -50, 0));
 	terrain->shader.setUniformMatrix4fv("projection", glm::value_ptr(projection));
 	terrain->shader.setUniformMatrix4fv("modelview", glm::value_ptr(view));
-	terrain->shader.setUniform1f("rows", (float)terrain->getRows()/32.0f);
+	terrain->shader.setUniform1f("rows", static_cast<float>(terrain->getRows())/32.0f);
 	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	//glUniformMatrix4fv(glGetUniformLocation(terrain->shader.getProgram(), "modelview"), 1, GL_FALSE, glm::value_ptr(view));
 
@@ -218,7 +222,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 	
 	//glPrimitiveRestartIndex(terrain->getRows() * terrain->getColumns());
 	//rt3d::drawIndexedMesh(terrain->getVAO(), terrain->getNumIndices(), GL_TRIANGLES);
-	glDrawElements(GL_TRIANGLES, terrain->getNumIndices(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, terrain->getNumIndices(), GL_UNSIGNED_INT, nullptr);
 	//glDisable(GL_PRIMITIVE_RESTART);
 	glBindVertexArray(0);
 	
@@ -229,7 +233,7 @@ void Renderer::drawTerrain(Terrain * terrain) const
 
 //Renders all objects in the provided list based on the camera provided in begin() and the currently
 //active shader
-void Renderer::render(std::vector<IRenderable*>& models)
+void Renderer::render(const std::vector<const IRenderable*>& models)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -247,15 +251,16 @@ void Renderer::render(std::vector<IRenderable*>& models)
 }
 
 //Renders "first person" renderables such as viewport weapon models
-void Renderer::renderFirstPerson(IRenderable * renderable)
+void Renderer::renderFirstPerson(const IRenderable* renderable)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
+	
 	//create projection from Camera data
 	currentShader->use();
 	currentShader->setUniformMatrix4fv("projection", value_ptr(projection));
 	mvStack.push(glm::mat4(1));
-	float rotation = -180.0f * DEG_TO_RADIAN;
+	auto rotation = -180.0f * DEG_TO_RADIAN;
 	mvStack.top() = translate(mvStack.top(), glm::vec3(0, 2, -2));
 	mvStack.top() = rotate(mvStack.top(), rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -263,40 +268,40 @@ void Renderer::renderFirstPerson(IRenderable * renderable)
 	mvStack.pop();
 }
 
-void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position, glm::vec3 size) 
+void Renderer::renderUI(const Rendering::UI* renderable, const glm::vec3& position, const glm::vec3& size) 
 {
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
+	mvStack.top() = translate(mvStack.top(), glm::vec3(position));
 
 	auto newSize = glm::vec3(size.x / SCREEN_WIDTH, size.y / SCREEN_HEIGHT, 1);
 
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
+	mvStack.top() = scale(mvStack.top(), glm::vec3(newSize));
 
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", value_ptr(mvStack.top()));
 
 	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	mvStack.pop();
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Renderer::renderUI(Rendering::UI* renderable, glm::vec3 position)
+void Renderer::renderUI(const Rendering::UI* renderable, const glm::vec3& position)
 {
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, renderable->getTexture());
 	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(position));
+	mvStack.top() = translate(mvStack.top(), glm::vec3(position));
 
 	auto newSize = glm::vec3(renderable->getWidth() / static_cast<float>(SCREEN_WIDTH), renderable->getHeight() / static_cast<float>(SCREEN_HEIGHT), 1);
 
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(newSize));
+	mvStack.top() = scale(mvStack.top(), glm::vec3(newSize));
 
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "projection", value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(currentShader->getProgram(), "modelview", value_ptr(mvStack.top()));
 
 	rt3d::drawIndexedMesh(renderable->getMesh(), renderable->getCount(), GL_TRIANGLES);
 	mvStack.pop();

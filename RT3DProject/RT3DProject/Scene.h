@@ -13,12 +13,13 @@ public:
 	virtual ~Scene();
 	void loadContent(Utilities::ResourceManager& content);
 	Player* getPlayer() const { return player; }
-	Rendering::Skybox* getSkybox() const { return skybox; }
-	Terrain* getTerrain() const { return terrain; }
-	std::vector<std::shared_ptr<Player>>& getNPCs() { return npcs; }
-	std::vector<StaticObject*>& getStaticObjects() { return staticObjects; }
-	std::vector<Pickup*> getPickups() const { return pickups; }
+	const Rendering::Skybox* getSkybox() const { return skybox; }
+	const Terrain* getTerrain() const { return terrain; }
+	const std::vector<std::shared_ptr<Player>>& getNPCs() const { return npcs; }
+	const std::vector<StaticObject*>& getStaticObjects() const { return staticObjects; }
+	const std::vector<Pickup*>& getPickups() const { return pickups; }
 	void removePickup(const int& index);
+	void removeNPC(const int& index);
 private:
 	Rendering::Skybox* skybox;
 	Terrain* terrain;
@@ -28,4 +29,3 @@ private:
 	std::vector<rt3d::lightStruct> lights;
 	std::vector<StaticObject*> staticObjects;
 };
-

@@ -1,5 +1,7 @@
 #include "Shader.h"
 #include "md2model.h"
+#include <string>
+#include <fstream>
 
 namespace Rendering
 {
@@ -7,7 +9,7 @@ namespace Rendering
 	{
 		GLuint f, v;
 
-		char *vs, *fs;
+		const char *vs, *fs;
 
 		v = glCreateShader(GL_VERTEX_SHADER);
 		f = glCreateShader(GL_FRAGMENT_SHADER);
@@ -18,8 +20,8 @@ namespace Rendering
 		vs = loadFile(vertexPath.c_str(), vlen);
 		fs = loadFile(fragmentPath.c_str(), flen);
 
-		const char * vv = vs;
-		const char * ff = fs;
+		auto vv = vs;
+		auto ff = fs;
 
 		glShaderSource(v, 1, &vv, &vlen);
 		glShaderSource(f, 1, &ff, &flen);
@@ -57,7 +59,7 @@ namespace Rendering
 		delete[] fs; // we allocated this in the loadFile function...
 	}
 
-	char* Shader::loadFile(const char* fname, GLint& fSize) const
+	const char* Shader::loadFile(const char* fname, GLint& fSize) const
 	{
 		int size;
 		char * memblock;
@@ -66,8 +68,8 @@ namespace Rendering
 		// ios::ate opens file at the end
 		std::ifstream file(fname, std::ios::in | std::ios::binary | std::ios::ate);
 		if (file.is_open()) {
-			size = (int)file.tellg(); // get location of file pointer i.e. file size
-			fSize = (GLint)size;
+			size = static_cast<int>(file.tellg()); // get location of file pointer i.e. file size
+			fSize = static_cast<GLint>(size);
 			memblock = new char[size];
 			file.seekg(0, std::ios::beg);
 			file.read(memblock, size);
