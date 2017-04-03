@@ -10,7 +10,7 @@ class Timer
 
 public:
 
-	explicit Timer(int duration) : duration(duration) {}
+	explicit Timer(const int& duration) : duration(duration) {}
 
 	void startTimer()
 	{
@@ -26,7 +26,7 @@ public:
 		}
 	}
 
-	bool finished() const
+	const bool& finished() const
 	{
 		return elapsed.count() >= duration;
 	}

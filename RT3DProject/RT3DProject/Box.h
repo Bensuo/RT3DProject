@@ -21,7 +21,7 @@ namespace Rendering
 		const rt3d::materialStruct& getMaterial() override;
 		const Transform& getTransform() override;
 		const bool& isIndexed() override;
-		void setMaterial(rt3d::materialStruct mat) { material = mat; };
+		void setMaterial(const rt3d::materialStruct& mat) { material = mat; };
 		const float& getInterp() override { return 0.0f; }
 	private:
 		GLfloat cubeVerts[24];

@@ -89,7 +89,7 @@ void Player::setFPS(const bool& fps)
 	this->fps = fps;
 }
 
-void Player::setState(PlayerState state)
+void Player::setState(const PlayerState& state)
 {
 	model.setAnimation(state);
 	weapon.setAnimation(state);
@@ -285,7 +285,7 @@ void Player::shoot()
 	}
 }
 
-bool Player::aiming() const
+const bool& Player::aiming() const
 {
 	return fps || isAiming;
 }

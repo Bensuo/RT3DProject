@@ -21,9 +21,8 @@ class GameTime
 public:
 	GameTime();
 	const double& getTime() const;
-	std::chrono::steady_clock::time_point getTimePoint();
+	const std::chrono::steady_clock::time_point& getTimePoint();
 	const double& getDeltaTime() const;
-
 	void setFrameCap(const unsigned& frameCap);
 	void initialize();
 	void reset();

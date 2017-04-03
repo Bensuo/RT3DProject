@@ -124,7 +124,7 @@ namespace Rendering
 	{
 	}
 
-	void Skybox::render(Camera& camera) const
+	void Skybox::render(const Camera& camera) const
 	{
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(GL_FALSE);

@@ -64,7 +64,7 @@ void Camera::updateCameraVectors(const glm::vec3& targetPos)
 	this->up = normalize(cross(this->right, this->front));
 }
 
-Camera::Camera(glm::vec3 position, glm::vec3 up) : front(glm::vec3(0.0f, 0.0f, -1.0f))
+Camera::Camera(const glm::vec3& position, const glm::vec3& up) : front(glm::vec3(0.0f, 0.0f, -1.0f))
 {
 	this->position = position;
 	this->worldUp = up;
@@ -85,7 +85,7 @@ void Camera::processMouseMovement(const glm::vec2& offset)
 	mouseMotion = -offset;
 }
 
-void Camera::processMouseScroll(float yoffset)
+void Camera::processMouseScroll(const float& yoffset)
 {
 	distance += yoffset * SCROLL_SENSITIVTY;
 	distance = glm::clamp(distance, 0.0f, MAX_DISTANCE);

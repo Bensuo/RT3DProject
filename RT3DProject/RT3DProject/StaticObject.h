@@ -10,7 +10,7 @@ public:
 	void loadContent(Utilities::ResourceManager &content, const std::string& meshPath, const std::string& texturePath);
 	Rendering::PlayerModel* getModel() const { return model; }
 	const AABB& getAABB() const { return boundingBox; }
-	void setTransform(Transform t) {
+	void setTransform(const Transform& t) {
 		boundingBox.c = t.position; 
 		boundingBox.c.y += boundingBox.r.y;
 		model->setTransform(t);

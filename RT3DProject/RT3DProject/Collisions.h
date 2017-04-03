@@ -14,7 +14,7 @@ namespace Collisions
 		
 	};
 
-	inline void testAxis(glm::vec3 axis, float minA, float maxA, float minB, float maxB, glm::vec3& mtvAxis, float& mtvDistance)
+	inline void testAxis(const glm::vec3& axis, const float& minA, const float& maxA, const float& minB, const float& maxB, glm::vec3& mtvAxis, float& mtvDistance)
 	{
 		auto axisLengthSquared = glm::dot(axis, axis);
 		//Calculates overlap ranges and find out if the overlap is on the left or right

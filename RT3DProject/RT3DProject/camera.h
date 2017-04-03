@@ -32,10 +32,10 @@ public:
 	const float& getYaw() const;
 	const glm::vec3& getFront() const;
 	void update(const float& deltaTime, const glm::vec3& targetPos);
-	explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
+	explicit Camera(const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f));
 	const glm::mat4& getViewMatrix() const;
 	void processMouseMovement(const glm::vec2& offset);
-	void processMouseScroll(float yoffset);
+	void processMouseScroll(const float& yoffset);
 	void snapDistance(const float& distance);
 	bool isFPS() const;
 	void snapToMaxDistance();

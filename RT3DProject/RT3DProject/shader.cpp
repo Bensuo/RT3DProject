@@ -9,7 +9,7 @@ namespace Rendering
 	{
 		GLuint f, v;
 
-		char *vs, *fs;
+		const char *vs, *fs;
 
 		v = glCreateShader(GL_VERTEX_SHADER);
 		f = glCreateShader(GL_FRAGMENT_SHADER);
@@ -20,8 +20,8 @@ namespace Rendering
 		vs = loadFile(vertexPath.c_str(), vlen);
 		fs = loadFile(fragmentPath.c_str(), flen);
 
-		const char * vv = vs;
-		const char * ff = fs;
+		auto vv = vs;
+		auto ff = fs;
 
 		glShaderSource(v, 1, &vv, &vlen);
 		glShaderSource(f, 1, &ff, &flen);
@@ -59,7 +59,7 @@ namespace Rendering
 		delete[] fs; // we allocated this in the loadFile function...
 	}
 
-	char* Shader::loadFile(const char* fname, GLint& fSize) const
+	const char* Shader::loadFile(const char* fname, GLint& fSize) const
 	{
 		int size;
 		char * memblock;

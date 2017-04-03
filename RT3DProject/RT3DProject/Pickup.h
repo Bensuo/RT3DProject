@@ -10,9 +10,9 @@ public:
 	Pickup();
 	virtual ~Pickup();
 	void loadContent(Utilities::ResourceManager content, const std::string& skin);
-	void update(float dt);
+	void update(const float& dt);
 	Rendering::Model& getPlayerModel();
-	void setPosition(glm::vec3 pos);
+	void setPosition(const glm::vec3& pos);
 	const glm::vec3& getPosition() const;
 	const AABB& getAABB() const;
 private:

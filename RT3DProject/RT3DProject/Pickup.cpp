@@ -1,4 +1,5 @@
 #include "Pickup.h"
+#include <glm/detail/type_mat.hpp>
 
 Pickup::Pickup()
 {
@@ -13,7 +14,7 @@ void Pickup::loadContent(Utilities::ResourceManager content, const std::string& 
 	model.loadContent(content, "res/md2/pickups/" + skin, "res/md2/pickups/" + skin);
 }
 
-void Pickup::update(float dt)
+void Pickup::update(const float& dt)
 {
 	transform.rotation.z += dt * rotationSpeed;
 
@@ -32,7 +33,7 @@ const glm::vec3& Pickup::getPosition() const
 	return transform.position;
 };
 
-void Pickup::setPosition(glm::vec3 pos)
+void Pickup::setPosition(const glm::vec3& pos)
 {
 	transform.position = pos;
 };

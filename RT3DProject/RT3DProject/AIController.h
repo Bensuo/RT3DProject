@@ -15,4 +15,3 @@ private:
 	Player* target;
 	int actionCounter;
 };
-

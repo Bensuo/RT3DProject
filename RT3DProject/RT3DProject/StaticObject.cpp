@@ -11,7 +11,7 @@ StaticObject::~StaticObject()
 {
 }
 
-void StaticObject::loadContent(Utilities::ResourceManager & content, const std::string & meshPath, const std::string & texturePath)
+void StaticObject::loadContent(Utilities::ResourceManager& content, const std::string& meshPath, const std::string& texturePath)
 {
 	model = new Rendering::PlayerModel();
 	model->loadContent(content, meshPath, texturePath);

@@ -55,7 +55,7 @@ public:
 	const glm::vec3& getPosition() const;
 	const AABB& getAABB() const;
 	const float& getAimDistance() const;
-	void setState(PlayerState state);
+	void setState(const PlayerState& state);
 	void updateVectors(const glm::vec3& cameraFront);
 	void moveForward();
 	void moveBackward();
@@ -68,7 +68,7 @@ public:
 	void clampPosition(const glm::vec3& min, const glm::vec3& max);
 	void stopAim();
 	void shoot();
-	bool getCanShoot() const { return canShoot; }
+	const bool& getCanShoot() const { return canShoot; }
 	void giveAmmo(const int& ammo)
 	{
 		this->ammo += ammo;
@@ -82,8 +82,8 @@ public:
 	}
 	const int& getHealth() const { return health; }
 	const int& getAmmo() const { return ammo; }
-	bool getIsDead() const { return isDead; }
-	bool aiming() const;
+	const bool& getIsDead() const { return isDead; }
+	const bool& aiming() const;
 private:
 	Rendering::PlayerModel model;
 	Rendering::PlayerModel weapon;

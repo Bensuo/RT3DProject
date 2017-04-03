@@ -11,9 +11,9 @@ namespace Utilities
 	public:
 		ResourceManager();
 		virtual ~ResourceManager();
-		std::shared_ptr<GLuint> loadTexture(std::string filename);
-		Mix_Music* loadMusic(std::string filename);
-		Mix_Chunk* loadSound(std::string filename);
+		const std::shared_ptr<GLuint>& loadTexture(const std::string& filename);
+		Mix_Music* loadMusic(const std::string& filename);
+		Mix_Chunk* loadSound(const std::string& filename);
 		void unloadAll();
 	private:
 		std::map<std::string, std::shared_ptr<GLuint>> textureMap;

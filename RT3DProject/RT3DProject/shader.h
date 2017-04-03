@@ -15,7 +15,7 @@ namespace Rendering
 		}
 
 		Shader(const std::string& vertexPath, const std::string& fragmentPath);
-		char* loadFile(const char *fname, GLint &fSize) const;
+		const char* loadFile(const char* fname, GLint& fSize) const;
 		void use() const;
 		const GLuint& getProgram() const { return this->program; }
 		void disable() const;

@@ -1,6 +1,7 @@
 #include <thread>
 #include <iostream>
 #include "GameTime.h"
+#include <chrono>
 
 GameTime::GameTime()
 {
@@ -21,7 +22,7 @@ const double& GameTime::getTime() const
 	return value / 1000.0;
 }
 
-std::chrono::steady_clock::time_point GameTime::getTimePoint()
+const std::chrono::steady_clock::time_point& GameTime::getTimePoint()
 {
 	return std::chrono::steady_clock::now();
 }

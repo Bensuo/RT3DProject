@@ -11,7 +11,7 @@ namespace Utilities
 	{
 	}
 
-	std::shared_ptr<GLuint> ResourceManager::loadTexture(std::string filename)
+	const std::shared_ptr<GLuint>& ResourceManager::loadTexture(const std::string& filename)
 	{
 		if (textureMap.find(filename) == textureMap.end())
 		{
@@ -54,7 +54,7 @@ namespace Utilities
 		return textureMap[filename];
 	}
 
-	Mix_Music * ResourceManager::loadMusic(std::string filename)
+	Mix_Music* ResourceManager::loadMusic(const std::string& filename)
 	{
 		auto iterator = musicMap.find(filename);
 		Mix_Music* music = nullptr;
@@ -80,7 +80,7 @@ namespace Utilities
 		return music;
 	}
 
-	Mix_Chunk * ResourceManager::loadSound(std::string filename)
+	Mix_Chunk* ResourceManager::loadSound(const std::string& filename)
 	{
 		auto iterator = soundsMap.find(filename);
 		Mix_Chunk* chunk = nullptr;
