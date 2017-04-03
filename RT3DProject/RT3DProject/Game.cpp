@@ -55,14 +55,14 @@ void Game::drawMinimap()
 		glViewport(1280 - mapWidth, 720 - mapHeight, mapWidth, mapHeight);
 
 		glDisable(GL_DEPTH_TEST);
-		renderList.push_back(&scene->getPlayer()->getPlayerModel());
-		renderList.push_back(&scene->getPlayer()->getWeapon());
+		renderList.push_back(scene->getPlayer()->getPlayerModel());
+		renderList.push_back(scene->getPlayer()->getWeapon());
 
 		auto& npcs = scene->getNPCs();
 		for (auto i = 0; i < npcs.size(); i++)
 		{
-			renderList.push_back(&npcs[i]->getPlayerModel());
-			renderList.push_back(&npcs[i]->getWeapon());
+			renderList.push_back(npcs[i]->getPlayerModel());
+			renderList.push_back(npcs[i]->getWeapon());
 		}
 
 		auto pickups = scene->getPickups();
@@ -86,19 +86,19 @@ void Game::drawScene()
 	//Populate render list
 	auto& npcs = scene->getNPCs();
 	if (!camera.isFPS()) {
-		renderList.push_back(&scene->getPlayer()->getPlayerModel());
+		renderList.push_back(scene->getPlayer()->getPlayerModel());
 		if (scene->getPlayer()->playerState != Player::PlayerState::DEATH1)
 		{
-			renderList.push_back(&scene->getPlayer()->getWeapon());
+			renderList.push_back(scene->getPlayer()->getWeapon());
 		}
 	}
 
 	for (auto i = 0; i < npcs.size(); i++)
 	{
-		renderList.push_back(&npcs[i]->getPlayerModel());
+		renderList.push_back(npcs[i]->getPlayerModel());
 		if (npcs[i]->playerState != Player::PlayerState::DEATH1)
 		{
-			renderList.push_back(&npcs[i]->getWeapon());
+			renderList.push_back(npcs[i]->getWeapon());
 		}
 		
 	}
@@ -128,7 +128,7 @@ void Game::drawScene()
 
 	if (camera.isFPS()) 
 	{
-		renderer.renderFirstPerson(&scene->getPlayer()->getVPWeapon());
+		renderer.renderFirstPerson(scene->getPlayer()->getVPWeapon());
 	}
 
 	renderList.clear();

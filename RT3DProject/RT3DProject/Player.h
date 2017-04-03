@@ -47,9 +47,9 @@ public:
 	void setFPS(const bool& fps);
 	const glm::vec3& normalise(glm::vec3& vector) const;
 	void updatePosition(const float& deltaTime);
-	Rendering::PlayerModel& getPlayerModel();
-	Rendering::PlayerModel& getWeapon();
-	Rendering::ViewportWeapon& getVPWeapon();
+	const IRenderable* getPlayerModel() const;
+	const IRenderable* getWeapon() const;
+	const IRenderable* getVPWeapon() const;
 	const glm::vec3& getPosition();
 	void setPosition(const glm::vec3& pos);
 	const glm::vec3& getPosition() const;

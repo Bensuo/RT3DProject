@@ -130,19 +130,19 @@ void Player::updatePosition(const float& deltaTime)
 	movementNormal = glm::vec3();
 }
 
-Rendering::PlayerModel& Player::getPlayerModel()
+const IRenderable* Player::getPlayerModel() const
 {
-	return model;
+	return &model;
 };
 
-Rendering::PlayerModel& Player::getWeapon()
+const IRenderable* Player::getWeapon() const
 {
-	return weapon;
+	return &weapon;
 };
 
-Rendering::ViewportWeapon& Player::getVPWeapon()
+const IRenderable* Player::getVPWeapon() const
 {
-	return vpWeapon;
+	return &vpWeapon;
 };
 
 const glm::vec3& Player::getPosition()
