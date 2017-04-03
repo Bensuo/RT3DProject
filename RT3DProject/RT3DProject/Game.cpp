@@ -164,11 +164,8 @@ void Game::drawHud()
 void Game::draw()
 {
 	drawScene();
-
 	drawMinimap();
-
 	drawHud();
-
 	renderer.swapBuffers();
 }
 
@@ -182,14 +179,18 @@ void Game::update()
 	running = !quit();
 
 	countdown.update();
+
+	//update HUDs
 	timeLabel->setString(countdown.toString());
 	scoreLabel->setString("SCORE: " + std::to_string(score));
 	healthLabel->setString("HEALTH: " + std::to_string(scene->getPlayer()->getHealth()));
 	ammoLabel->setString("AMMO: " + std::to_string(scene->getPlayer()->getAmmo()));
 
+	//update player with camera data
 	scene->getPlayer()->updateVectors(camera.getFront());
 	scene->getPlayer()->setFPS(camera.isFPS());
 
+	//update input handling
 	auto freezeControls = countdown.finished() || scene->getPlayer()->getIsDead();
 	input.update(scene->getPlayer(), camera, freezeControls);
 
@@ -199,12 +200,14 @@ void Game::update()
 		npcControllers[i].update();
 	}
 
+	//update pickups
 	auto pickups = scene->getPickups();
 	for (auto i = 0; i < pickups.size(); i++)
 	{
 		pickups[i]->update(gameTime.getDeltaTime());
 	}
 
+	//update NPCs
 	auto& npcs = scene->getNPCs();
 	for (size_t i = 0; i < npcs.size(); i++)
 	{
@@ -221,11 +224,17 @@ void Game::update()
 		}
 	}
 
+	//update player
 	scene->getPlayer()->update(gameTime.getDeltaTime());
 	scene->getPlayer()->clampPosition(glm::vec3(-scene->getTerrain()->getScale().x/2-1, 0, -scene->getTerrain()->getScale().z / 2-1), glm::vec3(scene->getTerrain()->getScale().x / 2-1, scene->getTerrain()->getScale().y + 250, scene->getTerrain()->getScale().z / 2-1));
+	
+	//update collisions
 	checkCollisions();
 
+	//update camera
 	camera.update(gameTime.getDeltaTime(), scene->getPlayer()->getPosition() - glm::vec3(0, -24, 0));
+
+	//update end-game sound efects
 	if (!endSoundPlayed)
 	{
 		if (scene->getPlayer()->getIsDead())
@@ -241,7 +250,7 @@ void Game::update()
 	}
 }
 
-Game::Game() : countdown(60 * 60)
+Game::Game() : countdown(2 * 60)
 {
 	init();
 	while (running)

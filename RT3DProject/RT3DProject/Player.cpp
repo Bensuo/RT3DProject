@@ -21,8 +21,11 @@ void Player::loadContent(Utilities::ResourceManager& content, const std::string&
 
 void Player::update(const float& dt)
 {
+	//rotate torwards camera direction in First Person and Aiming states
 	if (fps || isAiming)
 		transform.rotation.z = atan2f(front.x, front.z) * 57.2958;
+
+	//kill player
 	if (playerState != DEATH1)
 	{
 		updatePosition(dt);
@@ -30,24 +33,23 @@ void Player::update(const float& dt)
 		weapon.update(dt);
 	}
 	
-
+	//update models and animation
 	model.setAnimation(playerState);
-	
 	vpWeapon.setAnimation(weaponState);
 	model.update(dt);
 	model.setTransform(transform);
-
-	
 	weapon.setTransform(transform);
 	vpWeapon.update(dt);
 
 	collider.c = transform.position;
+
 	if (playerState == RUN)
 	{
+		//play footstep sound effects
 		if (stepCount == 40)
 		{
 			stepCount = 0;
-			AudioManager::playSound("res/audio/sfx/PlayerMove1.wav", 0.4f);
+			AudioManager::playSound("res/audio/sfx/PlayerMove1.wav", 0.2f);
 		}
 		stepCount++;
 	}
@@ -123,7 +125,7 @@ void Player::updatePosition(const float& deltaTime)
 	this->velocity.y -= 8.0f * deltaTime;
 	this->velocity.z = movementNormal.z;
 	
-	velocity = glm::clamp(velocity, glm::vec3(-maxSpeed, -10, -maxSpeed), glm::vec3(maxSpeed, 40, maxSpeed));
+	velocity = clamp(velocity, glm::vec3(-maxSpeed, -10, -maxSpeed), glm::vec3(maxSpeed, 40, maxSpeed));
 	velocity.y *= 0.97f;
 	this->transform.position += velocity;
 
@@ -177,22 +179,27 @@ void Player::updateVectors(const glm::vec3& cameraFront)
 	this->up = normalize(cross(this->right, this->front));
 }
 
+//add forward normal to current movement direction
 void Player::moveForward()
 {
 	movementNormal += this->front;
 
+	//rotate towards movement normal
 	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
+
 	if (playerState != JUMP)
 	{
 		playerState = RUN;
 	}
 }
 
+//subtract forward normal from current movement normal
 void Player::moveBackward()
 {
 	movementNormal -= this->front;
 
+	//rotate towards movement normal
 	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
@@ -202,10 +209,12 @@ void Player::moveBackward()
 	}
 }
 
+//subtract right normal from current movement normal
 void Player::moveLeft()
 {
 	movementNormal -= this->right;
 
+	//rotate towards movement normal
 	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 
@@ -215,10 +224,12 @@ void Player::moveLeft()
 	}
 }
 
+//add right normal to current movement normal
 void Player::moveRight()
 {
 	movementNormal += this->right;
 
+	//rotate towards movement normal
 	if (!fps && !isAiming)
 		transform.rotation.z = atan2f(movementNormal.x, movementNormal.z) * 57.2958;
 

@@ -31,6 +31,7 @@ class Camera
 public:
 	const float& getYaw() const;
 	const glm::vec3& getFront() const;
+	glm::vec3 calculatePosition() const;
 	void update(const float& deltaTime, const glm::vec3& targetPos);
 	explicit Camera(const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f));
 	const glm::mat4& getViewMatrix() const;
