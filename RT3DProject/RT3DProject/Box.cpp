@@ -35,32 +35,32 @@ namespace Rendering
 	{
 	}
 
-	const GLuint& Box::getMesh()
+	const GLuint& Box::getMesh() const
 	{
 		return mesh;
 	}
 
-	const GLuint& Box::getTexture()
+	const GLuint& Box::getTexture() const
 	{
 		return *texture.get();
 	}
 
-	const GLuint& Box::getCount()
+	const GLuint& Box::getCount() const
 	{
 		return cubeIndexCount;
 	}
 
-	const rt3d::materialStruct& Box::getMaterial()
+	const rt3d::materialStruct& Box::getMaterial() const
 	{
 		return material;
 	}
 
-	const Transform& Box::getTransform()
+	const Transform& Box::getTransform() const
 	{
 		return transform;
 	}
 
-	const bool& Box::isIndexed()
+	const bool& Box::isIndexed() const
 	{
 		return true;
 	}

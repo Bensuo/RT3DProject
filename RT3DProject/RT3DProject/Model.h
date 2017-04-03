@@ -20,13 +20,13 @@ namespace Rendering
 		virtual void setAnimation(const int& state) {}
 		virtual void setUpAnimationData() {}
 		virtual void setTransform(const Transform& transform);
-		const GLuint& getMesh() override;
-		const GLuint& getTexture() override;
-		const GLuint& getCount() override;
-		const rt3d::materialStruct& getMaterial() override;
-		const Transform& getTransform() override;
-		const bool& isIndexed() override;
-		const float& getInterp() override { return model.getInterp(); }
+		const GLuint& getMesh() const override;
+		const GLuint& getTexture() const override;
+		const GLuint& getCount() const override;
+		const rt3d::materialStruct& getMaterial() const override;
+		const Transform& getTransform() const override;
+		const bool& isIndexed() const override;
+		const float& getInterp() const override { return model.getInterp(); }
 	protected:
 		const float ANIMATION_SPEED = 5.0f; //multiples of deltaTime
 		std::shared_ptr<GLuint> texture;

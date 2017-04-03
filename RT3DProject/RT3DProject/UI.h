@@ -18,14 +18,14 @@ namespace Rendering
 		const int& getHeight() const;
 		void setString(const std::string& string);
 		const Shader& getShader();
-		const GLuint& getMesh() override;
-		const GLuint& getTexture() override;
-		const GLuint& getCount() override;
-		const rt3d::materialStruct& getMaterial() override;
-		const Transform& getTransform() override;
-		const bool& isIndexed() override;
+		const GLuint& getMesh() const override;
+		const GLuint& getTexture() const override;
+		const GLuint& getCount() const override;
+		const rt3d::materialStruct& getMaterial() const override;
+		const Transform& getTransform() const override;
+		const bool& isIndexed() const override;
 		void setText(const std::string& txt) { uiString = txt; }
-		const float& getInterp() override { return 0.0f; }
+		const float& getInterp() const override { return 0.0f; }
 	private:
 		Shader shader;
 		std::vector<GLfloat> verts;

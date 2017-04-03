@@ -78,7 +78,7 @@ namespace Rendering
 		return shader;
 	}
 
-	const GLuint& UI::getTexture() {
+	const GLuint& UI::getTexture() const {
 		return label;
 	}
 
@@ -102,10 +102,10 @@ namespace Rendering
 		}
 	}
 
-	const GLuint& UI::getMesh() { return mesh; }
-	const GLuint& UI::getCount() { return size; }
-	const rt3d::materialStruct& UI::getMaterial() { return material; }
-	const Transform& UI::getTransform() { return transform; }
-	const bool& UI::isIndexed() { return true; }
+	const GLuint& UI::getMesh() const { return mesh; }
+	const GLuint& UI::getCount() const { return size; }
+	const rt3d::materialStruct& UI::getMaterial() const { return material; }
+	const Transform& UI::getTransform() const { return transform; }
+	const bool& UI::isIndexed() const { return true; }
 }
 
