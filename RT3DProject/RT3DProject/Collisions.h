@@ -14,6 +14,7 @@ namespace Collisions
 		
 	};
 
+	//Test a single axis for collisions
 	inline void testAxis(const glm::vec3& axis, const float& minA, const float& maxA, const float& minB, const float& maxB, glm::vec3& mtvAxis, float& mtvDistance)
 	{
 		auto axisLengthSquared = glm::dot(axis, axis);
@@ -31,7 +32,7 @@ namespace Collisions
 			mtvAxis = sep;
 		}
 	}
-
+	//Test all 3 axis (xyz) and return the min translation vector/distance
 	inline glm::vec3 getMTV(const AABB& A, const AABB& B)
 	{
 		auto mtv = glm::vec3(0);

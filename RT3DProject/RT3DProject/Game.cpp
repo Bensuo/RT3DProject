@@ -212,6 +212,7 @@ void Game::update()
 		{
 			scene->removeNPC(i);
 			i--;
+			score += 1000;
 		}
 		else
 		{
